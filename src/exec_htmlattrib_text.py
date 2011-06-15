@@ -1,10 +1,10 @@
 
 """ """
 
-import htmattrib.regex
+import htmlattrib.regex
 import codecs
 
-h2t = htmattrib.regex.HtmlText() 
+h2t = htmlattrib.regex.HtmlText() 
    
 csvs = [ #'santinis_blog_pgs_hml_cleaned.csv', 'santinis_eshop_pgs_hml_cleaned.csv',\ 
          'santinis_faq_pgs_hml_cleaned.csv']
