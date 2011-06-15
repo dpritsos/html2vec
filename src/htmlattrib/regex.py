@@ -13,7 +13,8 @@ class BaseRegexHtmlAttributes(object):
         self.html_style = re.compile(r'<style[^>]*>[\S\s]*?</style>', re.UNICODE|re.IGNORECASE)
         self.whitespace_chars = re.compile(r'[\s]+', re.UNICODE)   # {2,}')
         self.unknown_char_seq = re.compile(r'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+', re.UNICODE|re.IGNORECASE) #{2,}')
-                                           #'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+ <-- plus added 8-June-2011                       
+        #'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+ <-- plus added 8-June-2011           
+                    
     def encoding_norm(self, str):
         """ NOT WORKING AS EXPECTED TO BE FIXED """
         #Normalise unicode text data (Refer to unicodedata module) 
