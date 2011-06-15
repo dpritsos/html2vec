@@ -8,10 +8,10 @@ h2t = htmlattrib.regex.HtmlText()
    
 csvs = [ #'santinis_blog_pgs_hml_cleaned.csv', 'santinis_eshop_pgs_hml_cleaned.csv',\ 
          'santinis_faq_pgs_hml_cleaned.csv']
-         #'santinis_listing_pgs_hml_cleaned.csv']
-         #'santinis_frontpage_pgs_hml_cleaned.csv']
-         #'santinis_php_pgs_hml_cleaned.csv' ]
-        
+#'santinis_listing_pgs_hml_cleaned.csv']
+#'santinis_frontpage_pgs_hml_cleaned.csv']
+#'santinis_php_pgs_hml_cleaned.csv' ]
+#'santinis_spages_pgs_hml_cleaned.csv' ] # 
 base_filepath = "/home/dimitrios/Synergy-Crawler/Santini_corpus_html2txt/"
 text_path = "/txt_rapidminer_app/"
 
