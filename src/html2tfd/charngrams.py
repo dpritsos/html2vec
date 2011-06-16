@@ -7,14 +7,18 @@ from htmlattrib.regex import HtmlText
 class BaseString2TF(object):
     
     def __init__(self, n):
-        reg_ng_size = r'.{' + str(n) + '}'
-        self.ngrams = re.compile( reg_ng_size, re.UNICODE )
+        self.n = n
+        #reg_ng_size = r'.{' + str(n) + '}'
+        #self.ngrams = re.compile( reg_ng_size, re.UNICODE )
     
     def nf_dict(self, text):
         if not text:
             return None
         #Find and Count NGrams
-        ngrms_l = self.ngrams.findall(text)
+        #ngrms_l = self.ngrams.findall(text)
+        ngrms_l = list()
+        for i in range( len(text) - self.n + 1 ): 
+            ngrms_l.append( text[i : i+self.n]  )
         NgF_d = dict()
         for ng in ngrms_l:
             if ng in NgF_d: #if the dictionary of terms has the 'terms' as a key 
@@ -28,7 +32,7 @@ class Html2TF(BaseString2TF, HtmlText):
     
     def __init__(self, n=3):
         HtmlText.__init__(self)
-        BaseString2TF.__init(self, n)
+        BaseString2TF.__init__(self, n)
     
     def _attrib(self, xhtml_str):
         return self.nf_dict( self.text( xhtml_str ) )
