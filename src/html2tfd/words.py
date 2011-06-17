@@ -138,8 +138,7 @@ class BaseString2TF(BaseWordExtractionRegexTools):
     def __init__(self):    
         BaseWordExtractionRegexTools.__init__(self)
         
-    def tf_dict(self, xhtml_str):
-        text = self.extract_text(xhtml_str)
+    def tf_dict(self, text):
         if not text:
             return None
         #Initially split the text to terms separated by white-spaces [ \t\n\r\f\v] 
@@ -166,13 +165,22 @@ class BaseString2TF(BaseWordExtractionRegexTools):
                 tf_d[term] = 1                    
         return tf_d 
 
-
+   
 class Html2TF(BaseString2TF, HtmlText):
     
-    def __init__(self):
-        HtmlText.__init__(self)    
+    def __init__(self, lowercase=False):
+        HtmlText.__init__(self)
         BaseString2TF.__init__(self)
-            
-    def _attrib(self, xhtml_str):
-        return self.tf_dict( self.text( xhtml_str ) )
+        if lowercase:
+            self._attrib = self.__attrib_lowercase
+        else:
+            self._attrib = self.__attrib
+        
+    def __attrib(self, xhtml_str):
+        return self.nf_dict( self.text( xhtml_str ) )
+    
+    def __attrib_lowercase(self, xhtml_str):
+        return self.nf_dict( self.text( xhtml_str ).lower() )
+    
+    
     

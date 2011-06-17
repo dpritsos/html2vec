@@ -21,15 +21,16 @@ class Test_BaseString2TF__3grams(unittest.TestCase):
                                 'vec': 1, ' fo': 2, 'a u': 1}
                            
     def test_basestring2tf_nf_dict(self):
-        #ngrams = self.bs2tf.nf_dict( self.txt_sample )
-        #self.assertEqual(ngrams, self.expected_ngrams)
-        pass
+        ngrams = self.bs2tf.nf_dict( self.txt_sample )
+        self.assertEqual(ngrams, self.expected_ngrams)
+
 
 class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
         self.n = 3
         self.html2tf = charngrams.Html2TF( self.n )
+        self.html2tf_lowercase = charngrams.Html2TF( self.n, lowercase=True )
         self.htmltext = htmlre.HtmlText()
         
         self.html_sample = "<html> \
@@ -50,6 +51,17 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                 'nit': 1, 'las': 1, ' a ': 1, 'rin': 1, 'seS': 1, 'cka': 1, ' cl': 1, 'd.c': 1, 'dul': 1,\
                                 'ack': 1, 'age': 1, ' ht': 2, 'ms.': 1, '/mo': 1, 'ng2': 1, 'ss ': 1, 'uni': 1, 'cto': 1,\
                                 'vec': 1, ' fo': 2, 'a u': 1, 'le ': 1}
+        self.expected_ngrams_lowercase = {u'le ': 1, u's i': 1, u't t': 1, u's.b': 1, u'f c': 1, u's a': 1, u'htm': 2, u'ram': 1,\
+                                          u'rs ': 1, u'tf ': 1, u's f': 1, u'.ch': 1, u't f': 1, u' un': 1, u'2tf': 2, u'.ba': 1,\
+                                          u'l2t': 1, u'l2v': 1, u's p': 1, u'ses': 1, u'mod': 1, u'tes': 1, u'ge/': 1, u'ams': 1,\
+                                          u'or ': 2, u'cha': 1, u'est': 2, u'st ': 1, u'for': 2, u'tor': 1, u' is': 1, u'ing': 1,\
+                                          u'cla': 1, u'e/m': 1, u'fd.': 1, u'ml2': 2, u'pac': 1, u'arn': 1, u'ngr': 1, u'r h': 2,\
+                                          u'ule': 1, u'har': 1, u'is ': 2, u'tml': 2, u'ng2': 1, u' cl': 1, u'ass': 1, u'tri': 1,\
+                                          u'his': 1, u'kag': 1, u'str': 1, u'2ve': 1, u'tfd': 1, u'gra': 1, u'rng': 1, u'ors': 1,\
+                                          u'it ': 1, u'odu': 1, u' pa': 1, u'ect': 1, u'ase': 1, u'dul': 1, u' te': 1, u'nit': 1,\
+                                          u'las': 1, u' a ': 1, u'rin': 1, u'g2t': 1, u'cka': 1, u'bas': 1, u'd.c': 1, u'ack': 1,\
+                                          u'age': 1, u' ht': 2, u'ms.': 1, u'/mo': 1, u'thi': 1, u'ss ': 1, u'uni': 1, u'cto': 1,\
+                                          u'vec': 1, u' fo': 2, u'a u': 1}
         self.pathto_htmls = "../unit_test_data/html/"
         self.xhtml_file_l = [ "../unit_test_data/html/test_01.html" ]
         self.txt_file_l = [ "../unit_test_data/txt/test_01.txt" ]
@@ -57,6 +69,10 @@ class Test_Html2TF__3grams(unittest.TestCase):
     def test_html2tf_from_src(self):
         html_ngrams = self.html2tf.from_src( self.html_sample )
         self.assertEqual(html_ngrams, self.expected_ngrams) 
+    
+    def test_html2tf_from_src_lowercase(self):
+        html_ngrams = self.html2tf_lowercase.from_src( self.html_sample )
+        self.assertEqual(html_ngrams, self.expected_ngrams_lowercase) 
        
     def test_html2tf_from_files(self):
         html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
