@@ -32,7 +32,6 @@ class Test_Html2TF__3grams(unittest.TestCase):
         self.html2tf = charngrams.Html2TF( self.n )
         self.html2tf_lowercase = charngrams.Html2TF( self.n, lowercase=True )
         self.htmltext = htmlre.HtmlText()
-        
         self.html_sample = "<html> \
                             <head> \
                             </head> \
