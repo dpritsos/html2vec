@@ -23,6 +23,8 @@ class BasePathFileHandler(object):
                 fname_lst.extend( [ basepath + filepath + fname for fname in flist ] )
         else:
             raise Exception("A String or a list of Strings was Expected as input - Stings should be file-paths")
+        #For ease of usage the filename list should be returned sorted
+        fname_lst.sort()
         return fname_lst
     
     @staticmethod
@@ -85,6 +87,7 @@ class BaseFileHandler(BasePathFileHandler):
     def save_files(self, basepath, fname_fstr_l, encoding='utf-8', error_handling='strict'):
         if not basepath:
             basepath = ""
+        print fname_fstr_l
         for filename, fstr in fname_fstr_l:
             with codecs.open( (basepath + filename), 'w', encoding, error_handling) as fobj:
                 fobj.write(fstr)

@@ -2,13 +2,13 @@
 
 import eventlet
 import codecs
-from .basefilehandler import BaseFileHandler 
+from basefilehandlers import BasePathFileHandler
 
 
-class TFdictFilesHandler(BaseFileHandler):
+class TFdictFilesHandler(BasePathFileHandler):
     
     def __init__(self):
-        BaseFileHandler.__init__(self)
+        BasePathFileHandler.__init__(self)
     
     def __load_tf_dict(self, filename, encoding='utf-8', error_handling='strict', force_lower_case=False):
         """ __load_tf_dict(): do not use this function prefer the VHTools.load_tf_dict(). 
@@ -134,7 +134,7 @@ class TFdictFilesHandler(BaseFileHandler):
         fname_lst = self.file_list_frmpaths(basepath, filepath_l)
         return self.load_tf_dict_l(fname_lst, page_lim, encoding, error_handling, force_lower_case)
            
-    def save_tf_dct(self, filename, records, encoding='utf-8', error_handling='strict'):
+    def save_tf_dct(self, filename, tfd, encoding='utf-8', error_handling='strict'):
         """ save_tf_dct(): is getting a filename string and a TF-Dictionary saves 
             the dictionary to a file with utf-8 Encoding. """
         try:
@@ -143,15 +143,15 @@ class TFdictFilesHandler(BaseFileHandler):
         except IOError:
             return None 
         try: 
-            for rec in records:  
-                fenc.write( rec + " ~~> "  + str(records[rec]) + "\n" ) # Write a string to a file 
+            for term, feq in tfd.items():  
+                fenc.write( term + " ~:~ "  + str(feq) + "\n" ) # Write a string to a file 
         except Exception as e:
-            print("ERROR WRITTING FILE: %s -- %s" % (filename, e))
+            print("ERROR WRITTING FILE: %s -- %s ~~> %s" % (e, filename, term))
         finally:
             fenc.close()
         return True           
 
-    def save_tf_dct_lst(self, filename, records, index, encoding='utf-8', error_handling='strict'):
+    def save_tf_dct_lst(self, filename, fname_tf_l, encoding='utf-8', error_handling='strict'):
         """ save_tf_dct_lst(): is getting a filename string a list of TF-Dictionaries and a List of Web-Pages
             related to the TF-Dictionaries and saves them to a file in the form <webpage-filename> ~~> <TF-Dictionary> """
         try:
@@ -161,13 +161,13 @@ class TFdictFilesHandler(BaseFileHandler):
             print "save_dct_lst Error: ", e
             return None 
         try: 
-            for i in range(len(index)):
-                fenc.write(index[i] + " ~~> ")
-                for rec in records[i]:
-                    fenc.write( rec + " ~:~ "  + str(records[i][rec]) + "\t") 
+            for fn, tfd in fname_tf_l:
+                fenc.write(fn + " ~~> ")
+                for term, freq in tfd.items():
+                    fenc.write( term + " ~:~ "  + str(freq) + "\t") 
                 fenc.write("\n") 
         except Exception as e:
-            print("ERROR WRITTING FILE: %s -- %s ---- %s" % (filename, e, rec))
+            print("ERROR WRITTING FILE: %s -- %s ~~> %s" % (e, fn, term))
         finally:
             fenc.close()
         return True       
@@ -217,62 +217,6 @@ class GreenTFdictFilesHandler(TFdictFilesHandler):
             return mrgd_tf_d
         else:
             raise Exception("A String or a list of Strings was Expected as input")
-    
-    
-#Unit Test TO BE FIXED
-if __name__ == "__main__":
-    
-    d1 = {'jim':1, 'one':1, 'two':2}
-    d2 = {'jim':1, 'one':2, 'two':3, 'three': 9}
-    d3 = {'jim':1, 'one':2, 'two':3, 'three': 9, 'Five': 99}
-    
-    print d1
-    print d2, "\n"
-    
-    l = [d1, d2]
-    d_all =  VHTools.merge_tf_dicts( *l )
-    l_all = VHTools.gen_tfd_frmlist( l )
-    
-    print "all ", d_all
-    print "List of Dict res", l_all
-    
-    tidx_d = VHTools.tf2tidx( d_all )
-    print tidx_d
-    idxf =  VHTools.tf2idxf(d3, tidx_d)
-    print idxf
-    #from trainevaloneclssvm import TermVectorFormat as vf
-    #print vf.tf2bin([idxf], tidx_d, 3)
-    
-    print VHTools.keep_most( d_all, 3 )
-    
-    filename = "/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_dictionaries/news.ncorpd"
-    print "TF Dictionary Loaded: ", len( VHTools.load_tf_dict(filename , True) )
-    flist = ["/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_dictionaries/news.ncorpd", 
-             "/home/dimitrios/Documents/Synergy-Crawler/saved_pages/blogs/ngrams_corpus_dictionaries/blogs.ncorpd"]
-    print "List of TF Dictionary Loaded: ", len( VHTools.load_tf_dict(flist , True) )
-    fpath_list = ["/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_dictionaries/", 
-                  "/home/dimitrios/Documents/Synergy-Crawler/saved_pages/blogs/ngrams_corpus_dictionaries/"] 
-    print "Merged TF Dictionary from files of a path or path list", len( VHTools.load_tfd_frmpaths(None, fpath_list , True) )
-    tidx_d = VHTools.tf2tidx( VHTools.load_tfd_frmpaths(None, fpath_list , True) )
-    print "From Term-Frequency Dictionary to Term-Index Dictionary after Indexing Process: ", tidx_d
-    
-    filename = "/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_webpage_vectors/www.latimes.com.49.html.news.ncvect"
-    flist = ["/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_webpage_vectors/www.latimes.com.49.html.news.ncvect",
-             "/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_webpage_vectors/www.latimes.com.50.html.news.ncvect"]
-    wpgs, tf_d = VHTools.load_tf_dict_l(filename , True)
-    print "TF Dictionary list Loaded: ", len( wpgs ), len( tf_d )
-    print "TF Dict of the last loading: ", tf_d
-    wpgs_l, tf_d_l = VHTools.load_tf_dict_l(flist, True)
-    print "Merged list of TF Dictionary lists Loaded: ", len( wpgs ), len( tf_d_l )
-    print "TF Dict of the last loading: ", tf_d_l
-    merged_tf_d = VHTools.gen_tfd_frmlist(tf_d_l)
-    termidx_d = VHTools.tf2tidx( merged_tf_d )
-    print "TF Dict to Term-Index Dict from TF-Dictionary List (length): ", len( termidx_d )
-    print "TF Dict List to  Index-Frequency Dict List: ", VHTools.tf2idxf(tf_d, termidx_d)
-    fpath_list = ["/home/dimitrios/Documents/Synergy-Crawler/saved_pages/news/ngrams_corpus_webpage_vectors/",
-                  "/home/dimitrios/Documents/Synergy-Crawler/saved_pages/blogs/ngrams_corpus_webpage_vectors/"]
-    #wpgs, tf_d = VHTools.load_tfd_l_frmpaths(None, fpath_list, True)
-    #print "Merged list of TF Dictionary lists Loaded from a list of paths: ", len( wpgs ), len( tf_d )
     
     
     
