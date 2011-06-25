@@ -87,7 +87,6 @@ class BaseFileHandler(BasePathFileHandler):
     def save_files(self, basepath, fname_fstr_l, encoding='utf-8', error_handling='strict'):
         if not basepath:
             basepath = ""
-        print fname_fstr_l
         for filename, fstr in fname_fstr_l:
             with codecs.open( (basepath + filename), 'w', encoding, error_handling) as fobj:
                 fobj.write(fstr)
