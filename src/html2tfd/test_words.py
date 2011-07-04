@@ -38,7 +38,7 @@ class Test_Html2TF(unittest.TestCase):
         self.expected_words_lowercase = {u'a': 1, u'@': 1, u'html2vectors': 1, u'for': 1, u'!)': 1, u'(': 1, u'is': 2,\
                                          u',': 1, u'.': 1, u'this': 1, u'test': 1, u'it': 1, u'package/module': 1,\
                                          u'html2tfd.charngrams.basestring2tf': 1, u'class': 1, u'unit': 1}
-        self.expec_xhtmls_dict_len = 1124
+        self.expec_xhtmls_dict_len = 1118
         self.pathto_htmls = "../unit_test_data/html/"
         self.xhtml_file_l = [ "../unit_test_data/html/test_01.html" ]
                          

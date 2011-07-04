@@ -14,7 +14,6 @@ bfile_hdlr = bfs.BasePathFileHandler()
 genres = [ "" ] 
 htmls_path = "/html/"
 base_filepath = "/home/dimitrios/Synergy-Crawler/Golden_Standared_from_Santinis_corpus/"
-text_path = "/gold_standard_text/"
 
 #base_filepath_w = "z:\\home\\dimitrios\\Synergy-Crawler\\Santini_corpus_html2txt\\"
 #htmls_path_w = "\\html\\"
@@ -22,16 +21,16 @@ text_path = "/gold_standard_text/"
 
 base_filepath_w = "z:\\home\\dimitrios\\Synergy-Crawler\\Golden_Standared_from_Santinis_corpus\\"
 htmls_path_w = "\\html\\"
-text_path_w = "\\htmlremover_text\\"
+text_path_w = "\\htmldetagger_console_ver_text\\"
 
 for g in genres:
     file_lst = bfile_hdlr.file_list_frmpaths(base_filepath, g + htmls_path)
     file_lst = [ fname.split('/')[-1] for fname in file_lst ]
     for html_f in file_lst:
         os.spawnlp(os.P_WAIT, '/usr/bin/wine', '/usr/bin/wine',\
-                   '/home/dimitrios/Development_Workspace/HtmlRemover/htmlrem.exe',\
+                   '/home/dimitrios/.wine/drive_c/Program Files/JafSoft/Detagger/h2acons.exe',\
                    base_filepath_w + g + htmls_path_w + html_f,\
-                   base_filepath_w + g + text_path_w + html_f + ".txt" )
+                   '/out=' + base_filepath_w + g + text_path_w + html_f + ".txt" )
 
 
 
