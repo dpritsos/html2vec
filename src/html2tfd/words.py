@@ -183,10 +183,8 @@ class Html2TF(BaseString2TF, HtmlText):
         BaseString2TF.__init__(self)
         if lowercase:
             self._attrib = self.__attrib_lowercase
-        else:
-            self._attrib = self.__attrib
         
-    def __attrib(self, xhtml_str):
+    def _attrib(self, xhtml_str):
         return self.tf_dict( self.text( xhtml_str ) )
     
     def __attrib_lowercase(self, xhtml_str):

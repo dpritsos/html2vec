@@ -62,10 +62,16 @@ class BaseRegexHtmlAttributes(object):
     def htmlentities2utf8(self, str):
         for entity, etname in self.html_entities_name.findall(str):
             #Last argument in str.replace() is for maximum number of occurrences to be replaced
-            str = str.replace(entity, unichr( hedfs.name2codepoint[ etname ] ), 1) 
+            try:
+                str = str.replace(entity, unichr( hedfs.name2codepoint[ etname ] ), 1) 
+            except Exception as e:
+                print("ERROR converting HTML entities to UTF-8 - There is no html entity: %s, %s" % (entity, e))
         for entity, etname in self.html_entities_number.findall(str):
             #Last argument in str.replace() is for maximum number of occurrences to be replaced
-            str = str.replace(entity, unichr( int(etname) ), 1)
+            try:
+                str = str.replace(entity, unichr( int(etname) ), 1)
+            except Exception as e:
+                print("ERROR converting HTML entities to UTF-8 - There is no html entity: %s, %s" % (entity, e))
         #Is trying to catch the error composed html entity characters and ref-numbers 
         for entity, etname in self.html_entname_nosemicolon.findall(str):
             try:

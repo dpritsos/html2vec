@@ -90,14 +90,4 @@ class BaseFileHandler(BasePathFileHandler):
         for filename, fstr in fname_fstr_l:
             with codecs.open( (basepath + filename), 'w', encoding, error_handling) as fobj:
                 fobj.write(fstr)
-        
-
-        
             
-            
-    
-    
-    
-    
-        
-    
