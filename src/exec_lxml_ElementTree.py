@@ -15,12 +15,16 @@ bfh = bfs.BaseFileHandler()
 #genres = [ "blog/html/", "eshop/html/", "faq/html/", "frontpage/html/", "listing/html/", "php/html/", "spage/html/"] 
 #base_filepath = "/home/dimitrios/Synergy-Crawler/Santini_corpus_html2txt/"
 #genres = [ "blog_pgs/html/", "news_pgs/html/", "product_pgs/html/", "forum_pgs/html/", "wiki_pgs/html/" ]
-genres = [ "blog_pgs/html_500/", "news_pgs/html_500/", "product_pgs/html_500/", "forum_pgs/html_500/", "wiki_pgs/html_500/" ] 
-base_filepath = "/home/dimitrios/Synergy-Crawler/Crawled_corpus_3000/"
+#genres = [ "blog_pgs/html_500/", "news_pgs/html_500/", "product_pgs/html_500/", "forum_pgs/html_500/", "wiki_pgs/html_500/" ] 
+genres = [ "blog_pgs/html/", "news_pgs/html/", "product_pgs/html/", "forum_pgs/html/", "wiki_pgs/html/" ]
+#base_filepath = "/home/dimitrios/Synergy-Crawler/Crawled_corpus_3000/"
+base_filepath = "/home/dimitrios/Synergy-Crawler/Crawled_corpus_500/"
+#base_filepath = "/home/dimitrios/Synergy-Crawler/Manually_Selected_Crawled_corpus_75/"
 #genres = [ "html/" ] 
 #base_filepath = "/home/dimitrios/Synergy-Crawler/Golden_Standared_from_Santinis_corpus/"
 #text_path = "/lxml_elementtree_text/"
-text_path = "/lxml_elementtree_text_500/"
+#text_path = "/lxml_elementtree_text_500/"
+text_path = "/lxml_elementtree_text/"
 
 find_text = lxml.etree.XPath("//text()")
 cleaner = lxml.html.clean.Cleaner(scripts=True,\
@@ -41,10 +45,10 @@ whitespace_chars = re.compile(r'[\s]+', re.UNICODE)
 
 for g in genres:
     fn_ftxt_l = bfh.load_frmpaths(base_filepath, g, encoding='utf-8', error_handling='replace')
-    fn_ftxt_l = [ [fn.replace('/html_500/', text_path),\
+    fn_ftxt_l = [ [fn.replace('/html/', text_path),\
                 whitespace_chars.sub(' ', " ".join( find_text( lxml.etree.fromstring( cleaner.clean_html(ftxt.encode()), parser)) ))\
                    ] for fn, ftxt in fn_ftxt_l ]
-    fn_ftxt_l = [ [fn.replace('.htm', '.html.txt'), ftxt.decode()] for fn, ftxt in fn_ftxt_l ]
+    fn_ftxt_l = [ [fn.replace('.html', '.html.txt'), ftxt.decode()] for fn, ftxt in fn_ftxt_l ]
     print fn_ftxt_l[0]
     bfh.save_files(None, fn_ftxt_l, encoding='utf-8', error_handling='strict')
         

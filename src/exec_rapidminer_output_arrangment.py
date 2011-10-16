@@ -6,15 +6,25 @@ import codecs
 
 h2t = htmlattrib.regex.HtmlText() 
    
-csvs = [ 'rapidminer_text.csv' ] 
+#csvs = [ 'rapidminer_text.csv' ] 
+#csvs = [ 'RapidMiner_CSV/blog_75.csv', 'RapidMiner_CSV/forum_75.csv',\
+#         'RapidMiner_CSV/news_75.csv', 'RapidMiner_CSV/product_75.csv',\
+#         'RapidMiner_CSV/wiki_75.csv'] #'RapidMiner_CSV/blog_500.csv',
+
+csvs = [ 'RapidMiner_CSV/product_75.csv', 'RapidMiner_CSV/wiki_75.csv' ]
+
+
+
 #'santinis_blog_pgs_hml_cleaned.csv', 'santinis_eshop_pgs_hml_cleaned.csv',\ 
 #'santinis_faq_pgs_hml_cleaned.csv']
 #'santinis_listing_pgs_hml_cleaned.csv']
 #'santinis_frontpage_pgs_hml_cleaned.csv']
 #'santinis_php_pgs_hml_cleaned.csv' ]
 #'santinis_spages_pgs_hml_cleaned.csv' ] # 
-base_filepath = "/home/dimitrios/Synergy-Crawler/Golden_Standared_from_Santinis_corpus/"
-text_path = "/rapidminer_text/"
+#base_filepath = "/home/dimitrios/Synergy-Crawler/Golden_Standared_from_Santinis_corpus/"
+#base_filepath = "/home/dimitrios/Synergy-Crawler/Crawled_corpus_500/"
+base_filepath = "/home/dimitrios/Synergy-Crawler/Manually_Selected_Crawled_corpus_75/"
+text_path = "/txt_rapidminer_app/"
 
 
 def load_csv(filename):
@@ -49,7 +59,7 @@ def load_csv(filename):
             else:
                 recored += read_buff
                 #print recored
-            if rec_c == 9:
+            if rec_c == 10: #9
                 print len(csv_line[0])
                 csv_lines.append( csv_line[0:3] )
                 csv_line = list()
@@ -61,7 +71,7 @@ for csv in csvs:
     csv_lines = load_csv( base_filepath + csv )
     for line_c in csv_lines:
         print line_c[2], line_c[1] 
-    fn_ftxt_l = [ [base_filepath + "" + text_path + line[2].strip() + ".txt", line[0]] for line in csv_lines ] #line[1].strip()
+    fn_ftxt_l = [ [base_filepath + line[1].strip() + text_path + line[2].strip() + ".txt", line[0]] for line in csv_lines ] #line[1].strip()
     #print fn_ftxt_l[1] 
     h2t.save_files(None, fn_ftxt_l[1:], encoding='utf-8', error_handling='strict')
    

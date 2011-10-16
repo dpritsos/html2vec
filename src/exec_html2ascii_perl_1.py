@@ -8,7 +8,11 @@ bpfh = bfs.BasePathFileHandler()
 
    
 genres = [ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"] 
+#genres = [ "blog_pgs", "news_pgs", "product_pgs", "forum_pgs", "wiki_pgs" ]
 base_filepath = "/home/dimitrios/Synergy-Crawler/Santini_corpus_html2txt/"
+#base_filepath = "/home/dimitrios/Synergy-Crawler/Manually_Selected_Crawled_corpus_75/"
+#base_filepath = "/home/dimitrios/Synergy-Crawler/Crawled_corpus_500/"
+
 htmls_path = "/html/"
 #genres = [ "" ] 
 #htmls_path = "html/"

@@ -14,20 +14,22 @@ from filehandlers import basefilehandlers as bfs
 genres = [ "" ] 
 base_filepath = "/home/dimitrios/Synergy-Crawler/Golden_Standared_from_Santinis_corpus/"
 base_filepath_save = "/home/dimitrios/Synergy-Crawler/Golden_Standared_from_Santinis_corpus_diffs_txt-format/"
-#text_path_l = ["/gold_standard_text/", "/htmlremover_text/"]
+text_path_l = ["/gold_standard_text/", "/htmlremover_text/"]
 #text_path_l = ["/gold_standard_text/", "/rapidminer_text/"]
 #text_path_l = ["/gold_standard_text/", "/nltk-clean_html_text/"]
 #text_path_l = ["/gold_standard_text/", "/html2text_debian_text/"]
 #text_path_l = ["/gold_standard_text/", "/htmldetagger_console_ver_text/"]
 #text_path_l = ["/gold_standard_text/", "/html2ascii_perl_text/"]
-text_path_l = ["/gold_standard_text/", "/lxml_elementtree_text/"]
-#diff_txt = "/htmlremover_diffs/"
+#text_path_l = ["/gold_standard_text/", "/lxml_elementtree_text/"]
+#text_path_l = ["/gold_standard_text/", "/html2vectors_text/"]
+diff_txt = "/htmlremover_diffs/"
 #diff_txt = "/rapidminer_diffs/"
 #diff_txt = "/nltk-clean_html_diffs/"
 #diff_txt = "/html2text_debian_diffs/"
 #diff_txt = "/htmldetagger_console_ver_diffs/"
 #diff_txt = "/html2ascii_perl_diffs/"
-diff_txt = "/lxml_elementtree_diffs/"
+#diff_txt = "/lxml_elementtree_diffs/"
+#diff_txt = "/html2vectors_diffs/"
 
 file_hdlr = bfs.BaseFileHandler()
 diffsto_html = difflib.HtmlDiff()

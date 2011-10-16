@@ -79,11 +79,12 @@ class TFdictFilesHandler(BasePathFileHandler):
         vect_l = list()
         try:
             lines_cnt = 0
-            for fileline in fenc:
+            wholetxt = fenc.read()
+            for fileline in wholetxt.split("\n~\n~\n"):
                 line = fileline.rstrip()
                 wp_name, wp_tf_d = tuple( line.split(" ~~> ") ) #BE CAREFULL with SPACES
                 wps_l.append( wp_name )
-                composed_terms = wp_tf_d.split('\t')
+                composed_terms = wp_tf_d.split('\t~,~\t')
                 vect_dict = dict()  
                 for comp_term in composed_terms:                     
                     Term, Freq = tuple( comp_term.split(' ~:~ ') )
@@ -163,9 +164,12 @@ class TFdictFilesHandler(BasePathFileHandler):
         try: 
             for fn, tfd in fname_tf_l:
                 fenc.write(fn + " ~~> ")
-                for term, freq in tfd.items():
-                    fenc.write( term + " ~:~ "  + str(freq) + "\t") 
-                fenc.write("\n") 
+                tfd_len = len(tfd)
+                for i, (term, freq) in enumerate(tfd.items()):
+                    fenc.write( term + " ~:~ "  + str(freq) )
+                    if i != tfd_len - 1:
+                        fenc.write("\t~,~\t") 
+                fenc.write("\n~\n~\n") 
         except Exception as e:
             print("ERROR WRITTING FILE: %s -- %s ~~> %s" % (e, fn, term))
         finally:
