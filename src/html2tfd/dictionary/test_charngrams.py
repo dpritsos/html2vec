@@ -1,13 +1,13 @@
 """ Unit Test for html2tfd.charngrams.py """
 
 import unittest
-import charngrams
-import htmlattrib.regex as htmlre
+import cngrams
+import htmlattrib.attrib as htmlre
 
 class Test_BaseString2TF__3grams(unittest.TestCase):
     
     def setUp(self):
-        self.bs2tf = charngrams.BaseString2TF(n=3)
+        self.bs2tf = cngrams.BaseString2TF(n=3)
         self.txt_sample = "This is a unit test for html2tfd.charngrams.BaseString2TF class for html2vectors package/module"
         self.expected_ngrams = {'s i': 1, 't t': 1, 'ase': 1, 's a': 1, 'htm': 2, 'ram': 1, 'rs ': 1, 'TF ': 1, 's f': 1,\
                                 '.ch': 1, 't f': 1, ' un': 1, '2tf': 1, 'l2t': 1, 'l2v': 1, 's p': 1, 'eSt': 1, 'tes': 1,\
@@ -29,8 +29,8 @@ class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
         self.n = 3
-        self.html2tf = charngrams.Html2TF( self.n )
-        self.html2tf_lowercase = charngrams.Html2TF( self.n, lowercase=True )
+        self.html2tf = cngrams.Html2TF( self.n )
+        self.html2tf_lowercase = cngrams.Html2TF( self.n, lowercase=True )
         self.htmltext = htmlre.HtmlText()
         self.html_sample = "<html> \
                             <head> \

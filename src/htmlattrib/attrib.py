@@ -18,13 +18,16 @@ class BaseHtmlAttrib(object):
         return text_l  
         
     def from_paths(self, basepath, filepath_l, encoding='utf8', error_handling='strict', low_mem=False):
+        
         if low_mem:
+            ###THIS IS THE FIRST PYTABLES INTERFACE
             flist = self.file_list_frmpaths(basepath, filepath_l)
             wpg_txt_ll = list()
             for filename in flist:
                 xhtml_src = self.load_files(filename, encoding, error_handling)
                 wpg_txt_ll.append( [filename, self._attrib(xhtml_src)]  )
             return wpg_txt_ll
+            ###THIS IS THE FIRST PYTABLES INTERFACE
         else:  
             return [ [wbpg, self._attrib(html_src)] for wbpg, html_src in\
                         self.load_frmpaths(basepath, filepath_l, encoding, error_handling) ]

@@ -1,7 +1,7 @@
 """ """
 
 import re
-from htmlattrib.regex import HtmlText
+from htmlattrib.attrib import HtmlText
 import tfdhandler
 
 

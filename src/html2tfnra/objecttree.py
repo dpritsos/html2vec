@@ -2,6 +2,7 @@
 
 import tables as pyt
 import numpy as np
+from tables import * 
 
 class Particle(pyt.IsDescription):
     identity = pyt.StringCol(itemsize=22, dflt=" ", pos=0) # character String
@@ -40,9 +41,8 @@ for table in (table1, table2):
         row['speed'] = i * 2.
         # This injects the Record values
         row.append()
-
-# Flush the table buffers
-table.flush()
+    # Flush the table buffers
+    table.flush()
 
 #Adding staff to PyTables tree
 speed = [ x['speed'] for x in table.iterrows() if x['idnumber'] > 3 and 6 <= x['speed'] < 16 ]
@@ -69,12 +69,15 @@ for group in fileh.walkGroups():
         print array
 print "iterNodes() function"
 for group in fileh.walkGroups():
-    for array in fileh.iterNodes(group, classname="Array"):
+    for array in fileh.iterNodes(group): # classname="Array"):
         print array
 print "h5file.walkNodes() function"
 for array in fileh.walkNodes("/", classname="Array"):
     print array
 
-    
+table = fileh.root.group1.table1
+#table = fileh.root.columns.speed
+print repr(table[:])
+   
 # Finally, close the file (this also will flush all the remaining buffers!)
 fileh.close()
