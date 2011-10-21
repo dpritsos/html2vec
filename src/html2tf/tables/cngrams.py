@@ -10,7 +10,7 @@ class BaseString2TF(object):
         #reg_ng_size = r'.{' + str(n) + '}'
         #self.ngrams = re.compile( reg_ng_size, re.UNICODE )
     
-    def nf_dict(self, text):
+    def nf_array(self, text):
         if not text:
             return None
         #Find and Count NGrams
