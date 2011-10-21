@@ -1,6 +1,7 @@
 """ """
 
 import tables as tb
+import numpy as np
 
 
 class TermPosFreq(tb.IsDescription):
@@ -14,6 +15,11 @@ class GenreTable(tb.IsDescription):
     wpg_name = tb.StringCol(itemsize=256)
     links_lst = tb.UInt64Col(shape=(100)) 
     tf = TermPosFreq()
+    
+GenreTableZ = np.dtype(('wpg_id', np.uint64),\
+                       ('',),\
+                       (,),\
+                       (,[]))
     
 
 class CorpusTable(object):
