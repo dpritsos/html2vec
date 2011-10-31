@@ -16,10 +16,13 @@ class GenreTable(tb.IsDescription):
     links_lst = tb.UInt64Col(shape=(100)) 
     tf = TermPosFreq()
     
-GenreTableZ = np.dtype(('wpg_id', np.uint64),\
-                       ('',),\
-                       (,),\
-                       (,[]))
+GenreTableZ = np.dtype([('wpg_id', 'uint64'),\
+                        ('wpg_name', 'S256'),\
+                        ('links_lst', 'uint64', 100),\
+                        ('TF',[('term', 'S128'),\
+                               ('pos', 'uint16'),\
+                               ('freq', 'float32')], 1000)\
+                        ])
     
 
 class CorpusTable(object):
