@@ -8,26 +8,28 @@ class TermPosFreq(tb.IsDescription):
     term = tb.StringCol(itemsize=128)
     pos = tb.UInt16Col()
     freq = tb.Float32Col()
-
-
-class GenreTable(tb.IsDescription):
-    wpg_id = tb.UInt64Col()
-    wpg_name = tb.StringCol(itemsize=256)
-    links_lst = tb.UInt64Col(shape=(100)) 
-    tf = TermPosFreq()
     
-GenreTableZ = np.dtype([('wpg_id', 'uint64'),\
-                        ('wpg_name', 'S256'),\
-                        ('links_lst', 'uint64', 100),\
-                        ('TF',[('term', 'S128'),\
-                               ('pos', 'uint16'),\
-                               ('freq', 'float32')], 1000)\
-                        ])
-    
+default_GenreTable_dtype = np.dtype([('wpg_id', 'uint64'),\
+                               ('wpg_name', 'S256'),\
+                               ('links_lst', 'uint64', 100),\
+                               ('TF', "S128, uint16, float32", 500)
+                               ]) # Still Working on it!
+
+default_TF_dtype = np.dtype( [('term', 'S128'), ('pos', 'uint16'), ('freq', 'float32')] ) #OK!
+                            
+
+#default_TF_dtype = np.dtype([('term', 'S128')])
+
+#class default_GenreTable(tb.IsDescription):
+#    wpg_id = tb.UInt64Col()
+#    wpg_name = tb.StringCol(itemsize=256)
+#    links_lst = tb.UInt64Col(shape=(100)) 
+#    TF = tb.Col.from_dtype( dtype=default_TF_dtype )
+   
 
 class CorpusTable(object):
     
-    def __init__(self, Genre_Table, table_name="CorpusTable.h5", table_path="",\
+    def __init__(self, genre_table=default_GenreTable_dtype, table_name="CorpusTable.h5", table_path="",\
                  ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
                  corpus_name="Corpus", genres_lst=["Genre1"], corpus_paths_lst=""):
         #Create HD5 file in user defined path
@@ -44,7 +46,7 @@ class CorpusTable(object):
         #Create TermsType-Position-Frequency Tables for each genre
         for grp in self.h5file.walkGroups(where="//"):
             for gnr in genres_lst:
-                gtable = self.h5file.createTable(grp, gnr, GenreTable) #GenreTable is a Nested-Table
+                gtable = self.h5file.createTable(grp, gnr, genre_table) #GenreTable is a Nested-Table
                 gtable.attrs.path_name = ""
     
     def get(self):
@@ -53,7 +55,7 @@ class CorpusTable(object):
 
 if __name__ == "__main__": #SAMPLE CODE TO BE REMOVED WHEN UnitTest-File will be ready
     
-    testTable = CorpusTable(GenreTable, table_name="Santinis.h5", corpus_name="Santinis_corpus", genres_lst=[ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"])
+    testTable = CorpusTable(np.zeros(1,dtype=default_GenreTable_dtype), table_name="Santinis.h5", corpus_name="Santinis_corpus", genres_lst=[ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"])
     
     print testTable.get()
     
