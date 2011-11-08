@@ -2,36 +2,60 @@
 
 from htmlattrib.attrib import HtmlText
 
-
-class BaseString2TF(object):
+class BaseString2NgramList(object):
     
     def __init__(self, n):
         self.n = n
-        #reg_ng_size = r'.{' + str(n) + '}'
-        #self.ngrams = re.compile( reg_ng_size, re.UNICODE )
+        self.ngrms_l = list()
+    
+    def terms_lst(self, text):
+        if not text:
+            return None
+        for i in range( len(text) - self.n + 1 ): 
+            self.ngrms_l.append( text[i : i+self.n]  )
+        return self.ngrms_l
+    
+    
+class BaseString2TFTP(BaseString2NgramList):
+    
+    def __init__(self, n):
+        BaseString2NgramList.__init__(self, n)
     
     def nf_dict(self, text):
         if not text:
             return None
-        #Find and Count NGrams
-        #ngrms_l = self.ngrams.findall(text)
-        ngrms_l = list()
-        for i in range( len(text) - self.n + 1 ): 
-            ngrms_l.append( text[i : i+self.n]  )
+        #Create NGram List if has been not previously generated    
+        if not self.ngrms_l:
+            self.terms_lst(text)
+        #Count NGrams and Build the Ngram-Frequency (TF) dictionary 
         NgF_d = dict()
-        for ng in ngrms_l:
+        for ng in self.ngrms_l:
             if ng in NgF_d: #if the dictionary of terms has the 'terms' as a key 
                 NgF_d[ ng ] += 1
             else: 
                 NgF_d[ ng ] = 1 
-        return NgF_d
+        return NgF_d  
     
+    def npos_dict(self, text):
+        if not text:
+            return None
+        #Create NGram List if has been not previously generated    
+        if not self.ngrms_l:
+            self.terms_lst(text)
+        NgPos_d = dict()
+        for i, ng in enumerate(self.ngrms_l):
+            if ng in NgPos_d: #if the dictionary of terms has the 'terms' as a key 
+                NgPos_d[ ng ].append(i)
+            else: 
+                NgPos_d[ ng ] = [ i ] 
+        return NgPos_d
+  
 
-class Html2TF(BaseString2TF, HtmlText):
+class Html2TF(BaseString2TFTP, HtmlText):
     
     def __init__(self, n=3, lowercase=False):
         HtmlText.__init__(self)
-        BaseString2TF.__init__(self, n)
+        BaseString2TFTP.__init__(self, n)
         if lowercase:
             self._attrib = self.__attrib_lowercase
         
@@ -40,4 +64,19 @@ class Html2TF(BaseString2TF, HtmlText):
     
     def __attrib_lowercase(self, xhtml_str):
         return self.nf_dict( self.text( xhtml_str ).lower() )
+    
+    
+class Html2TP(BaseString2TFTP, HtmlText):
+    
+    def __init__(self, n=3, lowercase=False):
+        HtmlText.__init__(self)
+        BaseString2TFTP.__init__(self, n)
+        if lowercase:
+            self._attrib = self.__attrib_lowercase
+        
+    def _attrib(self, xhtml_str):
+        return self.npos_dict( self.text( xhtml_str ) )
+    
+    def __attrib_lowercase(self, xhtml_str):
+        return self.npos_dict( self.text( xhtml_str ).lower() )
     
