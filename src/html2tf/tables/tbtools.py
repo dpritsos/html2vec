@@ -11,8 +11,10 @@ class default_GenreTable_Desc(tb.IsDescription):
     
 default_GenreTable_dtype = np.dtype( [('wpg_id', 'uint64'), ('wpg_name', 'S256'), ('links_lst', 'uint64', 100)] )
 
-default_TF_dtype = np.dtype( [('term', 'S128'), ('freq', 'float32')] ) 
-default_TP_dtype = np.dtype( [('term', 'S128'), ('pos', 'uint16')] )
+default_TF_dtype = np.dtype( [('terms', 'S128'), ('freq', 'float32')] ) 
+default_TF_3grams_dtype = np.dtype( [('terms', 'S3'), ('freq', 'float32')] )
+default_TP_dtype = np.dtype( [('terms', 'S128'), ('pos', 'uint16')] )
+default_TP_3grams_dtype = np.dtype( [('terms', 'S128'), ('pos', 'uint16')] )
                     
 
 class CorpusTable(object):
