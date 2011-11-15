@@ -14,7 +14,7 @@ default_GenreTable_dtype = np.dtype( [('wpg_id', 'uint64'), ('wpg_name', 'S256')
 default_TF_dtype = np.dtype( [('terms', 'S128'), ('freq', 'float32')] ) 
 default_TF_3grams_dtype = np.dtype( [('terms', 'S3'), ('freq', 'float32')] )
 default_TP_dtype = np.dtype( [('terms', 'S128'), ('pos', 'uint16')] )
-default_TP_3grams_dtype = np.dtype( [('terms', 'S128'), ('pos', 'uint16', (200,))] )
+default_TP_3grams_dtype = np.dtype( [('terms', 'S3'), ('pos', 'uint16', (200,))] )
                     
 
 class CorpusTable(object):

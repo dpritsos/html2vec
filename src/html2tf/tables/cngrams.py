@@ -32,11 +32,11 @@ class BaseString2TFTP(BaseString2NgramList):
         if not self.ngrms_l:
             self.terms_lst(text)
         terms, inds = np.unique1d(self.ngrms_l, return_inverse=True)
-        NgP_arr = np.rec.array(terms, dtype=ndtype)
-        ###NEEDS OTHER SOLUTION NOT FOR USE YET!!!
-        pos_arr_arr =[np.where(inds == idx) for idx in np.arange(len(terms))] 
-        #return pos_arr_arr
-        NgP_arr = np.rec.array([terms, pos_arr_arr], dtype=ndtype)
+        NgP_arr = np.zeros(len(terms) , dtype=ndtype)
+        NgP_arr['terms'] = terms
+        pos_arr_arr =[np.where(inds == idx) for idx in np.arange(len(terms))]
+        for i, pos_arr in enumerate(pos_arr_arr):
+            NgP_arr['pos'][i][0:len(pos_arr[0])] = pos_arr[0] + 1
         return NgP_arr
     
 
