@@ -25,13 +25,19 @@ class BaseString2TFTP(BaseString2NgramList):
         NgF_arr = np.rec.array([terms, freqs], dtype=ndtype) 
         return NgF_arr
     
-    def tpos_array(self, text):
+    def tpos_array(self, text, ndtype=tbtools.default_TP_3grams_dtype):
         if not text:
             return None
         #Find and Count NGrams
-        if not self.ngram_l:
+        if not self.ngrms_l:
             self.terms_lst(text)
-        pass
+        terms, inds = np.unique1d(self.ngrms_l, return_inverse=True)
+        NgP_arr = np.rec.array(terms, dtype=ndtype)
+        ###NEEDS OTHER SOLUTION NOT FOR USE YET!!!
+        pos_arr_arr =[np.where(inds == idx) for idx in np.arange(len(terms))] 
+        #return pos_arr_arr
+        NgP_arr = np.rec.array([terms, pos_arr_arr], dtype=ndtype)
+        return NgP_arr
     
 
 class Html2TF(BaseString2TFTP, HtmlText):

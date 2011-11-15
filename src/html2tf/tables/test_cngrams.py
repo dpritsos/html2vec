@@ -28,7 +28,8 @@ class Test_BaseString2TFTP__3grams(unittest.TestCase):
                                                ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0), ('s p', 1.0),\
                                                ('s.B', 1.0), ('seS', 1.0), ('ss ', 1.0), ('st ', 1.0), ('t f', 1.0),\
                                                ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0), ('tor', 1.0),\
-                                               ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype)
+                                               ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype)                                            
+                                            
         self.expected_ngrams_pos = {'s i': [3], 't t': [13], 'ase': [45], 's a': [6], 'htm': [24, 68], 'ram': [39], 'rs ': [78],\
                                     'TF ': [55], 's f': [62], '.ch': [32], 't f': [18], ' un': [9], '2tf': [28], 'l2t': [27],\
                                     'l2v': [71], 's p': [79], 'eSt': [47], 'tes': [15], 'ge/': [86], 'ams': [40], 'or ': [21, 65],\
@@ -44,14 +45,15 @@ class Test_BaseString2TFTP__3grams(unittest.TestCase):
                            
     def test_basestring2tf_nf_dict(self):
         ngrams_freq = self.bs2tf.tf_array( self.txt_sample )
-        #print ngrams_freq
-        self.assertEqual(ngrams_freq, self.expected_ngrams_freq)
+        for val, exp_val in zip(ngrams_freq, self.expected_ngrams_freq):
+            self.assertEqual(val, exp_val)
         
-"""def test_basestring2tf_npos_dict(self):
-        ngrams_pos = self.bs2tf.npos_dict( self.txt_sample )
-        self.assertEqual(ngrams_pos, self.expected_ngrams_pos)
-
-
+    def test_basestring2tf_npos_dict(self):
+        ngrams_pos = self.bs2tf.tpos_array( self.txt_sample )
+        print ngrams_pos
+        #self.assertEqual(ngrams_pos, self.expected_ngrams_pos)
+        
+"""
 class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
