@@ -5,7 +5,6 @@ from html2tf.dictionaries.cngrams import BaseString2NgramList
 import tbtools
 import numpy as np
 
-
 class BaseString2TFTP(BaseString2NgramList):
     
     def __init__(self, n):

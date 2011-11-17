@@ -2,12 +2,13 @@
 from filehandlers.basefilehandlers import BaseFileHandler
 import abc
 from regex import BaseRegexHtmlAttributes
+import tables as tb
 
 class BaseHtmlAttrib(object):
     __metaclass__ = abc.ABCMeta
     
     @abc.abstractmethod
-    def _attrib(self, xhtml_str): #Abstractmethod cannot be private (__methodname) method!
+    def _attrib(self, xhtml_str): #Abstract method cannot be private (__methodname) method!
         pass
     
     def from_src(self, xhtml_str):
@@ -18,7 +19,6 @@ class BaseHtmlAttrib(object):
         return text_l  
         
     def from_paths(self, basepath, filepath_l, encoding='utf8', error_handling='strict', low_mem=False):
-        
         if low_mem:
             ###THIS IS THE FIRST PYTABLES INTERFACE
             flist = self.file_list_frmpaths(basepath, filepath_l)
@@ -31,6 +31,21 @@ class BaseHtmlAttrib(object):
         else:  
             return [ [wbpg, self._attrib(html_src)] for wbpg, html_src in\
                         self.load_frmpaths(basepath, filepath_l, encoding, error_handling) ]
+    
+    def from_src2tbls(self, table, xhtml_str):
+        return self._attrib(xhtml_str)
+        
+    def from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
+        for filename, html_str in zip(xhtml_file_l, self.load_files(xhtml_file_l, encoding, error_handling)):
+            terms_tb_arr = fileh.createArray(tablesGroup, filename.split('/')[-1], self._attrib(html_str), '')
+            terms_tb_arr._v_attrs.filepath = filename 
+            terms_tb_arr._v_attrs.terms_num = len(terms_tb_arr.read())
+        return tablesGroup  
+        
+    def from_paths2tbls(self, fileh, tablesGroup, basepath, filepath_l, encoding='utf8', error_handling='strict'):
+        xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
+        tablesGroup = self.from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding, error_handling)
+        return (tablesGroup, xhtml_file_l) 
     
              
 class HtmlText(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
