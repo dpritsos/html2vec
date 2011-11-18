@@ -22,6 +22,11 @@ class CorpusTable(object):
     def __init__(self, genre_table=default_GenreTable_dtype, table_name="CorpusTable.h5", table_path="",\
                  ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
                  corpus_name="Corpus", genres_lst=["Genre1"], corpus_paths_lst=""):
+        pass
+    
+    def create(self, genre_table=default_GenreTable_dtype, table_name="CorpusTable.h5", table_path="",\
+                 ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
+                 corpus_name="Corpus", genres_lst=["Genre1"], corpus_paths_lst=""):
         #Create HD5 file in user defined path
         table_name = table_path + table_name
         self.h5file = tb.openFile(table_name, mode="w")
@@ -38,6 +43,7 @@ class CorpusTable(object):
             for gnr in genres_lst:
                 gtable = self.h5file.createTable(grp, gnr, genre_table)
                 gtable.attrs.path_name = ""
+        
     
     def get(self):
         return self.h5file
