@@ -19,9 +19,9 @@ default_TP_3grams_dtype = np.dtype( [('terms', 'S3'), ('pos', 'uint16', (200,))]
 
 class CorpusTable(object):
     
-    def __init__(self, genre_table=default_GenreTable_dtype, table_name="CorpusTable.h5", table_path="",\
-                 ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
-                 corpus_name="Corpus", genres_lst=["Genre1"], corpus_paths_lst=""):
+    def __init__(self): # genre_table=default_GenreTable_dtype, table_name="CorpusTable.h5", table_path="",\
+                        #ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
+                        #corpus_name="Corpus", genres_lst=["Genre1"], corpus_paths_lst=""):
         pass
     
     def create(self, genre_table=default_GenreTable_dtype, table_name="CorpusTable.h5", table_path="",\
@@ -43,21 +43,23 @@ class CorpusTable(object):
             for gnr in genres_lst:
                 gtable = self.h5file.createTable(grp, gnr, genre_table)
                 gtable.attrs.path_name = ""
-        
+        return self.h5file
     
     def get(self):
         return self.h5file
             
 
-if __name__ == "__main__": #SAMPLE CODE TO BE REMOVED WHEN UnitTest-File will be ready
+#if __name__ == "__main__": #SAMPLE CODE TO BE REMOVED WHEN UnitTest-File will be ready
     
-    testTable = CorpusTable(default_GenreTable_Desc, table_name="Santinis.h5", corpus_name="Santinis_corpus", genres_lst=[ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"])
+#    testTable = CorpusTable()
     
-    print testTable.get()
+#    testTable.create(default_GenreTable_Desc, table_name="Santinis.h5", corpus_name="Santinis_corpus", genres_lst=[ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"])
     
-    print testTable.get().root.Santinis_corpus._v_attrs.genres_lst
+#    print testTable.get()
     
-    testTable.get().close()
+#    print testTable.get().root.Santinis_corpus._v_attrs.genres_lst
+    
+#    testTable.get().close()
              
     
        

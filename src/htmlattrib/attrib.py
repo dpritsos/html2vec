@@ -32,8 +32,9 @@ class BaseHtmlAttrib(object):
             return [ [wbpg, self._attrib(html_src)] for wbpg, html_src in\
                         self.load_frmpaths(basepath, filepath_l, encoding, error_handling) ]
     
-    def from_src2tbls(self, table, xhtml_str):
-        return self._attrib(xhtml_str)
+    def from_src2tbls(self, fileh, tablesGroup, xhtml_str, tbname="tbarray1"):
+        terms_tb_arr = fileh.createTable(tablesGroup, tbname, self._attrib(xhtml_str), '')
+        return terms_tb_arr
         
     def from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
         for filename, html_str in zip(xhtml_file_l, self.load_files(xhtml_file_l, encoding, error_handling)):

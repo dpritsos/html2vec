@@ -6,6 +6,8 @@ import numpy as np
 import tbtools
 import htmlattrib.attrib as htmlre
 import pickle
+import tables as tb
+from tables import *
 
 class Test_BaseString2TFTP__3grams(unittest.TestCase):
     
@@ -53,12 +55,12 @@ class Test_BaseString2TFTP__3grams(unittest.TestCase):
         for i, pos_arr in enumerate(ngrams_pos_arr_lst):
             self.expected_ngrams_pos_arr['pos'][i][0:len(pos_arr[0])] = pos_arr[0] + 1 
                            
-    def test_basestring2tf_nf_dict(self):
+    def test_basestring2tf_tf_array(self):
         ngrams_freq_arr = self.bs2tf.tf_array( self.txt_sample )
         for val, exp_val in zip(ngrams_freq_arr, self.expected_ngrams_freq_arr):
             self.assertEqual(val, exp_val)
         
-    def test_basestring2tf_npos_dict(self):
+    def test_basestring2tf_tpos_array(self):
         ngrams_pos_arr = self.bs2tf.tpos_array( self.txt_sample )
         for (val_term, val_pos_arr), (exp_val_term, exp_val_pos_arr) in zip(ngrams_pos_arr, self.expected_ngrams_pos_arr):
             self.assertEqual(val_term, exp_val_term)
@@ -90,13 +92,13 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                                    ('est', 1.0), ('fd.', 1.0), ('for', 2.0), ('g2T', 1.0), ('ge/', 1.0),\
                                                    ('gra', 1.0), ('har', 1.0), ('his', 1.0), ('htm', 2.0), ('ing', 1.0),\
                                                    ('is ', 2.0), ('it ', 1.0), ('kag', 1.0), ('l2t', 1.0), ('l2v', 1.0),\
-                                                   ('las', 1.0), ('ml2', 2.0), ('mod', 1.0), ('ms.', 1.0), ('ng2', 1.0),\
-                                                   ('ngr', 1.0), ('nit', 1.0), ('odu', 1.0), ('or ', 2.0), ('ors', 1.0),\
-                                                   ('pac', 1.0), ('r h', 2.0), ('ram', 1.0), ('rin', 1.0), ('rng', 1.0),\
-                                                   ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0), ('s p', 1.0),\
-                                                   ('s.B', 1.0), ('seS', 1.0), ('ss ', 1.0), ('st ', 1.0), ('t f', 1.0),\
-                                                   ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0), ('tor', 1.0),\
-                                                   ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype) 
+                                                   ('las', 1.0), ('le ', 1.0), ('ml2', 2.0), ('mod', 1.0), ('ms.', 1.0),\
+                                                   ('ng2', 1.0), ('ngr', 1.0), ('nit', 1.0), ('odu', 1.0), ('or ', 2.0),\
+                                                   ('ors', 1.0), ('pac', 1.0), ('r h', 2.0), ('ram', 1.0), ('rin', 1.0),\
+                                                   ('rng', 1.0), ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0),\
+                                                   ('s p', 1.0), ('s.B', 1.0), ('seS', 1.0), ('ss ', 1.0), ('st ', 1.0),\
+                                                   ('t f', 1.0), ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0),\
+                                                   ('tor', 1.0), ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype) 
         #NOTICE the 'le ':1 on the above dictionary which is extra 3gram compare toTest_BaseString2NgramList__3grams because of HTML clean-up process 
         self.expected_ngrams_freq_arr_lowercase = np.array( [(' a ', 1.0), (' cl', 1.0), (' fo', 2.0), (' ht', 2.0), (' is', 1.0),\
                                                              ('/mo', 1.0), ('2tf', 2.0), ('2ve', 1.0), ('bas', 1.0),\
@@ -114,10 +116,14 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                                              ('s.b', 1.0), ('seS', 1.0), ('ss ', 1.0), ('st ', 1.0), ('t f', 1.0),\
                                                              ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0), ('tor', 1.0),\
                                                              ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype)
+        #test_tables = tbtools.CorpusTable() 
+        #self.h5file = test_tables.create(tbtools.default_GenreTable_Desc, table_name="../../unit_test_data/hd5files/CorpusTable.h5", corpus_name="Santinis_corpus", genres_lst=[ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"])
+        self.tables_name="../../unit_test_data/hd5files/CorpusTable.h5"
+        
         self.pathto_htmls = "../../unit_test_data/html/"
         self.xhtml_file_l = [ "../../unit_test_data/html/test_01.html" ]
         self.txt_file_l = [ "../../unit_test_data/txt/test_01.txt" ]
-        self.hf5path = "../../unit_test_data/hd5files"
+        
                          
     def test_html2tf_from_src(self):
         #html_ngrams = self.html2tf.from_src( self.html_sample )
@@ -151,11 +157,16 @@ class Test_Html2TF__3grams(unittest.TestCase):
         pass
     
     def test_html2tf_from_src2tbls(self):
-        self.hf5path
-        html_ngrams = self.html2tf.from_src( self.html_sample )
-        self.assertEqual(html_ngrams, self.expected_ngrams_freq) 
+        #Create the h5file and a test Group for the puropse of this Unit test
+        h5file = tb.openFile(self.tables_name, mode="w")
+        group_h5 = h5file.createGroup(h5file.root, "testgroup")
+        #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
+        #which is called again and again for each of the test_ methods into this Unit-test Class
+        tb_trms_frq_arr = self.html2tf.from_src2tbls(h5file, group_h5, self.html_sample, tbname="tbarray1")
+        for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr):
+            self.assertEqual(val, exp_val)
     
-    def test_html2tf_from_src2tbls_lowercase(self):
+"""  def test_html2tf_from_src2tbls_lowercase(self):
         html_ngrams = self.html2tf_lowercase.from_src( self.html_sample )
         self.assertEqual(html_ngrams, self.expected_ngrams_freq_lowercase) 
        
@@ -176,7 +187,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         ng_num_real = 0
         for nf in html_ngrams_l[0][1].values():
             ng_num_real += float(nf)
-        self.assertEqual(ng_num_real, ng_num_expected)
+        self.assertEqual(ng_num_real, ng_num_expected)"""
         
 """        
 class Test_Html2TP__3grams(unittest.TestCase):
@@ -258,7 +269,7 @@ class Test_Html2TP__3grams(unittest.TestCase):
         #Be carefull html_ngrams_tp is a list of Dictionaries where each Dictionary has keys a terms an values List of Term's Positions
         #html_ngrams_tp_l[0][  0 <-- ] contains the filenames       
         for vals, expected_vals in zip(html_ngrams_tp_l[0][1].values(), pos_lst):
-            self.assertEqual(vals, expected_vals)"""
+            self.assertEqual(vals, expected_vals)
 """
     
 suite = unittest.TestSuite()
@@ -266,5 +277,3 @@ suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_BaseString2TFTP_
 suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TF__3grams) )
 #suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TP__3grams) )
 unittest.TextTestRunner(verbosity=2).run(suite)        
-    
-        
