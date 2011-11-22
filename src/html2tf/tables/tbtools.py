@@ -5,9 +5,9 @@ import numpy as np
 
    
 class default_GenreTable_Desc(tb.IsDescription):
-    wpg_id = tb.UInt64Col()
-    wpg_name = tb.StringCol(itemsize=256)
-    links_lst = tb.UInt64Col(shape=(100)) 
+    wpg_id = tb.UInt64Col(pos=1)
+    wpg_name = tb.StringCol(pos=2, itemsize=256)
+    links_lst = tb.UInt64Col(pos=3, shape=(100)) 
     
 default_GenreTable_dtype = np.dtype( [('wpg_id', 'uint64'), ('wpg_name', 'S256'), ('links_lst', 'uint64', 100)] )
 

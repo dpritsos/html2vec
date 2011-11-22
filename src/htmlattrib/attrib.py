@@ -2,7 +2,9 @@
 from filehandlers.basefilehandlers import BaseFileHandler
 import abc
 from regex import BaseRegexHtmlAttributes
-import tables as tb
+import numpy as np
+from html2tf.tables import tbtools
+
 
 class BaseHtmlAttrib(object):
     __metaclass__ = abc.ABCMeta
@@ -38,15 +40,22 @@ class BaseHtmlAttrib(object):
         
     def from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
         for filename, html_str in zip(xhtml_file_l, self.load_files(xhtml_file_l, encoding, error_handling)):
-            terms_tb_arr = fileh.createArray(tablesGroup, filename.split('/')[-1], self._attrib(html_str), '')
+            terms_tb_arr = fileh.createTable(tablesGroup, filename.split('/')[-1].split('.')[0], self._attrib(html_str), '')
             terms_tb_arr._v_attrs.filepath = filename 
-            terms_tb_arr._v_attrs.terms_num = len(terms_tb_arr.read())
+            terms_tb_arr._v_attrs.terms_num = np.sum(terms_tb_arr.read()['freq'])
         return tablesGroup  
         
-    def from_paths2tbls(self, fileh, tablesGroup, basepath, filepath_l, encoding='utf8', error_handling='strict'):
+    def from_paths2tbls(self, fileh, tablesGroup, grn_wpg_tbl_name, basepath, filepath_l, encoding='utf8', error_handling='strict'):
         xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
-        tablesGroup = self.from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding, error_handling)
-        return (tablesGroup, xhtml_file_l) 
+        tablesGroup = self.from_files2tbls(fileh, tablesGroup, xhtml_file_l, encoding, error_handling)
+        GenrePageListTable = fileh.createTable(tablesGroup, grn_wpg_tbl_name, tbtools.default_GenreTable_Desc)
+        for i, filename in enumerate(xhtml_file_l):
+            GenrePageListTable.row['wpg_id' ] = i 
+            GenrePageListTable.row['wpg_name' ] = filename 
+            #GenrePageListTable.row['link_lst' ] = np.zeros(100)
+            GenrePageListTable.row.append()
+        GenrePageListTable.flush() 
+        return (tablesGroup, GenrePageListTable) 
     
              
 class HtmlText(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):

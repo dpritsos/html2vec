@@ -7,7 +7,6 @@ import tbtools
 import htmlattrib.attrib as htmlre
 import pickle
 import tables as tb
-from tables import *
 
 class Test_BaseString2TFTP__3grams(unittest.TestCase):
     
@@ -101,25 +100,23 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                                    ('tor', 1.0), ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype) 
         #NOTICE the 'le ':1 on the above dictionary which is extra 3gram compare toTest_BaseString2NgramList__3grams because of HTML clean-up process 
         self.expected_ngrams_freq_arr_lowercase = np.array( [(' a ', 1.0), (' cl', 1.0), (' fo', 2.0), (' ht', 2.0), (' is', 1.0),\
-                                                             ('/mo', 1.0), ('2tf', 2.0), ('2ve', 1.0), ('bas', 1.0),\
-                                                             ('f c', 1.0), ('str', 1.0), ('tf ', 1.0), ('thi', 1.0), ('a u', 1.0),\
-                                                             ('ack', 1.0), ('age', 1.0), ('ams', 1.0), ('arn', 1.0), ('ase', 1.0),\
-                                                             ('ass', 1.0), ('cha', 1.0), ('cka', 1.0), ('cla', 1.0), ('cto', 1.0),\
-                                                             ('d.c', 1.0), ('dul', 1.0), ('e/m', 1.0), ('est', 1.0), ('ect', 1.0),\
-                                                             ('est', 1.0), ('fd.', 1.0), ('for', 2.0), ('g2t', 1.0), ('ge/', 1.0),\
+                                                             (' pa', 1.0), (' te', 1.0), (' un', 1.0), ('.ba', 1.0), ('.ch', 1.0),\
+                                                             ('/mo', 1.0), ('2tf', 2.0), ('2ve', 1.0), ('a u', 1.0), ('ack', 1.0),\
+                                                             ('age', 1.0), ('ams', 1.0), ('arn', 1.0), ('ase', 1.0), ('ass', 1.0),\
+                                                             ('bas', 1.0), ('cha', 1.0), ('cka', 1.0), ('cla', 1.0), ('cto', 1.0),\
+                                                             ('d.c', 1.0), ('dul', 1.0), ('e/m', 1.0), ('ect', 1.0), ('est', 2.0),\
+                                                             ('f c', 1.0), ('fd.', 1.0), ('for', 2.0), ('g2t', 1.0), ('ge/', 1.0),\
                                                              ('gra', 1.0), ('har', 1.0), ('his', 1.0), ('htm', 2.0), ('ing', 1.0),\
                                                              ('is ', 2.0), ('it ', 1.0), ('kag', 1.0), ('l2t', 1.0), ('l2v', 1.0),\
-                                                             ('las', 1.0), ('ml2', 2.0), ('mod', 1.0), ('ms.', 1.0), ('ng2', 1.0),\
-                                                             ('ngr', 1.0), ('nit', 1.0), ('odu', 1.0), ('or ', 2.0), ('ors', 1.0),\
-                                                             ('pac', 1.0), ('r h', 2.0), ('ram', 1.0), ('rin', 1.0), ('rng', 1.0),\
-                                                             ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0), ('s p', 1.0),\
-                                                             ('s.b', 1.0), ('seS', 1.0), ('ss ', 1.0), ('st ', 1.0), ('t f', 1.0),\
-                                                             ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0), ('tor', 1.0),\
-                                                             ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)], dtype=tbtools.default_TF_3grams_dtype)
-        #test_tables = tbtools.CorpusTable() 
-        #self.h5file = test_tables.create(tbtools.default_GenreTable_Desc, table_name="../../unit_test_data/hd5files/CorpusTable.h5", corpus_name="Santinis_corpus", genres_lst=[ "blog", "eshop", "faq", "frontpage", "listing", "php", "spage"])
-        self.tables_name="../../unit_test_data/hd5files/CorpusTable.h5"
-        
+                                                             ('las', 1.0), ('le ', 1.0), ('ml2', 2.0), ('mod', 1.0), ('ms.', 1.0),\
+                                                             ('ng2', 1.0), ('ngr', 1.0), ('nit', 1.0), ('odu', 1.0), ('or ', 2.0),\
+                                                             ('ors', 1.0), ('pac', 1.0), ('r h', 2.0), ('ram', 1.0), ('rin', 1.0),\
+                                                             ('rng', 1.0), ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0),\
+                                                             ('s p', 1.0), ('s.b', 1.0), ('ses', 1.0), ('ss ', 1.0), ('st ', 1.0),\
+                                                             ('str', 1.0), ('t f', 1.0), ('t t', 1.0), ('tes', 1.0), ('tf ', 1.0),\
+                                                             ('tfd', 1.0), ('thi', 1.0), ('tml', 2.0), ('tor', 1.0), ('tri', 1.0),\
+                                                             ('ule', 1.0), ('uni', 1.0), ('vec', 1.0)], dtype=tbtools.default_TF_3grams_dtype)
+        self.tables_filename="../../unit_test_data/hd5files/CorpusTable.h5"
         self.pathto_htmls = "../../unit_test_data/html/"
         self.xhtml_file_l = [ "../../unit_test_data/html/test_01.html" ]
         self.txt_file_l = [ "../../unit_test_data/txt/test_01.txt" ]
@@ -158,36 +155,57 @@ class Test_Html2TF__3grams(unittest.TestCase):
     
     def test_html2tf_from_src2tbls(self):
         #Create the h5file and a test Group for the puropse of this Unit test
-        h5file = tb.openFile(self.tables_name, mode="w")
+        h5file = tb.openFile(self.tables_filename, mode="w")
         group_h5 = h5file.createGroup(h5file.root, "testgroup")
         #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
         #which is called again and again for each of the test_ methods into this Unit-test Class
         tb_trms_frq_arr = self.html2tf.from_src2tbls(h5file, group_h5, self.html_sample, tbname="tbarray1")
         for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr):
             self.assertEqual(val, exp_val)
+        h5file.close()
     
-"""  def test_html2tf_from_src2tbls_lowercase(self):
-        html_ngrams = self.html2tf_lowercase.from_src( self.html_sample )
-        self.assertEqual(html_ngrams, self.expected_ngrams_freq_lowercase) 
+    def test_html2tf_from_src2tbls_lowercase(self):
+        #Create the h5file and a test Group for the puropse of this Unit test
+        h5file = tb.openFile(self.tables_filename, mode="w")
+        group_h5 = h5file.createGroup(h5file.root, "testgroup")
+        #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
+        #which is called again and again for each of the test_ methods into this Unit-test Class
+        tb_trms_frq_arr = self.html2tf_lowercase.from_src2tbls(h5file, group_h5, self.html_sample, tbname="tbarray1")
+        for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr_lowercase):
+            self.assertEqual(val, exp_val) 
+        h5file.close()
        
     def test_html2tf_from_files2tbls(self):
+        #Create the h5file and a test Group for the puropse of this Unit test
+        h5file = tb.openFile(self.tables_filename, mode="w")
+        group_h5 = h5file.createGroup(h5file.root, "testgroup")
         html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
-        html_ngrams = self.html2tf.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        tb_trms_frq_arrz_group = self.html2tf.from_files2tbls(h5file, group_h5, self.xhtml_file_l, encoding='utf8', error_handling='strict' )
         ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0
-        for nf in html_ngrams[0].values():
-            ng_num_real += float(nf)
+        test_table = h5file.getNode(tb_trms_frq_arrz_group, 'test_01') 
+        ng_num_real += np.sum( test_table.read()['freq'] )        
         self.assertEqual(ng_num_real, ng_num_expected)
-
+        self.assertEqual(test_table._v_attrs.filepath, self.xhtml_file_l[0]) 
+        self.assertEqual(test_table._v_attrs.terms_num, ng_num_expected)
+        h5file.close()
+        
     def test_html2tf_from_paths2tbls(self):
-        html_text_l = self.htmltext.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
-        html_ngrams_l = self.html2tf.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=False )
-        #ng_num_expected: contains the calculated expected number of N-grams given the text-string lenght
-        ng_num_expected = len(html_text_l[0][1]) - self.n + 1
+        #Create the h5file and a test Group for the puropse of this Unit test
+        h5file = tb.openFile(self.tables_filename, mode="w")
+        group_h5 = h5file.createGroup(h5file.root, "testgroup")
+        html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        tb_trms_frq_arrz_group = self.html2tf.from_paths2tbls(h5file, group_h5, 'GenrePageListTable', None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
+        #Assert for the Filename-List returned
+        ### THIS IS A COMPLICTED STRUCTURE BE AWARE --> tb_trms_frq_arrz_group[1].read()['wpg_name']
+        self.assertEqual(tb_trms_frq_arrz_group[1].read()['wpg_name'], ['../../unit_test_data/html/test_01.html'])
+        #Assert for the amount of Ngrams greated
+        ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0
-        for nf in html_ngrams_l[0][1].values():
-            ng_num_real += float(nf)
-        self.assertEqual(ng_num_real, ng_num_expected)"""
+        test_table = h5file.getNode(tb_trms_frq_arrz_group[0], 'test_01') 
+        ng_num_real += np.sum( test_table.read()['freq'] )        
+        self.assertEqual(ng_num_real, ng_num_expected)
+        h5file.close()
         
 """        
 class Test_Html2TP__3grams(unittest.TestCase):
