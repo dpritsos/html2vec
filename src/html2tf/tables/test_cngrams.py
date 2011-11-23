@@ -183,7 +183,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         tb_trms_frq_arrz_group = self.html2tf.from_files2tbls(h5file, group_h5, self.xhtml_file_l, encoding='utf8', error_handling='strict' )
         ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0
-        test_table = h5file.getNode(tb_trms_frq_arrz_group, 'test_01') 
+        test_table = h5file.getNode(tb_trms_frq_arrz_group, 'test_01_html') 
         ng_num_real += np.sum( test_table.read()['freq'] )        
         self.assertEqual(ng_num_real, ng_num_expected)
         self.assertEqual(test_table._v_attrs.filepath, self.xhtml_file_l[0]) 
@@ -202,7 +202,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         #Assert for the amount of Ngrams greated
         ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0
-        test_table = h5file.getNode(tb_trms_frq_arrz_group[0], 'test_01') 
+        test_table = h5file.getNode(tb_trms_frq_arrz_group[0], 'test_01_html') 
         ng_num_real += np.sum( test_table.read()['freq'] )        
         self.assertEqual(ng_num_real, ng_num_expected)
         h5file.close()

@@ -22,14 +22,12 @@ class BaseHtmlAttrib(object):
         
     def from_paths(self, basepath, filepath_l, encoding='utf8', error_handling='strict', low_mem=False):
         if low_mem:
-            ###THIS IS THE FIRST PYTABLES INTERFACE
             flist = self.file_list_frmpaths(basepath, filepath_l)
             wpg_txt_ll = list()
             for filename in flist:
                 xhtml_src = self.load_files(filename, encoding, error_handling)
                 wpg_txt_ll.append( [filename, self._attrib(xhtml_src)]  )
             return wpg_txt_ll
-            ###THIS IS THE FIRST PYTABLES INTERFACE
         else:  
             return [ [wbpg, self._attrib(html_src)] for wbpg, html_src in\
                         self.load_frmpaths(basepath, filepath_l, encoding, error_handling) ]
@@ -40,18 +38,30 @@ class BaseHtmlAttrib(object):
         
     def from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
         for filename, html_str in zip(xhtml_file_l, self.load_files(xhtml_file_l, encoding, error_handling)):
-            terms_tb_arr = fileh.createTable(tablesGroup, filename.split('/')[-1].split('.')[0], self._attrib(html_str), '')
+            T_F_or_P_arr = self._attrib(html_str)
+            #This line has been add to prevent error when None is retured from cngrams.BaseString2TFTP methods
+            status_code = 0
+            if T_F_or_P_arr == None:
+                T_F_or_P_arr = np.zeros(1 ,dtype=tbtools.default_TF_dtype)
+                status_code = 1
+            terms_tb_arr = fileh.createTable(tablesGroup, filename.split('/')[-1].replace('.','_').replace('-','__'), T_F_or_P_arr, '')
             terms_tb_arr._v_attrs.filepath = filename 
             terms_tb_arr._v_attrs.terms_num = np.sum(terms_tb_arr.read()['freq'])
+            terms_tb_arr._v_attrs.status = status_code 
         return tablesGroup  
         
     def from_paths2tbls(self, fileh, tablesGroup, grn_wpg_tbl_name, basepath, filepath_l, encoding='utf8', error_handling='strict'):
         xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
         tablesGroup = self.from_files2tbls(fileh, tablesGroup, xhtml_file_l, encoding, error_handling)
         GenrePageListTable = fileh.createTable(tablesGroup, grn_wpg_tbl_name, tbtools.default_GenreTable_Desc)
-        for i, filename in enumerate(xhtml_file_l):
-            GenrePageListTable.row['wpg_id' ] = i 
-            GenrePageListTable.row['wpg_name' ] = filename 
+        for i, file_tb in enumerate(fileh.walkNodes(tablesGroup, classname='Table')):
+            #This line preventing to update the GenrePageListTable with its own meta-attributes (not available anyway) 
+            if file_tb.name == GenrePageListTable.name: 
+                continue 
+            GenrePageListTable.row['wpg_id'] = i
+            GenrePageListTable.row['wpg_name'] = file_tb._v_attrs.filepath
+            GenrePageListTable.row['terms_num'] = file_tb._v_attrs.terms_num 
+            GenrePageListTable.row['status_code'] = file_tb._v_attrs.status
             #GenrePageListTable.row['link_lst' ] = np.zeros(100)
             GenrePageListTable.row.append()
         GenrePageListTable.flush() 
