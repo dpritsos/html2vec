@@ -54,20 +54,14 @@ class Test_BaseString2TFTP__3grams(unittest.TestCase):
         for i, pos_arr in enumerate(ngrams_pos_arr_lst):
             self.expected_ngrams_pos_arr['pos'][i][0:len(pos_arr[0])] = pos_arr[0] + 1 
                            
-<<<<<<< HEAD
+
     def test_basestring2tf_tf_array(self):
-=======
-    def test_basestring2tf_nf_dict(self):
->>>>>>> e9ae502ac052b8367a5eeae128171e8116257a08
         ngrams_freq_arr = self.bs2tf.tf_array( self.txt_sample )
         for val, exp_val in zip(ngrams_freq_arr, self.expected_ngrams_freq_arr):
             self.assertEqual(val, exp_val)
         
-<<<<<<< HEAD
+
     def test_basestring2tf_tpos_array(self):
-=======
-    def test_basestring2tf_npos_dict(self):
->>>>>>> e9ae502ac052b8367a5eeae128171e8116257a08
         ngrams_pos_arr = self.bs2tf.tpos_array( self.txt_sample )
         for (val_term, val_pos_arr), (exp_val_term, exp_val_pos_arr) in zip(ngrams_pos_arr, self.expected_ngrams_pos_arr):
             self.assertEqual(val_term, exp_val_term)
