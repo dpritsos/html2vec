@@ -71,7 +71,7 @@ class BaseHtmlAttrib(object):
             GenrePageListTable.row.append()
         GenrePageListTable.flush() 
         return (tablesGroup, GenrePageListTable) 
-    
+   
              
 class HtmlText(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
     
