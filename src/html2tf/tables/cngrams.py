@@ -9,29 +9,26 @@ import numpy as np
 class BaseString2TFTP(BaseString2NgramList):
     
     def __init__(self, n):
-        self.n = n
-        self.ngrms_l = list()
+        BaseString2NgramList.__init__(self, n)
             
     def tf_array(self, text, ndtype=tbtools.default_TF_3grams_dtype):
         if not text:
             return None
         #Find and Count NGrams
-        if not self.ngrms_l:
-            self.terms_lst(text)
-        terms, inds = np.unique1d(self.ngrms_l, return_inverse=True)
+        ngrms_l = self.terms_lst(text)
+        terms, inds = np.unique1d(ngrms_l, return_inverse=True)
         freqs = np.bincount(inds)
         #We need a Recored arrays to be created thus using numpy.rec.array.fromarrays()
         #to be invoked as follows (alternatively fromarrays() can be used directly   
-        NgF_arr = np.rec.array([terms, freqs], dtype=ndtype) 
+        NgF_arr = np.rec.array([terms, freqs], dtype=ndtype)
         return NgF_arr
     
     def tpos_array(self, text, ndtype=tbtools.default_TP_3grams_dtype):
         if not text:
             return None
         #Find and Count NGrams
-        if not self.ngrms_l:
-            self.terms_lst(text)
-        terms, inds = np.unique1d(self.ngrms_l, return_inverse=True)
+        ngrms_l = self.terms_lst(text)
+        terms, inds = np.unique1d(ngrms_l, return_inverse=True)
         NgP_arr = np.zeros(len(terms) , dtype=ndtype)
         NgP_arr['terms'] = terms
         pos_arr_arr =[np.where(inds == idx) for idx in np.arange(len(terms))]

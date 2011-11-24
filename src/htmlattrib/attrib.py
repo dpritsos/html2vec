@@ -33,21 +33,26 @@ class BaseHtmlAttrib(object):
                         self.load_frmpaths(basepath, filepath_l, encoding, error_handling) ]
     
     def from_src2tbls(self, fileh, tablesGroup, xhtml_str, tbname="tbarray1"):
-        terms_tb_arr = fileh.createTable(tablesGroup, tbname, self._attrib(xhtml_str), '')
+        T_F_or_P_arr = self._attrib(xhtml_str)
+        #This line has been add to prevent error when None is returned from cngrams.BaseString2TFTP methods
+        status_code = 0
+        if T_F_or_P_arr == None:
+            T_F_or_P_arr = np.zeros(1 ,dtype=tbtools.default_TF_dtype)
+            status_code = 1
+        terms_tb_arr = fileh.createTable(tablesGroup, tbname, T_F_or_P_arr)
+        terms_tb_arr._v_attrs.terms_num = np.sum(terms_tb_arr.read()['freq'])
+        terms_tb_arr._v_attrs.status = status_code
         return terms_tb_arr
         
     def from_files2tbls(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
-        for filename, html_str in zip(xhtml_file_l, self.load_files(xhtml_file_l, encoding, error_handling)):
-            T_F_or_P_arr = self._attrib(html_str)
-            #This line has been add to prevent error when None is retured from cngrams.BaseString2TFTP methods
-            status_code = 0
-            if T_F_or_P_arr == None:
-                T_F_or_P_arr = np.zeros(1 ,dtype=tbtools.default_TF_dtype)
-                status_code = 1
-            terms_tb_arr = fileh.createTable(tablesGroup, filename.split('/')[-1].replace('.','_').replace('-','__'), T_F_or_P_arr, '')
-            terms_tb_arr._v_attrs.filepath = filename 
-            terms_tb_arr._v_attrs.terms_num = np.sum(terms_tb_arr.read()['freq'])
-            terms_tb_arr._v_attrs.status = status_code 
+        for i, xhtml_str in enumerate(self.load_files(xhtml_file_l, encoding, error_handling)):
+            table_name = xhtml_file_l[ i ].split('/')[-1]
+            table_name = table_name.replace('.','_')
+            table_name = table_name.replace('-','__')
+            table_name = table_name.replace(' ','')
+            terms_tb_arr = self.from_src2tbls(fileh, tablesGroup, xhtml_str, tbname=table_name)
+            terms_tb_arr._v_attrs.filepath = xhtml_file_l[ i ] 
+            terms_tb_arr.flush()
         return tablesGroup  
         
     def from_paths2tbls(self, fileh, tablesGroup, grn_wpg_tbl_name, basepath, filepath_l, encoding='utf8', error_handling='strict'):

@@ -206,8 +206,8 @@ class Test_Html2TF__3grams(unittest.TestCase):
         ng_num_real += np.sum( test_table.read()['freq'] )        
         self.assertEqual(ng_num_real, ng_num_expected)
         h5file.close()
-        
-"""        
+
+"""           
 class Test_Html2TP__3grams(unittest.TestCase):
     
     def setUp(self):

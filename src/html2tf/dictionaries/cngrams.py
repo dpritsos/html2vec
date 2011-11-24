@@ -6,14 +6,15 @@ class BaseString2NgramList(object):
     
     def __init__(self, n):
         self.n = n
-        self.ngrms_l = list()
+        #self.ngrms_l = list()
     
     def terms_lst(self, text):
         if not text:
             return None
+        ngrms_l =  list()
         for i in range( len(text) - self.n + 1 ): 
-            self.ngrms_l.append( text[i : i+self.n]  )
-        return self.ngrms_l
+            ngrms_l.append( text[i : i+self.n]  )
+        return ngrms_l
     
     
 class BaseString2TFTP(BaseString2NgramList):
@@ -25,11 +26,10 @@ class BaseString2TFTP(BaseString2NgramList):
         if not text:
             return None
         #Create NGram List if has been not previously generated    
-        if not self.ngrms_l:
-            self.terms_lst(text)
+        ngrms_l = self.terms_lst(text)
         #Count NGrams and Build the Ngram-Frequency (TF) dictionary 
         NgF_d = dict()
-        for ng in self.ngrms_l:
+        for ng in ngrms_l:
             if ng in NgF_d: #if the dictionary of terms has the 'terms' as a key 
                 NgF_d[ ng ] += 1
             else: 
@@ -40,10 +40,9 @@ class BaseString2TFTP(BaseString2NgramList):
         if not text:
             return None
         #Create NGram List if has been not previously generated    
-        if not self.ngrms_l:
-            self.terms_lst(text)
+        ngrms_l = self.terms_lst(text)
         NgPos_d = dict()
-        for i, ng in enumerate(self.ngrms_l):
+        for i, ng in enumerate(ngrms_l):
             if ng in NgPos_d: #if the dictionary of terms has the 'terms' as a key 
                 NgPos_d[ ng ].append(i)
             else: 

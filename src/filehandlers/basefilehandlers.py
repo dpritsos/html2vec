@@ -50,6 +50,22 @@ class BasePathFileHandler(object):
         
 
 class BaseFileHandler(BasePathFileHandler):
+    
+    def __init__(self):
+        self.filename_lst = []
+        self.file_count = None 
+        self.encoding = 'utf-8' 
+        self.error_handling = 'strict'
+        
+    def __iter__(self):
+        return self
+    
+    def next(self):
+        if len(self.filename_lst) == self.file_count:
+            raise StopIteration
+        xhtml = self.__load_file(self.filename_lst[ self.file_count ], self.encoding, self.error_handling)
+        self.file_count += 1 
+        return xhtml 
 
     def __load_file(self, filename, encoding='utf-8', error_handling='strict'):
         """ """
@@ -61,7 +77,7 @@ class BaseFileHandler(BasePathFileHandler):
         try:
             fstr = fenc.read()
         except Exception as e:
-            print("BaseFileHandler.load_file() FILE %s ERROR: %s" % (filename, e))
+            print("BaseFileHandler.__load_file() FILE %s ERROR: %s" % (filename, e))
             return None
         finally:
             fenc.close()    
@@ -72,17 +88,19 @@ class BaseFileHandler(BasePathFileHandler):
         if isinstance(filename_l, str):
             return self.__load_file(filename_l, encoding, error_handling)
         elif isinstance(filename_l, list):
-            fstr_lst = list()
-            for filename in filename_l:
-                fstr_lst.append( self.__load_file(filename, encoding, error_handling) )
-            return fstr_lst
+            self.filename_lst = filename_l
+            self.file_count = 0
+            self.encoding = encoding 
+            self.error_handling = error_handling
+            return self
         else:
             raise Exception("A String or a list of Strings was Expected as input")
     
-    def load_frmpaths(self, basepath, filepath_l, encoding='utf-8', error_handling='strict'):
-        """ """
-        fname_lst = self.file_list_frmpaths(basepath, filepath_l)
-        return  [ [fname, fstr] for fname, fstr in zip(fname_lst, self.load_files(fname_lst, encoding, error_handling)) ]
+    #### DEPRICATED BECAUSE IS ITS IS EXTREMELY MEMORY COSUMING ####
+    #def load_frmpaths(self, basepath, filepath_l, encoding='utf-8', error_handling='strict'):
+    #    """ """
+    #    fname_lst = self.file_list_frmpaths(basepath, filepath_l)
+    #    return  [ [fname, fstr] for fname, fstr in zip(fname_lst, self.load_files(fname_lst, encoding, error_handling)) ]
     
     def save_files(self, basepath, fname_fstr_l, encoding='utf-8', error_handling='strict'):
         if not basepath:
@@ -90,4 +108,3 @@ class BaseFileHandler(BasePathFileHandler):
         for filename, fstr in fname_fstr_l:
             with codecs.open( (basepath + filename), 'w', encoding, error_handling) as fobj:
                 fobj.write(fstr)
-            
