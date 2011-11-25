@@ -197,7 +197,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         h5file = tb.openFile(self.tables_filename, mode="w")
         group_h5 = h5file.createGroup(h5file.root, "testgroup")
         html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
-        tb_trms_frq_arrz_group = self.html2tf.from_paths2tbls(h5file, group_h5, 'GenrePageListTable', None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
+        tb_trms_frq_arrz_group = self.html2tf_lowercase.from_paths2tbls(h5file, group_h5, 'GenrePageListTable', None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
         #Assert for the Filename-List returned
         ### THIS IS A COMPLICTED STRUCTURE BE AWARE --> tb_trms_frq_arrz_group[1].read()['wpg_name']
         self.assertEqual(tb_trms_frq_arrz_group[1].read()['wpg_name'], ['../../unit_test_data/html/test_01.html'])

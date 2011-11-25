@@ -14,6 +14,7 @@ class BaseString2NgramList(object):
         ngrms_l =  list()
         for i in range( len(text) - self.n + 1 ): 
             ngrms_l.append( text[i : i+self.n]  )
+        #ngrms_l.sort() #it is nice to be sorted and to conform with numpy.unique1d results   
         return ngrms_l
     
     
@@ -25,7 +26,7 @@ class BaseString2TFTP(BaseString2NgramList):
     def nf_dict(self, text):
         if not text:
             return None
-        #Create NGram List if has been not previously generated    
+        #Create NGram List if has been not previously generated
         ngrms_l = self.terms_lst(text)
         #Count NGrams and Build the Ngram-Frequency (TF) dictionary 
         NgF_d = dict()

@@ -120,23 +120,24 @@ class Test_Html2TF__3grams(unittest.TestCase):
 
     def test_html2tf_from_paths(self):
         html_text_l = self.htmltext.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
-        html_ngrams_l = self.html2tf.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=False )
+        html_ngrams_l = self.html2tf.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict')
         #ng_num_expected: contains the calculated expected number of N-grams given the text-string lenght
         ng_num_expected = len(html_text_l[0][1]) - self.n + 1
         ng_num_real = 0
         for nf in html_ngrams_l[0][1].values():
             ng_num_real += float(nf)
         self.assertEqual(ng_num_real, ng_num_expected)
-           
-    def test_html2tf_from_paths_low_mem(self):
-        html_text_l = self.htmltext.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
-        html_ngrams_l = self.html2tf.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=True )
-        #ng_num_expected: contains the calculated expected number of N-grams given the text-string lenght
-        ng_num_expected = len(html_text_l[0][1]) - self.n + 1
-        ng_num_real = 0
-        for nf in html_ngrams_l[0][1].values():
-            ng_num_real += float(nf)
-        self.assertEqual(ng_num_real, ng_num_expected)
+    
+    #### DEPRICATED ####      
+    #def test_html2tf_from_paths_low_mem(self):
+    #    html_text_l = self.htmltext.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
+    #    html_ngrams_l = self.html2tf.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=True )
+    #    #ng_num_expected: contains the calculated expected number of N-grams given the text-string lenght
+    #    ng_num_expected = len(html_text_l[0][1]) - self.n + 1
+    #    ng_num_real = 0
+    #    for nf in html_ngrams_l[0][1].values():
+    #        ng_num_real += float(nf)
+    #    self.assertEqual(ng_num_real, ng_num_expected)
         
         
 class Test_Html2TP__3grams(unittest.TestCase):
@@ -204,21 +205,22 @@ class Test_Html2TP__3grams(unittest.TestCase):
         pos_lst_f = open(self.pckld_file_pos_list, "r")
         #load previously pickled list of Terms Positions pickle.dump(vals_ll, fl)
         pos_lst = pickle.load(pos_lst_f)
-        html_ngrams_tp_l = self.html2tp.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=False )
+        html_ngrams_tp_l = self.html2tp.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict')
         #Be carefull html_ngrams_tp is a list of Dictionaries where each Dictionary has keys a terms an values List of Term's Positions
         #html_ngrams_tp_l[0][  0 <-- ] contains the filenames       
         for vals, expected_vals in zip(html_ngrams_tp_l[0][1].values(), pos_lst):
             self.assertEqual(vals, expected_vals)
-           
-    def test_html2tp_from_paths_low_mem(self):
-        pos_lst_f = open(self.pckld_file_pos_list, "r")
-        #load previously pickled list of Terms Positions pickle.dump(vals_ll, fl)
-        pos_lst = pickle.load(pos_lst_f)
-        html_ngrams_tp_l = self.html2tp.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=True )
-        #Be carefull html_ngrams_tp is a list of Dictionaries where each Dictionary has keys a terms an values List of Term's Positions
-        #html_ngrams_tp_l[0][  0 <-- ] contains the filenames       
-        for vals, expected_vals in zip(html_ngrams_tp_l[0][1].values(), pos_lst):
-            self.assertEqual(vals, expected_vals)
+    
+    #### DEPRICATED ####      
+    #def test_html2tp_from_paths_low_mem(self):
+    #    pos_lst_f = open(self.pckld_file_pos_list, "r")
+    #    #load previously pickled list of Terms Positions pickle.dump(vals_ll, fl)
+    #    pos_lst = pickle.load(pos_lst_f)
+    #    html_ngrams_tp_l = self.html2tp.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict', low_mem=True )
+    #    #Be carefull html_ngrams_tp is a list of Dictionaries where each Dictionary has keys a terms an values List of Term's Positions
+    #    #html_ngrams_tp_l[0][  0 <-- ] contains the filenames       
+    #    for vals, expected_vals in zip(html_ngrams_tp_l[0][1].values(), pos_lst):
+    #        self.assertEqual(vals, expected_vals)
 
     
 suite = unittest.TestSuite()

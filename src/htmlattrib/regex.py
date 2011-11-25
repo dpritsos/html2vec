@@ -19,6 +19,7 @@ class BaseRegexHtmlAttributes(object):
         self.html_scripts = re.compile(r'<script[^>]*>[\S\s]*?</script>', re.UNICODE|re.IGNORECASE)
         self.html_style = re.compile(r'<style[^>]*>[\S\s]*?</style>', re.UNICODE|re.IGNORECASE)
         self.whitespace_chars = re.compile(r'[\s]+', re.UNICODE)   # {2,}')
+        #self.NULL_chars = re.compile(r'[\x00]', re.UNICODE)   # {2,}')
         self.unknown_char_seq = re.compile(r'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+', re.UNICODE|re.IGNORECASE) #{2,}')
         #'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+ <-- plus added 8-June-2011
         self.html_entities_name = re.compile(r'(&([\w]{2,8});)')
@@ -39,7 +40,7 @@ class BaseRegexHtmlAttributes(object):
         self.html_missclosed_tags = re.compile( missclosed_tags_regex )           
                     
     def encoding_norm(self, str):
-        """ NOT WORKING AS EXPECTED TO BE FIXED """
+        """ NOT WORKING AS EXPECTED - TO BE FIXED """
         #Normalise unicode text data (Refer to unicodedata module) 
         try:
             encod_str = unicodedata.normalize('NFKC', str)
@@ -111,6 +112,8 @@ class BaseRegexHtmlAttributes(object):
             text = self.htmlentities2utf8(text)
             #Normalise Encoding
             ###norm_text = self.encoding_norm(text)
+            #Replace NULL bytes - Yes! encoding and decoding conversion may case this BUT NO SURE TO USE IT  
+            #text = self.NULL_chars.sub(' ',text)
             #Replace whitespace chars with single space
             text = self.whitespace_chars.sub(' ', text)
             #Replace utf8 'REPLACEMENT CHARACTER' with empty string
