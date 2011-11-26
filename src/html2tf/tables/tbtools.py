@@ -53,31 +53,35 @@ class TFTablesHandler(object):
     def get(self):
         return self.h5file
     
-    #def merge_tf_tbls(self, fileh, tbgroup, tb_not=None):
-    #    """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
-    #        is getting a set of term-frequency dictionaries as list of
-    #        arguments and return a dictionary of common terms with their sum of frequencies
-    #        of occurred in all dictionaries containing these terms. """
-    #    dictionary_tb = fileh.createTable(tbgroup, 'Dictionary', default_TF_3grams_desc)
-    #    for tf_tb in fileh.walkNodes(tbgroup, classname='Table'):
-    #        for tf_row in tf_tb.iterrows():
-    #            row = dictionary_tb.where( tf_row['terms'] )
-    #            dictionary_tb
-    #            row.update()
-    #        dictionary_tb.flush()
-    #            tf_row['terms']
-    #            tf_row['freq']
-                
-    #    tf_d = dict()
-    #    tf_l = list()
-    #    for tr_dict in terms_d:
-    #        tf_l.extend( tr_dict.items() )    
-    #    for i in range(len(tf_l)):
-    #        if tf_l[i][0] in tf_d: 
-    #            tf_d[ tf_l[i][0] ] += tf_l[i][1]
-    #        else:
-    #            tf_d[ tf_l[i][0] ] = tf_l[i][1]
-    #    return tf_d
+    def merge_tf_tbls(self, fileh, tbgroup, tb_not=None):
+        """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
+            is getting a set of term-frequency dictionaries as list of
+            arguments and return a dictionary of common terms with their sum of frequencies
+            of occurred in all dictionaries containing these terms. """
+        #dictionary_tb = fileh.getNode( tbgroup + '/Dictionary' )
+        #print dictionary_tb
+        #if not dictionary_tb: 
+        dictionary_tb = fileh.createTable(tbgroup, 'Dictionary', default_TF_3grams_desc)
+        for tf_tb in fileh.walkNodes(tbgroup, classname='Table'):
+            if tf_tb.name == tb_not: continue
+            for tf_row in tf_tb.iterrows():
+                print tf_row['terms'].replace('"', '\\"')
+                idx_lst = dictionary_tb.getWhereList('terms == "'+tf_row['terms'].replace('"', '\\"')+'"' )
+                if len(idx_lst) > 1:
+                    print idx_lst
+                    print tf_row['terms']
+                    raise Exception("IT SUPOSE NOT TO HAVE MORE THAN ONE IDEXES RETURED")
+                if idx_lst:
+                    row = dictionary_tb[ idx_lst[0] ].row
+                    row['freq'] += tf_row['freq']
+                    row.update()
+                else:
+                    row = dictionary_tb.row
+                    row['terms'] = tf_row['terms']
+                    row['freq'] = tf_row['freq']
+                    row.append()
+            dictionary_tb.flush
+        return dictionary_tb
     
     #def gen_tfd_frmlist(self, tf_d_l):
     #    """ gen_tfd_frmlist(): is getting a list of Term-Frequency Dictionaries and creates a 
