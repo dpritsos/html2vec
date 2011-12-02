@@ -32,7 +32,7 @@ class BaseHtmlAttrib(object):
         T_F_or_P_arr = self._attrib(xhtml_str)
         #This line has been add to prevent error when None is returned from cngrams.BaseString2TFTP methods
         status_code = 0
-        if T_F_or_P_arr == None:
+        if T_F_or_P_arr == "":
             T_F_or_P_arr = np.zeros(1 ,dtype=tbtools.default_TF_dtype)
             status_code = 1
         terms_tb_arr = fileh.createTable(tablesGroup, tbname, T_F_or_P_arr)
@@ -59,8 +59,9 @@ class BaseHtmlAttrib(object):
             #This line preventing to update the GenrePageListTable with its own meta-attributes (not available anyway) 
             if file_tb.name == GenrePageListTable.name: 
                 continue 
-            GenrePageListTable.row['wpg_id'] = i
-            GenrePageListTable.row['wpg_name'] = file_tb._v_attrs.filepath
+            GenrePageListTable.row['id'] = i
+            GenrePageListTable.row['table_name'] = file_tb.name
+            GenrePageListTable.row['filename'] = file_tb._v_attrs.filepath
             GenrePageListTable.row['terms_num'] = file_tb._v_attrs.terms_num 
             GenrePageListTable.row['status_code'] = file_tb._v_attrs.status
             #GenrePageListTable.row['link_lst' ] = np.zeros(100)

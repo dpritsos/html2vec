@@ -5,11 +5,12 @@ import numpy as np
 
    
 class default_GenreTable_Desc(tb.IsDescription):
-    wpg_id = tb.UInt64Col(pos=1)
-    wpg_name = tb.StringCol(pos=2, itemsize=256)
-    terms_num = tb.UInt64Col(pos=3)
-    status_code = tb.UInt32Col(pos=4)
-    links_lst = tb.UInt64Col(pos=5, shape=(100))
+    id = tb.UInt32Col(pos=1)
+    table_name = tb.StringCol(pos=2, itemsize=64)
+    filename = tb.StringCol(pos=3, itemsize=256)
+    terms_num = tb.UInt64Col(pos=4)
+    status_code = tb.UInt32Col(pos=5)
+    links_lst = tb.UInt64Col(pos=6, shape=(100))
     
 class default_TF_3grams_desc(tb.IsDescription):
     terms = tb.StringCol(pos=1, itemsize=3)
@@ -53,6 +54,34 @@ class TFTablesHandler(object):
     def get(self):
         return self.h5file
     
+    def pagetf_array(self, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
+        """  """
+        len_tidd = len(term_idx_d)
+        pgtf_arr = np.zeros(len_tidd, dtype=data_type)
+        for pg_name in pagename_lst:
+            pg_tb = fileh.getNode(tbgroup, pg_name, classname='Table')
+            pg_vect = np.zeros(len_tidd, dtype=data_type)
+            for row in pg_tb:
+                pg_vect[ term_idx_d[row['terms']] ] = row['freq'] 
+            pgtf_arr = np.concatenate((pgtf_arr, pg_vect), axis=0)
+        return np.array( pgtf_arr[1::] ) 
+            
+    
+    def Merge_TFtbls2TFarray(self, fileh, tbgroup, tb_name_lst, data_type=default_TF_3grams_dtype):
+        """ Merge_TFtbls2TFarray: TEMPRORERARLY IMPLEMENTATION 
+            Returns: 
+                tf_arr                                        """
+        tf_d = dict()
+        for tb_name in tb_name_lst:
+            tf_tb = fileh.getNode(tbgroup, tb_name, classname='Table')
+            for tf_row in tf_tb.iterrows():
+                if tf_row['terms'] in tf_d: 
+                    tf_d[ tf_row['terms'] ] += tf_row['freq']
+                else:
+                    tf_d[ tf_row['terms'] ] = tf_row['freq']
+        tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
+        return tf_arr
+    
     def merge_tf_tbls(self, fileh, tbgroup, tb_not=None):
         """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
             is getting a set of term-frequency dictionaries as list of
@@ -64,23 +93,104 @@ class TFTablesHandler(object):
         dictionary_tb = fileh.createTable(tbgroup, 'Dictionary', default_TF_3grams_desc)
         for tf_tb in fileh.walkNodes(tbgroup, classname='Table'):
             if tf_tb.name == tb_not: continue
+            print tf_tb.name
             for tf_row in tf_tb.iterrows():
-                print tf_row['terms'].replace('"', '\\"')
-                idx_lst = dictionary_tb.getWhereList('terms == "'+tf_row['terms'].replace('"', '\\"')+'"' )
+                #print tf_row['terms'].replace('"', '\\"')
+                idx_lst = dictionary_tb.getWhereList('terms == "'+tf_row['terms'].replace('\\', '\\\\').replace('"', '\\"')+'"' )
+                print idx_lst 
                 if len(idx_lst) > 1:
                     print idx_lst
                     print tf_row['terms']
                     raise Exception("IT SUPOSE NOT TO HAVE MORE THAN ONE IDEXES RETURED")
-                if idx_lst:
-                    row = dictionary_tb[ idx_lst[0] ].row
-                    row['freq'] += tf_row['freq']
-                    row.update()
+                #print c
+                if len(idx_lst) > 0:
+                    #print "update for: "
+                    #print dictionary_tb[ idx_lst[0] ]
+                    row = dictionary_tb[ idx_lst[0] ]
+                    updd_freq = row['freq'] + tf_row['freq']
+                    dictionary_tb.modifyRows(start=idx_lst[0], rows=[(row['terms'], updd_freq)])
+                    print dictionary_tb[ idx_lst[0] ]
                 else:
                     row = dictionary_tb.row
                     row['terms'] = tf_row['terms']
                     row['freq'] = tf_row['freq']
                     row.append()
-            dictionary_tb.flush
+                dictionary_tb.flush()
+        return dictionary_tb
+    
+    def merge_tf_tbls_using_dict(self, fileh, tbgroup, tb_not=None, data_type=default_TF_3grams_dtype):
+        """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
+            is getting a set of term-frequency dictionaries as list of
+            arguments and return a dictionary of common terms with their sum of frequencies
+            of occurred in all dictionaries containing these terms. """
+        #dictionary_tb = fileh.getNode( tbgroup + '/Dictionary' )
+        #print dictionary_tb
+        #if not dictionary_tb: 
+        #dictionary_tb = fileh.createTable(tbgroup, 'Dictionary', default_TF_3grams_desc)
+        tf_d = dict()
+        for tf_tb in fileh.walkNodes(tbgroup, classname='Table'):
+            if tf_tb.name == tb_not: continue
+            if tf_tb._v_attrs.status:
+                print tf_tb.name
+            for tf_row in tf_tb.iterrows():
+                if tf_row['terms'] in tf_d: 
+                    tf_d[ tf_row['terms'] ] += tf_row['freq']
+                else:
+                    tf_d[ tf_row['terms'] ] = tf_row['freq']
+        tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
+        #self.dcttmp_l.append( tf_d )
+        #dictionary_tb = fileh.createTable(tbgroup, 'Dictionary', tf_arr)
+        #dictionary_tb.flush()
+        #del tf_arr
+        #return dictionary_tb
+        return (tf_arr, tf_d)
+    
+    def merge_tf_tbls_using_dict_normalized(self, fileh, tbgroup, tb_not=None):
+        """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
+            is getting a set of term-frequency dictionaries as list of
+            arguments and return a dictionary of common terms with their sum of frequencies
+            of occurred in all dictionaries containing these terms. """
+        #dictionary_tb = fileh.getNode( tbgroup + '/Dictionary' )
+        #print dictionary_tb
+        #if not dictionary_tb: 
+        #dictionary_tb = fileh.createTable(tbgroup, 'Dictionary', default_TF_3grams_desc)
+        tf_d = dict()
+        for tf_tb in fileh.walkNodes(tbgroup, classname='Table'):
+            if tf_tb.name == tb_not[0] or tf_tb.name == tb_not[1]: continue
+            if tf_tb._v_attrs.status:
+                print tf_tb.name
+            max_trm = np.max(tf_tb.read()['freq'])
+            for tf_row in tf_tb.iterrows():
+                if tf_row['terms'] in tf_d: 
+                    tf_d[ tf_row['terms'] ] += tf_row['freq'] / max_trm
+                else:
+                    tf_d[ tf_row['terms'] ] = tf_row['freq'] / max_trm
+        tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
+        #self.dcttmp_l.append( tf_d )
+        #dictionary_tb = fileh.createTable(tbgroup, 'DictionaryNormMax', tf_arr)
+        #dictionary_tb.flush()
+        #del tf_arr
+        return tf_arr
+    
+    def merge_tf_tbls_Dicts(self, fileh, tb_diz_lst, saveto_grp, data_type=default_TF_3grams_dtype):
+        """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
+            is getting a set of term-frequency dictionaries as list of
+            arguments and return a dictionary of common terms with their sum of frequencies
+            of occurred in all dictionaries containing these terms. """
+        tf_d = dict()
+        for tf_tb in tb_diz_lst:
+            if isinstance(tf_tb, str):
+                tf_tb = fileh.getNode("/".join(tf_tb.split('/')[0:-1]), tf_tb.split('/')[-1])
+            for tf_row in tf_tb.iterrows():
+                if tf_row['terms'] in tf_d: 
+                    tf_d[ tf_row['terms'] ] += tf_row['freq']
+                else:
+                    tf_d[ tf_row['terms'] ] = tf_row['freq']
+        tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
+        #self.dcttmp_l.append( tf_d )
+        dictionary_tb = fileh.createTable(saveto_grp, 'CorpusGlobalDictionaryNormMax', tf_arr)
+        dictionary_tb.flush()
+        del tf_arr
         return dictionary_tb
     
     #def gen_tfd_frmlist(self, tf_d_l):

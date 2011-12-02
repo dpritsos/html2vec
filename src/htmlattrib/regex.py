@@ -91,11 +91,11 @@ class BaseRegexHtmlAttributes(object):
         return str
                     
     def text(self, xhtml_str):
-        properhtml = [xhtml_str] #self.proper_html.findall(xhtml_str)
-        if not properhtml or properhtml:
-            #return None
-        #else:
-            text  = properhtml[0]
+        properhtml = xhtml_str #self.proper_html.findall(xhtml_str)
+        if not properhtml:
+            return ""
+        else:
+            text  = " ".join( properhtml )
             #Clean-up comments
             text = self.html_comments.sub('', text)
             #Clean-up <!DOCTYPE> tag
