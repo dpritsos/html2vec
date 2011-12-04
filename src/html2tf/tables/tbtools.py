@@ -2,6 +2,7 @@
 
 import tables as tb
 import numpy as np
+import scipy.sparse as scsp
 
    
 class default_GenreTable_Desc(tb.IsDescription):
@@ -54,20 +55,45 @@ class TFTablesHandler(object):
     def get(self):
         return self.h5file
     
+    
+    def pagetf_array_non_sparse(self, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
+        """  """
+        pgtf_arr = scsp.coo_matrix((len(pagename_lst), len(term_idx_d)), dtype=data_type)
+        for irow_pgtf, pg_name in enumerate(pagename_lst):
+            pg_tb = fileh.getNode(tbgroup, pg_name, classname='Table')
+            for row in pg_tb:
+                if row['terms'] in term_idx_d: 
+                    pgtf_arr[irow_pgtf,  term_idx_d[row['terms']] - 1 ] = row['freq'] 
+        return pgtf_arr
+    
+    
     def pagetf_array(self, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
         """  """
+        pgtf_arr = np.zeros((len(pagename_lst), len(term_idx_d)), dtype=data_type)
+        for irow_pgtf, pg_name in enumerate(pagename_lst):
+            pg_tb = fileh.getNode(tbgroup, pg_name, classname='Table')
+            for row in pg_tb:
+                if row['terms'] in term_idx_d: 
+                    pgtf_arr[irow_pgtf,  term_idx_d[row['terms']] ] = row['freq'] 
+        return pgtf_arr
+    
+    def pagetf_array_old(self, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
+        """  """
         len_tidd = len(term_idx_d)
+        len_pgnlst= len(pagename_lst)
+        
         pgtf_arr = np.zeros(len_tidd, dtype=data_type)
         for pg_name in pagename_lst:
             pg_tb = fileh.getNode(tbgroup, pg_name, classname='Table')
             pg_vect = np.zeros(len_tidd, dtype=data_type)
             for row in pg_tb:
-                pg_vect[ term_idx_d[row['terms']] ] = row['freq'] 
-            pgtf_arr = np.concatenate((pgtf_arr, pg_vect), axis=0)
-        return np.array( pgtf_arr[1::] ) 
+                if row['terms'] in term_idx_d: 
+                    pg_vect[ term_idx_d[row['terms']] - 1 ] = row['freq'] 
+            pgtf_arr = np.vstack((pgtf_arr, pg_vect))
+        return np.array( pgtf_arr[1:, :] ) 
             
     
-    def Merge_TFtbls2TFarray(self, fileh, tbgroup, tb_name_lst, data_type=default_TF_3grams_dtype):
+    def TFtbls_Lst_2_TIdx_D(self, fileh, tbgroup, tb_name_lst, data_type):
         """ Merge_TFtbls2TFarray: TEMPRORERARLY IMPLEMENTATION 
             Returns: 
                 tf_arr                                        """
@@ -80,7 +106,53 @@ class TFTablesHandler(object):
                 else:
                     tf_d[ tf_row['terms'] ] = tf_row['freq']
         tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
-        return tf_arr
+        tf_arr.sort(order='freq')
+        tf_arr = tf_arr[::-1]
+        idxs = range( len(tf_arr) )
+        term_idx_d = dict( zip( tf_arr['terms'] , idxs ) )
+        return term_idx_d, self.tf2idxf(tf_d, term_idx_d)
+    
+    def __tf2idxf(self, tf_d, tidx_d):
+        """ __tf2idxf(): Don't use it directly, use tf2idxf instead.
+            This function is getting a TF dictionary representing the TF Vector,
+            and a TF-Index as defined in VHTools.tf_dict_idxing(). It returns
+            a Index-Frequency dictionary where each term of the TF dictionary has been 
+            replaced with the Index number of the TF-Index. In case the term of the 
+            TF Dictionary is not in the TF-Index then the term is just Dropped. Therefore,
+            the Index-Frequency dictionary it will no more include the missing (from TF-Index) term. """
+        idxed_d = dict() 
+        for term, freq in tf_d.items():
+            if term in tidx_d:
+                idxed_d[ tidx_d[term] ] = freq
+            #else: DROP THE TERM
+        return idxed_d
+    
+    def tf2idxf(self, tf_d_l, tf_idx_d):
+        """ tf2idxf(): is getting a TF-Dictionary or a list of TF-Dictionaries and TF-Index. It applies
+            the VHTools.__tf2idxf() function to the dictionaries and returns a list or single TF-Dictionary
+            depending on the input. """
+        if isinstance(tf_d_l, list):
+            idxed_d = list()
+            for tf_d in tf_d_l:
+                idxed_d.append( self.__tf2idxf(tf_d, tf_idx_d) )
+            return idxed_d
+        elif isinstance(tf_d_l, dict):
+            return self.__tf2idxf(tf_d_l, tf_idx_d)
+        else:
+            raise Exception("Dictionary or a List of Dictionaries was expected as fist input argument")
+    
+    
+    
+    
+    def tf2tidx(self, term_d):
+        """ tf2tidx(): is getting a Term-Frequency dictionary and returns one
+            with terms-index number. The index number is just their position in the
+            descending order sorted list of dictionary keys. """
+        term_l = term_d.keys()
+        term_l.sort()
+        idx = range( len(term_l) + 1 )
+        term_idx_d = dict( zip( term_l , idx[1:] ) )
+        return term_idx_d
     
     def merge_tf_tbls(self, fileh, tbgroup, tb_not=None):
         """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 

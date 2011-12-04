@@ -72,9 +72,9 @@ class BaseHtmlAttrib(object):
              
 class HtmlText(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
     
-    def __init__(self):
+    def __init__(self, valid_html):
         BaseFileHandler.__init__(self)
-        BaseRegexHtmlAttributes.__init__(self)
+        BaseRegexHtmlAttributes.__init__(self, valid_html)
     
     def _attrib(self, xhtml_str):
         return self.text(xhtml_str)

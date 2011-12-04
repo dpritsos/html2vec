@@ -75,7 +75,7 @@ class TFdictHandler(object):
         terms_l.reverse()
         atlest_terms_l = terms_l[0:terms_amount]
         last_freq = atlest_terms_l[-1][0]
-        print last_freq
+        #print last_freq
         for freq, term in terms_l[terms_amount:]:
             if freq == last_freq:
                 atlest_terms_l.append( (freq, term) )

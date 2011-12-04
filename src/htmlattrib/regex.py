@@ -8,8 +8,11 @@ import htmltagslist
 
 class BaseRegexHtmlAttributes(object):
     
-    def __init__(self):
-        self.proper_html = re.compile(r'<html[^>]*>[\S\s]+</html>', re.UNICODE|re.IGNORECASE)
+    def __init__(self, valid_html=False):
+        if valid_html:
+            self.proper_html = re.compile(r'<html[^>]*>[\S\s]+</html>', re.UNICODE|re.IGNORECASE)
+        else:
+            self.proper_html = lambda xhtml : xhtml
         self.html_comments = re.compile(r'<!--[\s\S]*?-->', re.UNICODE|re.IGNORECASE)
         self.html_doctype_tag = re.compile(r'<!DOCTYPE[^>]*?>')
         #This meta tag content extraction regular expression is rejecting http-equiv content 
@@ -91,10 +94,11 @@ class BaseRegexHtmlAttributes(object):
         return str
                     
     def text(self, xhtml_str):
-        properhtml = xhtml_str #self.proper_html.findall(xhtml_str)
+        properhtml = self.proper_html.findall(xhtml_str)
         if not properhtml:
             return ""
         else:
+            #Concatenate HTML parts in case there is an tag soup and we have a case of several <html></html> tag pairs
             text  = " ".join( properhtml )
             #Clean-up comments
             text = self.html_comments.sub('', text)
