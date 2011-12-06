@@ -77,18 +77,21 @@ class TFTablesHandler(object):
                     pgtf_arr[irow_pgtf,  term_idx_d[row['terms']] ] = row['freq'] 
         return pgtf_arr
     
-    def pagetf_EArray(self, h5f_tmp, EArr_name, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
+    def pagetf_EArray(self, h5f_tmp, EArr, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
         """  """
         len_term_idx_d = len(term_idx_d)
-        pgtf_arr = np.zeros(len_term_idx_d, dtype=data_type)
+        pgtf_arr = np.zeros((1,len_term_idx_d), dtype=data_type)
+        #print np.shape(pgtf_arr)
         for irow_pgtf, pg_name in enumerate(pagename_lst):
             pg_tb = fileh.getNode(tbgroup, pg_name, classname='Table')
             for row in pg_tb:
                 if row['terms'] in term_idx_d: 
-                    pgtf_arr[irow_pgtf,  term_idx_d[row['terms']] ] = row['freq'] 
+                    #print row['terms'], term_idx_d[row['terms']], len_term_idx_d, row['freq'] 
+                    pgtf_arr[0, term_idx_d[row['terms']] ] = row['freq'] 
+                    #pgtf_arr[0, 0] = 0.0 #row['freq']
             EArr.append(pgtf_arr)
-            pgtf_arr = np.zeros(len_term_idx_d, dtype=data_type)
-        h5f_tmp.flush()
+            pgtf_arr = np.zeros((1,len_term_idx_d), dtype=data_type)
+        #h5f_tmp.flush()
         return EArr
     
     def pagetf_array_old(self, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
@@ -123,6 +126,7 @@ class TFTablesHandler(object):
         tf_arr.sort(order='freq')
         tf_arr = tf_arr[::-1]
         idxs = range( len(tf_arr) )
+        print idxs[0], idxs[-1], len(tf_arr) 
         term_idx_d = dict( zip( tf_arr['terms'] , idxs ) )
         return term_idx_d, self.tf2idxf(tf_d, term_idx_d)
     
