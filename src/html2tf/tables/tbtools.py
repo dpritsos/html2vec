@@ -108,7 +108,6 @@ class TFTablesHandler(object):
                     pg_vect[ term_idx_d[row['terms']] - 1 ] = row['freq'] 
             pgtf_arr = np.vstack((pgtf_arr, pg_vect))
         return np.array( pgtf_arr[1:, :] ) 
-            
     
     def TFtbls_Lst_2_TIdx_D(self, fileh, tbgroup, tb_name_lst, data_type):
         """ Merge_TFtbls2TFarray: TEMPRORERARLY IMPLEMENTATION 
