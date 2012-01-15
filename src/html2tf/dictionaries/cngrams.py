@@ -53,7 +53,7 @@ class BaseString2TFTP(BaseString2NgramList):
 
 class Html2TF(BaseString2TFTP, HtmlText):
     
-    def __init__(self, n=3, lowercase=True, valid_html=False):
+    def __init__(self, n, lowercase, valid_html):
         HtmlText.__init__(self, valid_html)
         BaseString2TFTP.__init__(self, n)
         if lowercase:
@@ -68,7 +68,7 @@ class Html2TF(BaseString2TFTP, HtmlText):
     
 class Html2TP(BaseString2TFTP, HtmlText):
     
-    def __init__(self, n=3, lowercase=False, valid_html=False):
+    def __init__(self, n, lowercase, valid_html):
         HtmlText.__init__(self, valid_html)
         BaseString2TFTP.__init__(self, n)
         if lowercase:

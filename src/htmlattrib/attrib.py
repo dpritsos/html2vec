@@ -20,7 +20,7 @@ class BaseHtmlAttrib(object):
         text_l = [ self._attrib(html_str) for html_str in self.load_files(xhtml_file_l, encoding, error_handling) ]
         return text_l  
         
-    def from_paths(self, basepath, filepath_l, encoding='utf8', error_handling='strict', low_mem=False):
+    def from_paths(self, basepath, filepath_l, encoding='utf8', error_handling='strict'):
         flist = self.file_list_frmpaths(basepath, filepath_l)
         wpg_txt_ll = list()
         for filename in flist:
@@ -82,9 +82,9 @@ class HtmlText(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
     
 class HtmlTags(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
     
-    def __init__(self):
+    def __init__(self, valid_html):
         BaseFileHandler.__init__(self)
-        BaseRegexHtmlAttributes.__init__(self)
+        BaseRegexHtmlAttributes.__init__(self, valid_html)
     
     def _attrib(self, xhtml_str):
         return self.tags(xhtml_str)
@@ -92,9 +92,9 @@ class HtmlTags(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
 
 class HtmlScripts(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
     
-    def __init__(self):
+    def __init__(self, valid_html):
         BaseFileHandler.__init__(self)
-        BaseRegexHtmlAttributes.__init__(self)
+        BaseRegexHtmlAttributes.__init__(self, valid_html)
     
     def _attrib(self, xhtml_str):
         return self.scripts(xhtml_str)
@@ -102,9 +102,9 @@ class HtmlScripts(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
 
 class HtmlStyles(BaseHtmlAttrib, BaseFileHandler, BaseRegexHtmlAttributes):
     
-    def __init__(self):
+    def __init__(self, valid_html):
         BaseFileHandler.__init__(self)
-        BaseRegexHtmlAttributes.__init__(self)
+        BaseRegexHtmlAttributes.__init__(self, valid_html)
     
     def _attrib(self, xhtml_str):
         return self.styles(xhtml_str)

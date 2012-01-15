@@ -100,7 +100,10 @@ class BaseRegexHtmlAttributes(object):
             return ""
         else:
             #Concatenate HTML parts in case there is an tag soup and we have a case of several <html></html> tag pairs
-            text  = " ".join( properhtml )
+            if isinstance(properhtml, list) and properhtml > 1:
+                text  = " ".join( properhtml )
+            else:
+                text  = properhtml
             #Clean-up comments
             text = self.html_comments.sub('', text)
             #Clean-up <!DOCTYPE> tag

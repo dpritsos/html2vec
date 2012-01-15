@@ -158,9 +158,6 @@ class TFTablesHandler(object):
         else:
             raise Exception("Dictionary or a List of Dictionaries was expected as fist input argument")
     
-    
-    
-    
     def tf2tidx(self, term_d):
         """ tf2tidx(): is getting a Term-Frequency dictionary and returns one
             with terms-index number. The index number is just their position in the

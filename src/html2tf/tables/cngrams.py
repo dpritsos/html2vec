@@ -15,10 +15,20 @@ class BaseString2TFTP(BaseString2NgramList):
             return None
         #Find and Count NGrams
         ngrms_l = self.terms_lst(text)
+        for ngrm in ngrms_l:
+            if len(ngrm) < 3:
+                0/0 #### TEMP UNTIL ACCorpus WILL BE TESTED
+        
         terms, inds = np.unique1d(ngrms_l, return_inverse=True)
         freqs = np.bincount(inds)
         #We need a Recored arrays to be created thus using numpy.rec.array.fromarrays()
         #to be invoked as follows (alternatively fromarrays() can be used directly   
+        #print terms
+        
+        for trm in terms: 
+            if len(trm) < 3:
+                0/0
+        
         NgF_arr = np.rec.array([terms, freqs], dtype=ndtype)
         return NgF_arr
     
@@ -38,7 +48,7 @@ class BaseString2TFTP(BaseString2NgramList):
 
 class Html2TF(BaseString2TFTP, HtmlText):
     
-    def __init__(self, n=3, lowercase=True, valid_html=False):
+    def __init__(self, n, lowercase, valid_html):
         HtmlText.__init__(self, valid_html)
         BaseString2TFTP.__init__(self, n)
         if lowercase:
@@ -53,7 +63,7 @@ class Html2TF(BaseString2TFTP, HtmlText):
     
 class Html2TP(BaseString2TFTP, HtmlText):
     
-    def __init__(self, n=3, lowercase=False, valid_html=False):
+    def __init__(self, n, lowercase, valid_html):
         HtmlText.__init__(self, valid_html)
         BaseString2TFTP.__init__(self, n)
         if lowercase:

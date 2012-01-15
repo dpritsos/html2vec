@@ -72,9 +72,9 @@ class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
         self.n = 3
-        self.html2tf = cngrams.Html2TF( self.n )
-        self.html2tf_lowercase = cngrams.Html2TF( self.n, lowercase=True )
-        self.htmltext = htmlre.HtmlText()
+        self.html2tf = cngrams.Html2TF( self.n, lowercase=False, valid_html=False )
+        self.html2tf_lowercase = cngrams.Html2TF( self.n, lowercase=True, valid_html=False )
+        self.htmltext = htmlre.HtmlText(valid_html=False)
         self.html_sample = "<html> \
                             <head> \
                             </head> \
@@ -200,7 +200,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         tb_trms_frq_arrz_group = self.html2tf_lowercase.from_paths2tbls(h5file, group_h5, 'GenrePageListTable', None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
         #Assert for the Filename-List returned
         ### THIS IS A COMPLICTED STRUCTURE BE AWARE --> tb_trms_frq_arrz_group[1].read()['wpg_name']
-        self.assertEqual(tb_trms_frq_arrz_group[1].read()['wpg_name'], ['../../unit_test_data/html/test_01.html'])
+        self.assertEqual(tb_trms_frq_arrz_group[1].read()['filename'], ['../../unit_test_data/html/test_01.html'])
         #Assert for the amount of Ngrams greated
         ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0

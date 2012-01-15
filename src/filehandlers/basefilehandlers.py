@@ -92,7 +92,7 @@ class BaseFileHandler(BasePathFileHandler):
             self.file_count = 0
             self.encoding = encoding 
             self.error_handling = error_handling
-            return self
+            return self.__iter__()
         else:
             raise Exception("A String or a list of Strings was Expected as input")
     
