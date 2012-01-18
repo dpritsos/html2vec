@@ -1,6 +1,6 @@
 """ Term Frequency (TF) dictionary Handling methods Classes """
 
-class TFdictHandler(object):
+class TFDictHandler(object):
     
     def __init__(self):
         pass
