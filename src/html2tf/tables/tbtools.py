@@ -31,12 +31,8 @@ class TFTablesHandler(object):
     def __init__(self, h5file): 
         self.h5file = h5file
     
-    def create(self, table_name="CorpusTable.h5", table_path="",\
-                 ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
+    def create(self, ttypes_structures_lst=["words", "trigrams"], inv_dict=True,\
                  corpus_name="Corpus", genres_lst=["Genre1"], corpus_paths_lst=""):
-        #Create HD5 file in user defined path
-        table_name = table_path + table_name
-        self.h5file = tb.openFile(table_name, mode="w")
         #Create Corpus Group
         corpus_group = self.h5file.createGroup(self.h5file.root, corpus_name)
         corpus_group._v_attrs.paths = corpus_paths_lst
@@ -54,22 +50,20 @@ class TFTablesHandler(object):
     def get(self):
         return self.h5file
     
-    def pagetf_EArray(self, h5f_tmp, EArr, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
-        """  """
+    def TFTabels2EArray(self, earr, tbgroup, tb_name_lst, term_idx_d, data_type=np.float32):
+        """ TEMPRORERARLY IMPLEMENTATION """
         len_term_idx_d = len(term_idx_d)
         pgtf_arr = np.zeros((1,len_term_idx_d), dtype=data_type)
-        #print np.shape(pgtf_arr)
-        for irow_pgtf, pg_name in enumerate(pagename_lst):
-            pg_tb = fileh.getNode(tbgroup, pg_name, classname='Table')
-            for row in pg_tb:
-                if row['terms'] in term_idx_d: 
-                    #print row['terms'], term_idx_d[row['terms']], len_term_idx_d, row['freq'] 
-                    pgtf_arr[0, term_idx_d[row['terms']] ] = row['freq'] 
-                    #pgtf_arr[0, 0] = 0.0 #row['freq']
-            EArr.append(pgtf_arr)
-            pgtf_arr = np.zeros((1,len_term_idx_d), dtype=data_type)
-        #h5f_tmp.flush()
-        return EArr
+        for tf_tb in self.h5file.walkNodes(tbgroup, classname='Table'):
+            if tf_tb.name in tb_name_lst: 
+                for row in tf_tb:
+                    if row['terms'] in term_idx_d: 
+                        #print row['terms'], term_idx_d[row['terms']], len_term_idx_d, row['freq'] 
+                        pgtf_arr[0, term_idx_d[row['terms']] ] = row['freq'] 
+                        #pgtf_arr[0, 0] = 0.0 #row['freq']
+                earr.append(pgtf_arr)
+                pgtf_arr = np.zeros((1,len_term_idx_d), dtype=data_type)
+        return earr
     
     def TFTables2TFDict_n_TFArr(self, tbgroup, tb_name_lst, data_type):
         """ Merge_TFtbls2TFarray: TEMPRORERARLY IMPLEMENTATION 
@@ -77,7 +71,6 @@ class TFTablesHandler(object):
         tf_d = dict()
         for tf_tb in self.h5file.walkNodes(tbgroup, classname='Table'):
             if tf_tb.name in tb_name_lst: 
-                print tf_tb.name
                 for tf_row in tf_tb.iterrows():
                     if tf_row['terms'] in tf_d: 
                         tf_d[ tf_row['terms'] ] += tf_row['freq']
@@ -86,8 +79,7 @@ class TFTablesHandler(object):
         tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
         tf_arr.sort(order='freq')
         tf_arr = tf_arr[::-1]
-        idxs = range( len(tf_arr) )
-        #print idxs[0], idxs[-1], len(tf_arr) 
+        idxs = range( len(tf_arr) ) 
         term_idx_d = dict( zip( tf_arr['terms'] , idxs ) )
         return term_idx_d, tf_arr
 
