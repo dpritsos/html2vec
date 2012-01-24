@@ -83,6 +83,21 @@ class TFTablesHandler(object):
         term_idx_d = dict( zip( tf_arr['terms'] , idxs ) )
         return term_idx_d, tf_arr
 
+    def Arr2CsrMtrx(self, arr, r_lim, c_lim):
+        #print 'ln'
+        ar_rows, ar_cols = np.nonzero(arr[0:1, 0:c_lim])
+        arr_tmp = arr[0:1, 0:c_lim]
+        ar_dat = arr_tmp[ np.nonzero(arr_tmp) ] 
+        for erow in arr:
+            ar_dat = np.hstack((ar_dat, erow[np.nonzero(erow)]))
+            #print ar_dat 
+        for i in range(r_lim):
+            ln = i+1
+            #print ln
+            rows, cols = np.nonzero(arr[ln:ln+1, :])
+            ar_rows = np.hstack((ar_rows, rows))
+            ar_cols = np.hstack((ar_cols, cols))
+        return scsp.csr_matrix((ar_dat, (ar_rows, ar_cols)))    
     
     def merge_tf_tbls_Dicts(self, fileh, tb_diz_lst, saveto_grp, data_type=default_TF_3grams_dtype):
         """ mege_tf_tbls(): TEMPRORERARLY IMPLEMENTATION 
@@ -103,7 +118,7 @@ class TFTablesHandler(object):
         dictionary_tb = fileh.createTable(saveto_grp, 'CorpusGlobalDictionaryNormMax', tf_arr)
         dictionary_tb.flush()
         del tf_arr
-        return dictionary_tb
+        return dictionary_tb    
     
     def pagetf_array_old(self, fileh, tbgroup, pagename_lst, term_idx_d, data_type=np.float32):
         """  """
