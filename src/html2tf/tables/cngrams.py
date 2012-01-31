@@ -11,24 +11,20 @@ class BaseString2TFTP(BaseString2NgramList):
         BaseString2NgramList.__init__(self, n)
             
     def tf_array(self, text, ndtype=tbtools.default_TF_3grams_dtype):
+        
         if not text:
             return None
-        #Find and Count NGrams
-        ngrms_l = self.terms_lst(text)
-        for ngrm in ngrms_l:
-            if len(ngrm) < 3:
-                0/0 #### TEMP UNTIL ACCorpus WILL BE TESTED
         
+        #Find NGrams
+        ngrms_l = self.terms_lst(text)
+        
+        #Count NGrams
         terms, inds = np.unique1d(ngrms_l, return_inverse=True)
         freqs = np.bincount(inds)
+        
         #We need a Recored arrays to be created thus using numpy.rec.array.fromarrays()
         #to be invoked as follows (alternatively fromarrays() can be used directly   
         #print terms
-        
-        for trm in terms: 
-            if len(trm) < 3:
-                0/0
-        
         NgF_arr = np.rec.array([terms, freqs], dtype=ndtype)
         return NgF_arr
     
