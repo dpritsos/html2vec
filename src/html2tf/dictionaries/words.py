@@ -1,14 +1,4 @@
-#
-#    Module: words - Natural Language Dictionary Words as Terms Types      
-# 
-#    Author: Dimitiros Pritsos 
-#    
-#    License: BSD Style
-#
-#    Last update: Please refer to the GIT tracking 
-# 
 
-""" html2tf.termstypes.words: submodule of `html2tf` module defines the class String2CNGramsList """ 
 
 import re
 from htmlattrib.attrib import HtmlText
