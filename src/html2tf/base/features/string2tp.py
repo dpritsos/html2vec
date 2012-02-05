@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.base.string2tpl: submodule of `html2tf` module defines the class BaseString2TPL """ 
+""" html2tf.base.features.string2tpl: submodule of `html2tf` module defines the class BaseString2TPL """ 
 
 import numpy as np
 

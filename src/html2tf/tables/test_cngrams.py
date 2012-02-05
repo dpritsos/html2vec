@@ -1,11 +1,11 @@
 """ Unit Test for charngrams.py """
 
 import unittest
-import cngrams
+import html2tf.dict.cngrams as cngrams
 import numpy as np
 import tbtools
-import htmlattrib.attrib as htmlre
-import pickle
+import html2tf.string.attrib_text
+from html2tf.string.attrib_text import HtmlFullText
 import tables as tb
 
 class Test_BaseString2TFTP__3grams(unittest.TestCase):
@@ -74,7 +74,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         self.n = 3
         self.html2tf = cngrams.Html2TF( self.n, lowercase=False, valid_html=False )
         self.html2tf_lowercase = cngrams.Html2TF( self.n, lowercase=True, valid_html=False )
-        self.htmltext = htmlre.HtmlText(valid_html=False)
+        self.htmltext = HtmlFullText(valid_html=False)
         self.html_sample = "<html> \
                             <head> \
                             </head> \
@@ -216,7 +216,7 @@ class Test_Html2TP__3grams(unittest.TestCase):
         self.n = 3
         self.html2tp = cngrams.Html2TP( self.n )
         self.html2tp_lowercase = cngrams.Html2TP( self.n, lowercase=True )
-        self.htmltext = htmlre.HtmlText()
+        self.htmltext = HtmlFullText()
         self.html_sample = "<html> \
                             <head> \
                             </head> \

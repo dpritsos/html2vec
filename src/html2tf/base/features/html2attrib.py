@@ -1,12 +1,21 @@
+#
+#    Module: Base HTML 2(to) HTML Attributes   
+# 
+#    Author: Dimitiros Pritsos 
+#    
+#    License: BSD Style
+#
+#    Last update: Please refer to the GIT tracking 
+# 
+
+""" html2tf.base.features.html2attrib: submodule of `html2tf` module defines the class BaseHTML2Attributes """ 
 
 import re
 import unicodedata
-from filehandlers.basefilehandlers import BaseFileHandler
 import htmlentitydefs as hedfs
-import abc
 import htmltagslist 
 
-class BaseRegexHtmlAttributes(object):
+class BaseHTML2Attributes(object):
     
     def __init__(self, valid_html=False):
         self.valid_html = valid_html

@@ -1,4 +1,14 @@
-""" """
+#
+#    Module: Base File Handlers
+# 
+#    Author: Dimitiros Pritsos 
+#    
+#    License: BSD Style
+#
+#    Last update: Please refer to the GIT tracking 
+# 
+
+""" html2tf.base.io.basefilehndlers: submodule of `html2tf` module defines the class BasePathHandler and BaseFileHandler """ 
 
 import codecs
 import os
@@ -54,8 +64,8 @@ class BaseFileHandler(BasePathFileHandler):
     def __init__(self):
         self.filename_lst = []
         self.file_count = None 
-        self.encoding = 'utf-8' 
-        self.error_handling = 'strict'
+        #self.encoding = 'utf-8' 
+        #self.error_handling = 'strict'
         
     def __iter__(self):
         return self
