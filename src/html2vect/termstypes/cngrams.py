@@ -1,15 +1,14 @@
 #
 #    Module: cngrams - Character NGrams    
 # 
-#    Author: Dimitiros Pritsos 
+#    Author: Dimitrios Pritsos 
 #    
 #    License: BSD Style
 #
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.termstypes.cngrams: submodule of `html2tf` module defines the class String2CNGramsList """ 
-
+""" html2vect.termstypes.cngrams: submodule of `html2vect` module defines the class String2CNGramsList """ 
 
 
 class String2CNGramsList(object):
@@ -21,6 +20,7 @@ class String2CNGramsList(object):
     
     def __init__(self, n):
         self.n = n
+    
     
     def terms_lst(self, text):
         

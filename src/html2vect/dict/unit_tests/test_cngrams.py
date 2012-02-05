@@ -1,8 +1,8 @@
 """ Unit Test for html2tfd.charngrams.py """
 
 import unittest
-import cngrams
-import htmlattrib.attrib as htmlre
+import html2vect.dict.cngrams as cngrams
+from html2vect.string.attrib_text import HtmlFullText 
 import pickle
 
 class Test_BaseString2NgramList__3grams(unittest.TestCase):
@@ -66,7 +66,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         self.n = 3
         self.html2tf = cngrams.Html2TF( self.n, lowercase=False, valid_html=True )
         self.html2tf_lowercase = cngrams.Html2TF( self.n, lowercase=True, valid_html=True )
-        self.htmltext = htmlre.HtmlText(valid_html=True)
+        self.htmltext = HtmlFullText(valid_html=True)
         self.html_sample = "<html> \
                             <head> \
                             </head> \
@@ -97,9 +97,9 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                                u'las': 1, u' a ': 1, u'rin': 1, u'g2t': 1, u'cka': 1, u'bas': 1, u'd.c': 1, u'ack': 1,\
                                                u'age': 1, u' ht': 2, u'ms.': 1, u'/mo': 1, u'thi': 1, u'ss ': 1, u'uni': 1, u'cto': 1,\
                                                u'vec': 1, u' fo': 2, u'a u': 1}
-        self.pathto_htmls = "../../unit_test_data/html/"
-        self.xhtml_file_l = [ "../../unit_test_data/html/test_01.html" ]
-        self.txt_file_l = [ "../../unit_test_data/txt/test_01.txt" ]
+        self.pathto_htmls = "../../../unit_test_data/html/"
+        self.xhtml_file_l = [ "../../../unit_test_data/html/test_01.html" ]
+        self.txt_file_l = [ "../../../unit_test_data/txt/test_01.txt" ]
                          
     def test_html2tf_from_src(self):
         html_ngrams = self.html2tf.from_src( self.html_sample )
@@ -146,7 +146,7 @@ class Test_Html2TP__3grams(unittest.TestCase):
         self.n = 3
         self.html2tp = cngrams.Html2TP( self.n, lowercase=False, valid_html=True )
         self.html2tp_lowercase = cngrams.Html2TP( self.n, lowercase=True, valid_html=True )
-        self.htmltext = htmlre.HtmlText(valid_html=True)
+        self.htmltext = HtmlFullText(valid_html=True)
         self.html_sample = "<html> \
                             <head> \
                             </head> \

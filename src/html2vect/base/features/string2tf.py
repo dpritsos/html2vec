@@ -28,6 +28,7 @@ class BaseString2TF(object):
     def __init__(self, termstype):
         self.tt = termstype
     
+    
     def tf_dict(self, text):
         
         #Create Terms List 
@@ -46,6 +47,7 @@ class BaseString2TF(object):
                 TF_d[ trm ] = 1
                  
         return TF_d  
+    
     
     def tf_narray(self, text, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')]) ):
         

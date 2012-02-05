@@ -28,6 +28,7 @@ class BaseString2TPL(object):
     def __init__(self, termstype):
         self.tt = termstype
     
+    
     def tpl_dict(self, text):
         
         #Create Terms List    
@@ -46,6 +47,7 @@ class BaseString2TPL(object):
                 TPL_d[ trm ] = [i]
                  
         return TPL_d        
+    
     
     def tpl_array(self, text, ndtype=np.dtype( [('terms', 'S3'), ('pos', 'uint16', (200,))] ) ):
         
