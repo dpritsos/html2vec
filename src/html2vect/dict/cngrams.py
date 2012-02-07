@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.dict.cngrams: submodule of `html2tf` module defines the classes:
+""" html2vect.dict.cngrams: submodule of `html2tf` module defines the classes:
     HtmlTF(), HtmlTP()"""
 
 from ..base.features.html2attrib import BaseHTML2Attributes
@@ -16,7 +16,6 @@ from ..base.features.string2tf import BaseString2TF
 from ..base.features.string2tp import BaseString2TPL
 from ..base.io.baseio import BaseIO
 
- 
 
 class Html2TF(BaseString2TF, BaseHTML2Attributes, BaseIO):
     

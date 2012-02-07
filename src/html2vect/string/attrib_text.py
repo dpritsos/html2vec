@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.string.attrib_text: submodule of `html2tf` module defines the classes:
+""" html2vect.string.attrib_text: submodule of `html2tf` module defines the classes:
     HtmlFullText(), HtmlTagText(), HtmlScriptText(), HtmlStyleText()  """
 
 from ..base.features.html2attrib import BaseHTML2Attributes

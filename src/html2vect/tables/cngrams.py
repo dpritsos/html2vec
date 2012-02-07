@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.dict.cngrams: submodule of `html2tf` module defines the classes:
+""" html2vect.dict.cngrams: submodule of `html2tf` module defines the classes:
     HtmlTF(), HtmlTP()"""
 
 __package__ = "html2tf.dict.cngrams"

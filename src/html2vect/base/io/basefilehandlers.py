@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.base.io.basefilehndlers: submodule of `html2tf` module defines the class BasePathHandler and BaseFileHandler """ 
+""" html2vect.base.io.basefilehndlers: submodule of `html2tf` module defines the class BasePathHandler and BaseFileHandler """ 
 
 import codecs
 import os

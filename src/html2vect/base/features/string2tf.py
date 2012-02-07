@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.base.features.string2tf: submodule of `html2tf` module defines the class BaseString2TF """ 
+""" html2vect.base.features.string2tf: submodule of `html2tf` module defines the class BaseString2TF """ 
 
 import numpy as np
 

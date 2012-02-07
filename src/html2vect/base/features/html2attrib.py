@@ -8,12 +8,22 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.base.features.html2attrib: submodule of `html2tf` module defines the class BaseHTML2Attributes """ 
+""" html2vect.base.features.html2attrib: submodule of `html2tf` module defines the class BaseHTML2Attributes """ 
 
 import re
 import unicodedata
 import htmlentitydefs as hedfs
-import htmltagslist 
+
+htmltags = [ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'b', 'base', 'basefont', 'bdo', 'big', 'blockquote', 'body',\
+             'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl',\
+             'dt', 'em', 'fieldset', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr',\
+             'html', 'i', 'iframe', 'img', 'input', 'ins', 'isindex', 'kbd', 'label', 'legend', 'li', 'link', 'map', 'menu',\
+             'meta', 'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'q', 's', 'samp',\
+             'script', 'select', 'small', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea',\
+             'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'u', 'ul', 'var', 'xmp' ]
+
+htmltags.sort(reverse=True)
+
 
 class BaseHTML2Attributes(object):
     

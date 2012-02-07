@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2tf.base.io.baseio: submodule of `html2tf` module defines the class BaseIO """ 
+""" html2vect.base.io.baseio: submodule of `html2tf` module defines the class BaseIO """ 
 
 import abc
 from .basefilehandlers import BaseFileHandler

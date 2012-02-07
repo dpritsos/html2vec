@@ -23,14 +23,14 @@ class String2WordList(object):
         self.url_str = re.compile(r'(((ftp://|FTP://|http://|HTTP://|https://|HTTPS://)?(www|[^\s()<>.?]+))?([.]?[^\s()<>.?]+)+?(?=.org|.edu|.tv|.com|.gr|.gov|.uk)(.org|.edu|.tv|.com|.gr|.gov|.uk){1}([/]\S+)*[/]?)', re.UNICODE|re.IGNORECASE)
         
         #Comma decomposer
-        self.comma_decomp = re.compile(r'[^,]+|[,]+', re.UNICODE|re.IGNORECASE)
+        self.comma_decomp = re.compile(r'[^,]+(?=,)|(?<=,)[^,]+|[,]+', re.UNICODE|re.IGNORECASE)
         
         #Find dot or sequence of dots
         self.dot_str = re.compile(r'[.]+', re.UNICODE)
-        self.dot_decomp = re.compile(r'[^.]+|[.]+', re.UNICODE)
+        self.dot_decomp = re.compile(r'[^.]+(?=\.)|(?<=\.)[^.]+|[.]+', re.UNICODE)
         
         #Symbol term decomposer 
-        self.fredsb_clean = re.compile(r'^[^\w]+|[^\w%]+$', re.UNICODE) #front-end-symbol-cleaning => fredsb_clean
+        self.fredsb_clean = re.compile(r'^[\W]|[^\w%]$', re.UNICODE) #front-end-symbol-cleaning => fredsb_clean
         
         #Find proper number
         self.proper_num = re.compile(r'(^[0-9]+$)|(^[0-9]+[,][0-9]+$)|(^[0-9]+[.][0-9]+$)|(^[0-9]{1,3}(?:[.][0-9]{3})+[,][0-9]+$)|(^[0-9]{1,3}(?:[,][0-9]{3})+[.][0-9]+$)', re.UNICODE)
@@ -58,6 +58,11 @@ class String2WordList(object):
         analysed_terms_l.extend(num_trm_l)
         fnd_idx_l.extend(fidx_l)
         
+        #Remove the already analysed terms after finding the proper numbers
+        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]
+        #Clean-up the index list because items already removed
+        fnd_idx_l = []
+        
         #Extract the terms to sub-terms of any symbol but comma (,) and comma sub-term(s)
         comma_trm_l, fidx_l  = self.extract_comma_n_trms(terms_l)
         analysed_terms_l.extend(comma_trm_l)
@@ -68,14 +73,19 @@ class String2WordList(object):
         analysed_terms_l.extend(dot_trm_l)
         fnd_idx_l.extend(fidx_l)
         
+        #Remove the already analysed terms after finding dots and commas
+        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]
+        #Clean-up the index list because items already removed
+        fnd_idx_l = []
+              
         #Extract the non-alphanumeric symbols ONLY from the Beginning and the End of the terms
         ##except dot (.) and percentage % at the end for the term)
         symb_trm_l, fidx_l  = self.extract_propr_trms_n_symbs(terms_l)
         analysed_terms_l.extend(symb_trm_l)
-        fnd_idx_l.extend(fidx_l)
+        fnd_idx_l.extend(fidx_l)      
         
         #Remove the already analysed terms
-        terms_l.pop(fnd_idx_l)
+        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]
         
         #Merge the main terms list with the list of analysed terms
         analysed_terms_l.extend(terms_l)
@@ -103,8 +113,8 @@ class String2WordList(object):
         #    1)xxxxxx 2)xxxx,xxxx 3)xxxx.xxxx 4)333.333.333...333,xxxxxx 5)333,333,333,333,,,333.xxxxxx
         for i, term in enumerate(terms_l):
             num_terms = self.proper_num.findall(term) # It returns a list of the proper numbers extracted from a raw term
-            num_terms_l.extend(num_terms)
             if num_terms:
+                num_terms_l.extend([trm for trm in num_terms[0] if trm != ""])
                 fnd_idx_l.append(i)
         
         return num_terms_l, fnd_idx_l
@@ -137,12 +147,12 @@ class String2WordList(object):
             decomp_term = self.dot_decomp.findall(term)
             dtrm_len = len(decomp_term)
             
-            if dtrm_len > 1 and dtrm_len <= 3: 
+            if dtrm_len > 1 and dtrm_len <= 3:
                 #Here we have the cases of ...CCC or .CC or CC.... or CCC. or CC.CCC or CCCC....CCCC so keep each sub-term
                 dot_terms_l.extend(decomp_term)
                 fnd_idx_l.append(i)
                 
-            elif dtrm_len > 3: #i.e. Greater thatn 3
+            elif dtrm_len > 3: #i.e. Greater than 3
                 #Remove the first and the last dot sub-string and let the rest of the term as it was (but the prefix and suffix of dot(s))
                 sub_term_l = list()
                 
@@ -157,12 +167,13 @@ class String2WordList(object):
                     
                 #Save the sub-terms of the Decomposed term from the terms list 
                 dot_terms_l.extend(sub_term_l)
+                dot_terms_l.append("".join(decomp_term))
                 fnd_idx_l.append(i)
                 
             else:
                 #in case of one element in the list check if it is a dot-sequence
                 if self.dot_str.findall(term):     
-                    dot_terms_l.extend(sub_term_l)
+                    dot_terms_l.extend(decomp_term)
                     fnd_idx_l.append(i)
                      
         return dot_terms_l, fnd_idx_l
@@ -184,19 +195,10 @@ class String2WordList(object):
                 clean_trm = self.fredsb_clean.sub('', term)
                 
                 #Keep the terms free of symbols found
-                symb_terms_l.extend(clean_trm)
+                symb_terms_l.append(clean_trm)
                 
                 #Keep index symbols found
                 fnd_idx_l.append(i)
         
         return symb_terms_l, fnd_idx_l
-    
-    
-    
-    
-        
-        
-
-
-    
     
