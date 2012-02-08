@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2vect.termstypes.cngrams: submodule of `html2vect` module defines the class String2CNGramsList """ 
+""" html2vect.base.termstypes.cngrams: submodule of `html2vect` module defines the class String2CNGramsList """ 
 
 
 class String2CNGramsList(object):

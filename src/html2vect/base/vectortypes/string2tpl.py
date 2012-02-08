@@ -49,7 +49,7 @@ class BaseString2TPL(object):
         return TPL_d        
     
     
-    def tpl_array(self, text, ndtype=np.dtype( [('terms', 'S3'), ('pos', 'uint16', (200,))] ) ):
+    def tpl_array(self, text, ndtype=np.dtype( [('terms', 'S126'), ('pos', 'uint16', (200,))] ) ):
         
         #NOTE REQUIRES RE-FACTORING
         

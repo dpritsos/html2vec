@@ -51,7 +51,7 @@ class BaseHTML2Attributes(object):
         #Build and Define a Regular Expression for matching incomplite html tags
         find_tgs = r'('
         condition_tgs = r'(?:'
-        for tag in htmltagslist.htmltags:
+        for tag in htmltags:
             find_tgs += '<' +tag + r'|'
             condition_tgs += r'(?<=<' + tag + r')|'
         find_tgs = find_tgs.rstrip(r'|')

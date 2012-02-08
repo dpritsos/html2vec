@@ -1,5 +1,5 @@
 #
-#    Unit Test for html2vect.termstypes.words
+#    Unit Test for html2vect.base.termstypes.words
 # 
 #    Author: Dimitiros Pritsos 
 #    
@@ -9,14 +9,16 @@
 # 
 
 import unittest
-from html2vect.termstypes.words import String2WordList
+from html2vect.base.termstypes.words import String2WordList
 
 
 class Test_String2WordList__words(unittest.TestCase):
     
     def setUp(self):
         self.str2cng = String2WordList()
-        self.txt_sample = "This is a unit test for html2vect.termstype.words.String2WordList. package/module in cases of: proper numbers 2,000.00 proper symbol remove 10% and comma,,, ,comma dot. after .dot before"
+        self.txt_sample = "This is a unit test for html2vect.termstype.words.String2WordList. package/module in\
+                            cases of: proper numbers 2,000.00 proper symbol remove 10% and comma,,, ,comma\
+                            dot. after .dot before"
         self.expected_terms_lst = ['2,000.00', 'comma', ',,,', ',', 'comma', '.', 'html2vect.termstype.words.String2WordList',\
                                    'dot', '.', '.', 'dot', ':', 'of', 'This', 'is', 'a', 'unit', 'test', 'for', 'package/module',\
                                    'in', 'cases', 'proper', 'numbers', 'proper', 'symbol', 'remove', '10%', 'and', 'after', 'before']   

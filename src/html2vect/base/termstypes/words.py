@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2vect.termstypes.words: submodule of `html2vect` module defines the class String2WordList """ 
+""" html2vect.base.termstypes.words: submodule of `html2vect` module defines the class String2WordList """ 
 
 import re
 

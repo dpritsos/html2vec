@@ -1,5 +1,5 @@
 #
-#    Unit Test for html2vect.termstypes.cngrams
+#    Unit Test for html2vect.base.termstypes.cngrams
 # 
 #    Author: Dimitiros Pritsos 
 #    
@@ -9,7 +9,7 @@
 # 
 
 import unittest
-from html2vect.termstypes.cngrams import String2CNGramsList
+from html2vect.base.termstypes.cngrams import String2CNGramsList
 
 
 class Test_String2CNGramsList__3grams(unittest.TestCase):
