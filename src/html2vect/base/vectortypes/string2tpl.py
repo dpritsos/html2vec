@@ -42,9 +42,9 @@ class BaseString2TPL(object):
         TPL_d = dict()
         for i, trm in enumerate(terms_l):
             if trm in TPL_d: #if the dictionary of terms has the 'terms' as a key 
-                TPL_d[ trm ].append(i)
+                TPL_d[ trm ].append(i + 1)
             else: 
-                TPL_d[ trm ] = [i]
+                TPL_d[ trm ] = [i + 1]
                  
         return TPL_d        
     

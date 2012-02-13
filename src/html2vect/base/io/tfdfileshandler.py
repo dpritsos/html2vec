@@ -1,4 +1,14 @@
-""" """
+#
+#    Module: TF Dictionary-Files Handler
+# 
+#    Author: Dimitiros Pritsos 
+#    
+#    License: BSD Style
+#
+#    Last update: Please refer to the GIT tracking 
+# 
+
+""" html2vect.base.io.tfdfileshadlers: submodule of `html2vect` module defines the class TFdictFilesHandler """ 
 
 import eventlet
 import codecs

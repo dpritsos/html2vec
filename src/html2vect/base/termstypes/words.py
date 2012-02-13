@@ -59,7 +59,7 @@ class String2WordList(object):
         fnd_idx_l.extend(fidx_l)
         
         #Remove the already analysed terms after finding the proper numbers
-        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]
+        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]        
         #Clean-up the index list because items already removed
         fnd_idx_l = []
         
@@ -84,11 +84,17 @@ class String2WordList(object):
         analysed_terms_l.extend(symb_trm_l)
         fnd_idx_l.extend(fidx_l)      
         
-        #Remove the already analysed terms
-        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]
+        #Remove the already analysed terms and put the return a tuple list including the indices of remaining terms list
+        terms_l = [(j, trm) for j, trm in enumerate(terms_l) if terms_l.index(trm) not in fnd_idx_l]
         
         #Merge the main terms list with the list of analysed terms
         analysed_terms_l.extend(terms_l)
+        
+        #Short tuple list by indices i.e. using the fist element of the tuple
+        analysed_terms_l.sort()
+        
+        #Discard indices and keep only the terms list
+        analysed_terms_l = [trm[1] for trm in analysed_terms_l]
         
         return analysed_terms_l      
         
@@ -114,7 +120,7 @@ class String2WordList(object):
         for i, term in enumerate(terms_l):
             num_terms = self.proper_num.findall(term) # It returns a list of the proper numbers extracted from a raw term
             if num_terms:
-                num_terms_l.extend([trm for trm in num_terms[0] if trm != ""])
+                num_terms_l.extend([(j+i, trm) for j, trm in enumerate(num_terms[0]) if trm != ""])
                 fnd_idx_l.append(i)
         
         return num_terms_l, fnd_idx_l
@@ -129,7 +135,7 @@ class String2WordList(object):
         for i, term in enumerate(terms_l):
             #Decompose the terms that in their char set include comma symbol to a list of comma separated terms and the comma(s) 
             decomp_terms = self.comma_decomp.findall(term)
-            comma_terms_l.extend(decomp_terms)
+            comma_terms_l.extend([(j+i, trm) for j, trm in enumerate(decomp_terms) if trm != ""])
             if decomp_terms:
                 fnd_idx_l.append(i)
         
@@ -149,7 +155,7 @@ class String2WordList(object):
             
             if dtrm_len > 1 and dtrm_len <= 3:
                 #Here we have the cases of ...CCC or .CC or CC.... or CCC. or CC.CCC or CCCC....CCCC so keep each sub-term
-                dot_terms_l.extend(decomp_term)
+                dot_terms_l.extend([(j+i, trm) for j, trm in enumerate(decomp_term) if trm != ""])
                 fnd_idx_l.append(i)
                 
             elif dtrm_len > 3: #i.e. Greater than 3
@@ -166,14 +172,14 @@ class String2WordList(object):
                     sub_term_l.append( decomp_term.pop(l_end) )
                     
                 #Save the sub-terms of the Decomposed term from the terms list 
-                dot_terms_l.extend(sub_term_l)
-                dot_terms_l.append("".join(decomp_term))
+                dot_terms_l.append( (i,"".join(decomp_term)) )
+                dot_terms_l.extend([(j+i+1, trm) for j, trm in enumerate(sub_term_l) if trm != ""])
                 fnd_idx_l.append(i)
                 
             else:
                 #in case of one element in the list check if it is a dot-sequence
                 if self.dot_str.findall(term):     
-                    dot_terms_l.extend(decomp_term)
+                    dot_terms_l.extend([(j+i, trm) for j, trm in enumerate(sub_term_l) if trm != ""])
                     fnd_idx_l.append(i)
                      
         return dot_terms_l, fnd_idx_l
@@ -191,11 +197,11 @@ class String2WordList(object):
             
             if symb_term_l:
                 #Keep the symbols found 
-                symb_terms_l.extend(symb_term_l)
+                symb_terms_l.extend([(j+i+1, trm) for j, trm in enumerate(symb_term_l) if trm != ""])
                 clean_trm = self.fredsb_clean.sub('', term)
                 
                 #Keep the terms free of symbols found
-                symb_terms_l.append(clean_trm)
+                symb_terms_l.append((i+j,clean_trm))
                 
                 #Keep index symbols found
                 fnd_idx_l.append(i)

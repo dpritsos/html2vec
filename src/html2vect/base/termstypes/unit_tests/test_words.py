@@ -19,9 +19,11 @@ class Test_String2WordList__words(unittest.TestCase):
         self.txt_sample = "This is a unit test for html2vect.termstype.words.String2WordList. package/module in\
                             cases of: proper numbers 2,000.00 proper symbol remove 10% and comma,,, ,comma\
                             dot. after .dot before"
-        self.expected_terms_lst = ['2,000.00', 'comma', ',,,', ',', 'comma', '.', 'html2vect.termstype.words.String2WordList',\
-                                   'dot', '.', '.', 'dot', ':', 'of', 'This', 'is', 'a', 'unit', 'test', 'for', 'package/module',\
-                                   'in', 'cases', 'proper', 'numbers', 'proper', 'symbol', 'remove', '10%', 'and', 'after', 'before']   
+        self.expected_terms_lst = ['This', 'is', 'a', 'unit', 'test', 'for', 'html2vect.termstype.words.String2WordList',\
+                                   'package/module', '.', 'in', 'cases', 'of', ':', 'proper', 'numbers', 'proper', 'symbol',\
+                                   'remove', '10%', 'and', '2,000.00', 'after', 'before', 'comma', ',', ',,,', 'comma', 'dot',\
+                                   '.', '.', 'dot'] 
+
     
     def test_terms_lst(self):
         terms_l = self.str2cng.terms_lst( self.txt_sample )
