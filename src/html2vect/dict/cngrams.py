@@ -8,13 +8,14 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2vect.dict.cngrams: submodule of `html2tf` module defines the classes: HtmlTF(), HtmlTP()"""
+""" html2vect.dict.cngrams: submodule of `html2vect` module defines the classes: HtmlTF(), HtmlTP()"""
 
 from ..base.features.html2attrib import BaseHTML2Attributes
-from ..base.termstypes.cngrams import String2CNGramsList
 from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.vectortypes.string2tpl import BaseString2TPL
 from ..base.io.baseio import BaseIO
+
+from ..base.termstypes.cngrams import String2CNGramsList
 
 
 class Html2TF(BaseString2TF, BaseHTML2Attributes, BaseIO):
@@ -38,7 +39,7 @@ class Html2TP(BaseString2TPL, BaseHTML2Attributes, BaseIO):
     def __init__(self, n, lowercase, valid_html):
         BaseIO.__init__(self)
         BaseHTML2Attributes.__init__(self, valid_html)
-        BaseString2TPL.__init__(self, String2CNGramsList( n ))
+        BaseString2TPL.__init__(self, String2CNGramsList( n ) )
         if lowercase:
             self._attrib = self.__attrib_lowercase
         

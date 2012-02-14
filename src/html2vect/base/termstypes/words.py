@@ -51,10 +51,10 @@ class String2WordList(object):
         terms_l = self.white_spliter.split(text)
         
         #Any term has more than 512 characters is rejected
-        terms_l = self.term_len_limit(terms_l, 512)
+        terms_l = self.__term_len_limit(terms_l, 512)
         
         #Extract the Numbers form the terms_l
-        num_trm_l, fidx_l = self.extract_proper_numbers(terms_l)
+        num_trm_l, fidx_l = self.__extract_proper_numbers(terms_l)
         analysed_terms_l.extend(num_trm_l)
         fnd_idx_l.extend(fidx_l)
         
@@ -64,12 +64,12 @@ class String2WordList(object):
         fnd_idx_l = []
         
         #Extract the terms to sub-terms of any symbol but comma (,) and comma sub-term(s)
-        comma_trm_l, fidx_l  = self.extract_comma_n_trms(terms_l)
+        comma_trm_l, fidx_l  = self.__extract_comma_n_trms(terms_l)
         analysed_terms_l.extend(comma_trm_l)
         fnd_idx_l.extend(fidx_l)
         
         #Extract term to words upon dot (.) and dot needs special treatment because we have the case of . or ... and so on
-        dot_trm_l, fidx_l  = self.extract_dot_n_trms(terms_l)
+        dot_trm_l, fidx_l  = self.__extract_dot_n_trms(terms_l)
         analysed_terms_l.extend(dot_trm_l)
         fnd_idx_l.extend(fidx_l)
         
@@ -80,7 +80,7 @@ class String2WordList(object):
               
         #Extract the non-alphanumeric symbols ONLY from the Beginning and the End of the terms
         ##except dot (.) and percentage % at the end for the term)
-        symb_trm_l, fidx_l  = self.extract_propr_trms_n_symbs(terms_l)
+        symb_trm_l, fidx_l  = self.__extract_propr_trms_n_symbs(terms_l)
         analysed_terms_l.extend(symb_trm_l)
         fnd_idx_l.extend(fidx_l)      
         
@@ -99,7 +99,7 @@ class String2WordList(object):
         return analysed_terms_l      
         
         
-    def term_len_limit(self, term_l, limit):
+    def __term_len_limit(self, term_l, limit):
         
         norm_term_l = list()
         
@@ -109,7 +109,7 @@ class String2WordList(object):
         return norm_term_l 
         
         
-    def extract_proper_numbers(self, terms_l):
+    def __extract_proper_numbers(self, terms_l):
         
         #The proper_numbers list and the list of indices where the proper_number-terms found in the original list    
         num_terms_l = list()
@@ -126,7 +126,7 @@ class String2WordList(object):
         return num_terms_l, fnd_idx_l
     
     
-    def extract_comma_n_trms(self, terms_l):
+    def __extract_comma_n_trms(self, terms_l):
         
         #The comma list and the list of indices where the comma-terms found in the original list    
         comma_terms_l = list()
@@ -142,7 +142,7 @@ class String2WordList(object):
         return comma_terms_l, fnd_idx_l
     
     
-    def extract_dot_n_trms(self, terms_l):
+    def __extract_dot_n_trms(self, terms_l):
         
         #The dot list and the list of indices where the dot-terms found in the original list    
         dot_terms_l = list()
@@ -185,7 +185,7 @@ class String2WordList(object):
         return dot_terms_l, fnd_idx_l
         
         
-    def extract_propr_trms_n_symbs(self, terms_l):
+    def __extract_propr_trms_n_symbs(self, terms_l):
         
         #The proper terms and symbols list and the list of indices where the proper-terms&symbols found in the original list    
         symb_terms_l = list()

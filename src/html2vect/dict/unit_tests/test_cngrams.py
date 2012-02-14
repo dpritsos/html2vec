@@ -1,4 +1,12 @@
-""" Unit Test for html2tfd.charngrams.py """
+#
+#    Unit Test for html2vect.dict.cngrams
+# 
+#    Author: Dimitiros Pritsos 
+#    
+#    License: BSD Style
+#
+#    Last update: Please refer to the GIT tracking 
+#
 
 import unittest
 import html2vect.dict.cngrams as cngrams
@@ -20,8 +28,6 @@ class Test_Html2TF__3grams(unittest.TestCase):
                              <p>This is a unit test for <b>html2tfd.charngrams.BaseString2TF</b> class for html2vectors package/module</p>\
                             </body>\
                            </html>"
-                           
-        self.txt_sample = "This is a unit test for html2tfd.charngrams.BaseString2TF class for html2vectors package/module"
         
         self.expected_ngrams_freq = {'s i': 1, 't t': 1, 'ase': 1, 's a': 1, 'htm': 2, 'ram': 1, 'rs ': 1, 'TF ': 1, 's f': 1,\
                                      '.ch': 1, 't f': 1, ' un': 1, '2tf': 1, 'l2t': 1, 'l2v': 1, 's p': 1, 'eSt': 1, 'tes': 1,\
@@ -64,7 +70,9 @@ class Test_Html2TF__3grams(unittest.TestCase):
        
     def test_html2tf_from_files(self):
         html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        
         html_ngrams = self.html2tf.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        
         ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0
         for nf in html_ngrams[0].values():
@@ -74,7 +82,9 @@ class Test_Html2TF__3grams(unittest.TestCase):
 
     def test_html2tf_from_paths(self):
         html_text_l = self.htmltext.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict' )
+        
         html_ngrams_l = self.html2tf.from_paths( None, self.pathto_htmls, encoding='utf8', error_handling='strict')
+        
         #ng_num_expected: contains the calculated expected number of N-grams given the text-string lenght
         ng_num_expected = len(html_text_l[0][1]) - self.n + 1
         ng_num_real = 0
@@ -97,7 +107,6 @@ class Test_Html2TP__3grams(unittest.TestCase):
                              <p>This is a unit test for <b>html2tfd.charngrams.BaseString2TF</b> class for html2vectors package/module</p>\
                             </body>\
                            </html>"
-        self.txt_sample = "This is a unit test for html2tfd.charngrams.BaseString2TF class for html2vectors package/module"
         
         #NOTICE the 'le ':1 on the bellow dictionary which is extra 3gram compare toTest_BaseString2NgramList__3grams because of HTML clean-up process
         self.expected_ngrams_pos = {u'le ': [94], u's i': [4], u't t': [14], u'ase': [46], u's a': [7], u'htm': [25, 69], u'ram': [40], u'rs ': [79],\
@@ -127,8 +136,8 @@ class Test_Html2TP__3grams(unittest.TestCase):
         
         self.pathto_htmls = "../../../unit_test_data/html/"
         self.xhtml_file_l = [ "../../../unit_test_data/html/test_01.html" ]
-        self.txt_file_l = [ "../../../unit_test_data/txt/test_01.txt" ]
         self.pckld_file_pos_list = "../../../unit_test_data/pickled/pckled_pos_lst.pkl"
+        
                          
     def test_html2tp_from_src(self):
         html_ngrams_pos = self.html2tp.from_src( self.html_sample )
