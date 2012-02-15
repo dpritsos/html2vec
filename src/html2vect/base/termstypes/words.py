@@ -179,7 +179,7 @@ class String2WordList(object):
             else:
                 #in case of one element in the list check if it is a dot-sequence
                 if self.dot_str.findall(term):     
-                    dot_terms_l.extend([(j+i, trm) for j, trm in enumerate(sub_term_l) if trm != ""])
+                    dot_terms_l.extend([(j+i, trm) for j, trm in enumerate(decomp_term) if trm != ""])
                     fnd_idx_l.append(i)
                      
         return dot_terms_l, fnd_idx_l

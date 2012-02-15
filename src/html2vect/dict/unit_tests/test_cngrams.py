@@ -13,6 +13,7 @@ import html2vect.dict.cngrams as cngrams
 from html2vect.string.attrib_text import HtmlFullText 
 import pickle
 
+
 class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
@@ -93,12 +94,12 @@ class Test_Html2TF__3grams(unittest.TestCase):
         self.assertEqual(ng_num_real, ng_num_expected)
         
         
-class Test_Html2TP__3grams(unittest.TestCase):
+class Test_Html2TPL__3grams(unittest.TestCase):
     
     def setUp(self):
         self.n = 3
-        self.html2tp = cngrams.Html2TP( self.n, lowercase=False, valid_html=True )
-        self.html2tp_lowercase = cngrams.Html2TP( self.n, lowercase=True, valid_html=True )
+        self.html2tp = cngrams.Html2TPL( self.n, lowercase=False, valid_html=True )
+        self.html2tp_lowercase = cngrams.Html2TPL( self.n, lowercase=True, valid_html=True )
         self.htmltext = HtmlFullText(valid_html=True)
         self.html_sample = "<html> \
                             <head> \
@@ -172,7 +173,7 @@ class Test_Html2TP__3grams(unittest.TestCase):
     
 suite = unittest.TestSuite()
 suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TF__3grams) )
-suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TP__3grams) )
+suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TPL__3grams) )
 unittest.TextTestRunner(verbosity=2).run(suite)        
     
         

@@ -14,6 +14,7 @@ from html2vect.base.termstypes.cngrams import String2CNGramsList
 from html2vect.base.termstypes.words import String2WordList
 import numpy as np
 
+
 class Test_BaseString2TF(unittest.TestCase):
     
     def setUp(self):
@@ -58,9 +59,9 @@ class Test_BaseString2TF(unittest.TestCase):
                                                    dtype=np.dtype([('terms', 'S128'), ('freq', 'float32')]))
         
         self.expected_words_freq_arr = np.array( [('This', 1.0), ('a', 1.0), ('class', 1.0), ('for', 2.0),\
-                                              ('html2tfd.charngrams.BaseString2TF', 1.0), ('html2vectors', 1.0),\
-                                              ('is', 1.0), ('package/module', 1.0), ('test', 1.0), ('unit', 1.0)],\
-                                              dtype=np.dtype([('terms', 'S128'), ('freq', 'float32')]))                                          
+                                                  ('html2tfd.charngrams.BaseString2TF', 1.0), ('html2vectors', 1.0),\
+                                                  ('is', 1.0), ('package/module', 1.0), ('test', 1.0), ('unit', 1.0)],\
+                                                  dtype=np.dtype([('terms', 'S128'), ('freq', 'float32')]))                                          
                            
                            
     def test_tf_dict_3grams(self):
