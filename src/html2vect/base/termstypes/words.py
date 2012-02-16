@@ -93,8 +93,8 @@ class String2WordList(object):
         #Short tuple list by indices i.e. using the fist element of the tuple
         analysed_terms_l.sort()
         
-        #Discard indices and keep only the terms list
-        analysed_terms_l = [trm[1] for trm in analysed_terms_l]
+        #Discard indices and keep only the terms list and Remove any empty string
+        analysed_terms_l = [trm[1] for trm in analysed_terms_l if trm[1] != ""]
         
         return analysed_terms_l      
         

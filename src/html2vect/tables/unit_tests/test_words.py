@@ -35,13 +35,13 @@ class Test_Html2TF(unittest.TestCase):
                             </body>\
                            </html>"
         
-        self.expected_words_arr = np.array( [('', 1.0), ('(', 1.0), (')', 1.0), (',', 1.0), ('.', 1.0), ('@', 1.0),\
+        self.expected_words_arr = np.array( [('(', 1.0), (')', 1.0), (',', 1.0), ('.', 1.0), ('@', 1.0),\
                                              ('IS!', 1.0), ('IT', 1.0), ('This', 1.0), ('a', 1.0), ('class', 1.0),\
                                              ('for', 1.0), ('html2tfd.charngrams.BaseString2TF', 1.0), ('html2vectors', 1.0),\
                                              ('is', 1.0), ('package/module', 1.0), ('test', 1.0), ('unit', 1.0)],\
                                              np.dtype([('terms', 'S128'), ('freq', 'float32')]) )
          
-        self.expected_words_freq_arr_lowercase = np.array( [('', 1.0), ('(', 1.0), (')', 1.0), (',', 1.0), ('.', 1.0), ('@', 1.0),\
+        self.expected_words_freq_arr_lowercase = np.array( [('(', 1.0), (')', 1.0), (',', 1.0), ('.', 1.0), ('@', 1.0),\
                                                             ('a', 1.0), ('class', 1.0), ('for', 1.0), ('html2tfd.charngrams.basestring2tf', 1.0),\
                                                             ('html2vectors', 1.0), ('is', 1.0), ('is!', 1.0), ('it', 1.0), ('package/module', 1.0),\
                                                             ('test', 1.0), ('this', 1.0), ('unit', 1.0)],\

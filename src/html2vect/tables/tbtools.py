@@ -58,7 +58,9 @@ class TFTablesHandler(object):
             if tf_tb.name in tb_name_lst: 
                 for row in tf_tb:
                     if row['terms'] in term_idx_d: 
-                        #print row['terms'], term_idx_d[row['terms']], len_term_idx_d, row['freq'] 
+                        #print row['terms'], term_idx_d[row['terms']], len_term_idx_d, row['freq']
+                        print term_idx_d[row['terms']]
+                        print pgtf_arr.shape  
                         pgtf_arr[0, term_idx_d[row['terms']] ] = row['freq'] 
                         #pgtf_arr[0, 0] = 0.0 #row['freq']
                 earr.append(pgtf_arr)
@@ -72,14 +74,14 @@ class TFTablesHandler(object):
         for tf_tb in self.h5file.walkNodes(tbgroup, classname='Table'):
             if tf_tb.name in tb_name_lst: 
                 for tf_row in tf_tb.iterrows():
-                    if tf_row['terms'] in tf_d: 
+                    if tf_row['terms'] in tf_d:
                         tf_d[ tf_row['terms'] ] += tf_row['freq']
                     else:
                         tf_d[ tf_row['terms'] ] = tf_row['freq']
         tf_arr = np.rec.array(tf_d.items(), dtype=data_type)
         tf_arr.sort(order='freq')
         tf_arr = tf_arr[::-1]
-        idxs = range( len(tf_arr) ) 
+        idxs = range( len(tf_arr) )
         term_idx_d = dict( zip( tf_arr['terms'] , idxs ) )
         return term_idx_d, tf_arr
 
