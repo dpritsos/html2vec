@@ -10,9 +10,9 @@
 
 """ html2vect.table.io: submodule of `html2vect` module defines the class IO() which overrides BaseIO"""
 
-import tbtools 
 import numpy as np
 
+from ..base.convert import tfttools as tbtools # Fix this
 from ..base.io.baseio import BaseIO
 
 class IO(BaseIO):
