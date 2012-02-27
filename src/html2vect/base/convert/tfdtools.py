@@ -97,29 +97,6 @@ class TFDictTools(object):
             raise Exception("Dictionary or a List of Dictionaries was expected as fist input argument")
     
     
-    def keep_atleast(self, terms_d, terms_amount):
-        """ keep_most(): is getting a dictionary of Terms-Frequencies and 
-            the amount of Terms to return as arguments. It is returning the number
-            of Terms equal to the argument 'terms_amount' with the Highest Frequency.
-            However if the subsequent terms have the same Frequency with the last
-            one if the Returned dictionary then it will include this terms. """
-            
-        terms_l = [(v, k) for (k, v) in terms_d.iteritems()]
-        terms_l.sort()
-        terms_l.reverse()
-        
-        atlest_terms_l = terms_l[0:terms_amount]
-        last_freq = atlest_terms_l[-1][0]
-        
-        #print last_freq
-        for freq, term in terms_l[terms_amount:]:
-            if freq == last_freq:
-                atlest_terms_l.append( (freq, term) )
-        terms_d = dict( [ (k, v) for (v, k) in atlest_terms_l ] )
-        
-        return terms_d
-
-
     def keep_most(self, terms_d, terms_amout):
         """ keep_most(): is getting a dictionary of Terms-Frequencies and 
             the amount of Terms to return as arguments. It is returning the number

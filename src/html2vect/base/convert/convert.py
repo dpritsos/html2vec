@@ -21,8 +21,9 @@ import warnings
 
 class TFVects2Matrix2D(TFDictTools, TFTablesTools):
     
-    def __init__(self, Dictionary=None):
+    def __init__(self, Dictionary=None, DSize=None):
         self.Dictionary = Dictionary
+        self.DSize = DSize
         
     
     def from_tables(self, h5file, tbgroup, tb_name_lst, data_type):
@@ -30,6 +31,11 @@ class TFVects2Matrix2D(TFDictTools, TFTablesTools):
         #If no predefined Dictionary has given Build the Dictionary for the vector to be Projected (Aligned)   
         if not self.Dictionary:
             tf_d = self.merge_tfts2tfd(h5file, tbgroup, tb_name_lst, data_type)
+            #In case it is required only sub-set of the created Dictionary it is kept only this and
+            #the last few terms that have the same frequency to the last one user requested
+            if self.Dsize:
+                tf_d = self.resize_tfd(tf_d, self.Dsize)
+            #The Terms-Indices Dictionary
             self.Dictionary = self.tf2tidx(tf_d)
         else:
             warnings.warn("Dictionary is already defined or created in previews usage of from_tables() function")
@@ -67,5 +73,3 @@ class TFVects2Matrix2D(TFDictTools, TFTablesTools):
     def from_matrixs(self):
         pass
     
-
- 

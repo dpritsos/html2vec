@@ -80,6 +80,30 @@ class TFTablesTools(object):
         return tf_d
     
     
+    def resize_tfd(self, tf_d, tfd_size):
+        """ resize_tfd(): is getting a dictionary of Terms-Frequencies and 
+            the amount of Terms to return as arguments. It is returning the number
+            of Terms equal to the argument 'tfd_size' with the Highest Frequency.
+            However if the subsequent terms have the same Frequency with the last
+            one in the Returned dictionary then it will include this terms. """
+        
+        #Get the TF list
+        tf_l = tf_d.items()
+        #Short by Frequency Max frequency goes first (Descending Order)
+        tf_l = sorted(tf_l, key=lambda tf_l: tf_l[1], reverse=True)    
+        
+        #Get the maximum index to keep - Having the same Frequency as the item located at tfd_size
+        freq_l = [itm[1] for itm in tf_l]
+        freq_arr = np.array(freq_l)
+        #The + 1 is required for keeping the last item with the equal to the tfd_size-item's frequency
+        max_idx = np.max( np.where( freq_arr==freq_arr[0:tfd_size] ) ) + 1
+        
+        #Keep the proper size of the new Dictionary and Rebuild it
+        tf_d = dict( tf_l[0:max_idx] )
+        
+        return tf_d
+    
+    
     def TFTabels2EArray(self, earr, tbgroup, tb_name_lst, term_idx_d, data_type=np.float32):
         """ TEMPRORERARLY IMPLEMENTATION """
         len_term_idx_d = len(term_idx_d)
@@ -101,8 +125,4 @@ class TFTablesTools(object):
    
             
 
-             
-    
-       
-        
         
