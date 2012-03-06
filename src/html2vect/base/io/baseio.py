@@ -12,7 +12,7 @@
 
 import abc
 from .basefilehandlers import BaseFileHandler
-import numpy as np
+
 
 class BaseIO(BaseFileHandler):
     __metaclass__ = abc.ABCMeta

@@ -96,7 +96,7 @@ class TFTablesTools(object):
         freq_l = [itm[1] for itm in tf_l]
         freq_arr = np.array(freq_l)
         #The + 1 is required for keeping the last item with the equal to the tfd_size-item's frequency
-        max_idx = np.max( np.where( freq_arr==freq_arr[0:tfd_size] ) ) + 1
+        max_idx = np.max( np.where( freq_arr==freq_arr[tfd_size] ) ) + 1
         
         #Keep the proper size of the new Dictionary and Rebuild it
         tf_d = dict( tf_l[0:max_idx] )

@@ -12,11 +12,9 @@ import unittest
 import html2vect.dict.words as words
 from html2vect.string.attrib_text import HtmlFullText 
 from html2vect.base.termstypes.words import String2WordList
-import pickle
-
+#import pickle
 
 ################################### REQUIRES A UNIT TEST FOR words.Html2TPL Class ################################# 
-
                
 class Test_Html2TF(unittest.TestCase):
     
