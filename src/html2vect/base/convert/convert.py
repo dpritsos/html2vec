@@ -31,12 +31,15 @@ class TFVects2Matrix2D(TFDictTools, TFTablesTools):
         #If no predefined Dictionary has given Build the Dictionary for the vector to be Projected (Aligned)   
         if not self.Dictionary:
             tf_d = self.merge_tfts2tfd(h5file, tbgroup, tb_name_lst, data_type)
+            
             #In case it is required only sub-set of the created Dictionary it is kept only this and
             #the last few terms that have the same frequency to the last one user requested
-            if self.Dsize:
-                tf_d = self.resize_tfd(tf_d, self.Dsize)
+            if self.DSize:
+                tf_d = self.resize_tfd(tf_d, self.DSize)
+            
             #The Terms-Indices Dictionary
             self.Dictionary = self.tf2tidx(tf_d)
+            
         else:
             warnings.warn("Dictionary is already defined or created in previews usage of from_tables() function")
         
@@ -46,29 +49,34 @@ class TFVects2Matrix2D(TFDictTools, TFTablesTools):
         frequencies_l = list()  
         
         #Get frequencies for all terms in each Table and form the proper row and column indices
-        row_c = -1 #Counts the Tables only for the ones exists in tb_name_list
+        rows_c = -1 #Counts the Tables only for the ones exists in tb_name_list
         for tf_tb in h5file.walkNodes(tbgroup, classname='Table'):
             if tf_tb.name in tb_name_lst:
-                row_c += 1 
+                rows_c += 1
+                
                 for tf in tf_tb.iterrows():
                     #Get the Index from the Dictionary as columns position and append it in the list - If term exists in the Dictionary
                     if tf['terms'] in self.Dictionary:
                         idx_in_Dict = self.Dictionary[ tf['terms'] ]
                         cols_l.append( idx_in_Dict )
+                        
                         #Append as row index the count number - As many times as the amount of terms(i.e. TFs) in the Table  
-                        rows_l.append(row_c)
+                        rows_l.append(rows_c)
+                                                
                         #Append the frequency of for this term (in this table row)
                         frequencies_l.append( tf['freq'] )
                     
-        #Return Scipy CSR Sparse matrix 
-        return ssp.csr_matrix((frequencies_l, (rows_l, cols_l)), dtype=np.float32)
+        #Return Scipy CSR Sparse matrix - shape is really import for keeping consistency when several matrices are created using the same Dictionary
+        return ssp.csr_matrix((frequencies_l, (rows_l, cols_l)), shape=(rows_c + 1, len(self.Dictionary)) , dtype=np.float32)
     
     
     def from_dicts(self):
         pass
     
+    
     def from_narrays(self):
         pass
+    
     
     def from_matrixs(self):
         pass

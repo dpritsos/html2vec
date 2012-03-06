@@ -54,4 +54,3 @@ class HtmlStyleText(BaseHTML2Attributes, BaseIO):
     def _attrib(self, xhtml_str):
         return self.styles(xhtml_str)
     
-     

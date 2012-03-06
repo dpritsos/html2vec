@@ -15,7 +15,7 @@ from html2vect.base.termstypes.words import String2WordList
 
 import numpy as np
 import tables as tb
-import pickle
+#import pickle
 
 ################################### REQUIRES A UNIT TEST FOR words.Html2TPL Class ################################# 
 
