@@ -37,11 +37,13 @@ class BaseString2LB(object):
             return None 
         
         #Define Terms Sequence Sparse Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-        ts_mtrx = ssp.dok_matrix( (len(self.tid_d), len(terms_l)), dtype='f')
+        #ts_mtrx = ssp.dok_matrix( (len(self.tid_d), len(terms_l)), dtype='f')
         rows_idx_l = [ self.tid_d[term] for term in terms_l ]
-        ts_mtrx[rows_idx_l, 0:len(terms_l)] = 1.0
-        print "Done"
-        ts_mtrx = ts_mtrx.tocoo()
+        #rows_idx_l.extend(rows_idx_l)
+        ts_mtrx = ssp.csr_matrix( (np.ones(len(rows_idx_l)*len(terms_l), dtype='f'), (np.array(rows_idx_l), np.arange(len(rows_idx_l)*len(terms_l)))) )
+        #ts_mtrx[rows_idx_l, 0:len(terms_l)] = 1.0
+        print "Done", ts_mtrx.shape
+        #ts_mtrx = ts_mtrx.tocoo()
         print "Done"
         
         #Prepare positions to be Smoothed-out 
