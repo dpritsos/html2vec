@@ -38,9 +38,14 @@ class Html2LBN(BaseString2LB, BaseString2TF, TFDictTools, BaseHTML2Attributes, I
         
         #Create the Dictionary from the given corpus if not given form the use
         if tid_dictionary == None:
-            tid_dictionary = dict()
+            tf_d = dict()
+            
+            #Merge All Term-Frequency Dictionaries created by the Raw Texts
             for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-                tid_dictionary = self.merge_tfds( tid_dictionary, self.tf_dict( self.__text( html_str ) ) )
+                tf_d = self.merge_tfds( tf_d, self.tf_dict( self.__text( html_str ) ) )
+                
+            #Create The Terms-Index Dictionary that is shorted by Frequency descending order
+            tid_dictionary = self.tf2tidx( tf_d )
         
         #Create the LowBow Sparse Matrix for the whole corpus
         lowbow_lst = list()

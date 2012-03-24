@@ -40,7 +40,7 @@ class Test_Html2LBN__3grams_GausseKernel(unittest.TestCase):
         
         html_lowbow = self.html2lbn.from_files( self.xhtml_file_l, [1,2,3,4,5], 0.5, tid_dictionary=None, encoding='utf8', error_handling='strict' )
         
-        print html_lowbow[0].todense()
+        print html_lowbow[0].todense(), html_lowbow[0].shape, len(html_lowbow[1]) 
         
         #ng_num_expected = len(html_text[0]) - self.n + 1
         #ng_num_real = 0

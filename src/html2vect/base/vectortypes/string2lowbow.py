@@ -37,24 +37,20 @@ class BaseString2LB(object):
             return None 
         
         #Define Terms Sequence Sparse Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-        #ts_mtrx = ssp.dok_matrix( (len(self.tid_d), len(terms_l)), dtype='f')
         rows_idx_l = [ self.tid_d[term] for term in terms_l ]
-        #rows_idx_l.extend(rows_idx_l)
-        ts_mtrx = ssp.csr_matrix( (np.ones(len(rows_idx_l)*len(terms_l), dtype='f'), (np.array(rows_idx_l), np.arange(len(rows_idx_l)*len(terms_l)))) )
-        #ts_mtrx[rows_idx_l, 0:len(terms_l)] = 1.0
-        print "Done", ts_mtrx.shape
-        #ts_mtrx = ts_mtrx.tocoo()
-        print "Done"
+        ###print np.array(rows_idx_l).shape, np.arange(len(terms_l))
+        ts_mtrx = ssp.csr_matrix( (np.ones(len(terms_l), dtype='f'), (np.array(rows_idx_l), np.arange(len(terms_l))) ),\
+                                    shape=(len(self.tid_d), len(terms_l)) )
         
         #Prepare positions to be Smoothed-out 
-        
         text_posz = np.arange(1, len(terms_l)+1)
         text_posz = (text_posz - 0.5) / text_posz.shape[0]  
         
-        #Smoothing Process for all Smooting positions
+        #Smoothing Process for all Smoothing positions
         smoothd_sums = ssp.lil_matrix((len(smth_pos_l), len(self.tid_d)), dtype='f')
         for i, smth_pos in enumerate(smth_pos_l):
-            smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma)
+            #PDF Re-Normalised based for the range [0,1]
+            smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) / (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
             
             #Normalise Smoothing Kernel
             smth_k = smth_k / smth_k.sum()
