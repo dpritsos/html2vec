@@ -50,7 +50,7 @@ class BaseString2LB(object):
         smoothd_sums = ssp.lil_matrix((len(smth_pos_l), len(self.tid_d)), dtype='f')
         for i, smth_pos in enumerate(smth_pos_l):
             #PDF Re-Normalised based for the range [0,1]
-            smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) / (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
+            smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) #/ (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
             
             #Normalise Smoothing Kernel
             smth_k = smth_k / smth_k.sum()
@@ -66,6 +66,7 @@ class BaseString2LB(object):
             smoothd_sums[i,:] = smoothd[0, rows_idx_l]
          
         #Sum up and return the sparse matrix for this string/text
-        return ssp.csr_matrix( smoothd_sums.sum(0) )   
+        smthd_sums_sum = smoothd_sums.sum(0)
+        return ssp.csr_matrix( smthd_sums_sum, shape=smthd_sums_sum.shape )   
     
     

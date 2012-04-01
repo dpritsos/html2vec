@@ -37,7 +37,7 @@ class IO(BaseIO):
         xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
         
         #Create the lowbow vectors sparse matrix for this files
-        lowbow_matrix, tid_dict = self.from_files(self, xhtml_file_l, smth_pos_l, smth_sigma, tid_dictionary=None, encoding='utf8', error_handling='strict')
+        lowbow_matrix, tid_dict = self.from_files(xhtml_file_l, smth_pos_l, smth_sigma, tid_dictionary, encoding, error_handling)
         
         #Return the lowbow matrix, the dictionary created and the xhtml_files_list
         return (lowbow_matrix, tid_dict, xhtml_file_l)
