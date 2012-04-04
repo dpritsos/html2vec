@@ -36,21 +36,29 @@ class BaseString2LB(object):
         if terms_l == None:
             return None 
         
-        #Define Terms Sequence Sparse Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-        rows_idx_l = [ self.tid_d[term] for term in terms_l ]
-        ###print np.array(rows_idx_l).shape, np.arange(len(terms_l))
-        ts_mtrx = ssp.csr_matrix( (np.ones(len(terms_l), dtype='f'), (np.array(rows_idx_l), np.arange(len(terms_l))) ),\
+        #Get the indices for rows based on the Dictionary - Required for Terms-Sequence-Sparse-Matrix 
+        rows_idx_l = [ self.tid_d[term] for term in terms_l if term in self.tid_d ]
+        if not rows_idx_l:
+            rows_idx_l = [ len(self.tid_d) - 1 ]
+        
+        #Get the term_l left based on the Available Dictionary - Required for Terms-Sequence-Sparse-Matrix
+        terms_l = [ term for term in terms_l if term in self.tid_d ]
+        if not terms_l:
+            terms_l = [ 0 ]
+            
+        #Define Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
+        ts_mtrx = ssp.csr_matrix( (np.ones(len(terms_l), dtype=np.float64), (np.array(rows_idx_l), np.arange(len(terms_l))) ),\
                                     shape=(len(self.tid_d), len(terms_l)) )
         
         #Prepare positions to be Smoothed-out 
         text_posz = np.arange(1, len(terms_l)+1)
-        text_posz = (text_posz - 0.5) / text_posz.shape[0]  
+        text_posz = (text_posz - 0.5) / text_posz.shape[0]
         
         #Smoothing Process for all Smoothing positions
-        smoothd_sums = ssp.lil_matrix((len(smth_pos_l), len(self.tid_d)), dtype='f')
+        smoothd_sums = ssp.lil_matrix((len(smth_pos_l), len(self.tid_d)), dtype=np.float64)
         for i, smth_pos in enumerate(smth_pos_l):
             #PDF Re-Normalised based for the range [0,1]
-            smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) #/ (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
+            smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) / (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
             
             #Normalise Smoothing Kernel
             smth_k = smth_k / smth_k.sum()
@@ -62,11 +70,19 @@ class BaseString2LB(object):
                 smoothd = ts_mtrx.tocsr() * smth_k_mtrx.tocsr().T #TRaspose maybe
             else:
                 smoothd = (ts_mtrx.tocsr() * smth_k_mtrx.tocsr()).sum(1).T #TRaspose maybe
-
-            smoothd_sums[i,:] = smoothd[0, rows_idx_l]
+        
+            #Get the proper weights respectively to the row indices and put them to the smoothd_sums matrix
+            if smoothd[0, rows_idx_l].shape[1] != 1:
+                smoothd_sums[i,:] = smoothd[0, rows_idx_l]
+            else: 
+                #if there is only one element requires direct assignment
+                smoothd_sums[i, 0] = smoothd[0, rows_idx_l[0]]
          
         #Sum up and return the sparse matrix for this string/text
         smthd_sums_sum = smoothd_sums.sum(0)
-        return ssp.csr_matrix( smthd_sums_sum, shape=smthd_sums_sum.shape )   
+        #Get Normalised Sum of Sums
+        norm_smthd_sums = smthd_sums_sum / np.sum(smthd_sums_sum) 
+                
+        return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float64)   
     
     

@@ -38,7 +38,7 @@ class Test_Html2LBN__3grams_GausseKernel(unittest.TestCase):
     def test_html2lbn_from_files(self):
         #html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
         
-        html_lowbow = self.html2lbn.from_files( self.xhtml_file_l, [1,2,3,4,5], 0.5, tid_dictionary=None, encoding='utf8', error_handling='strict' )
+        html_lowbow = self.html2lbn.from_files( self.xhtml_file_l, [0.1, 0.2, 0.3, 0.4, 0.5], 0.5, tid_dictionary=None, encoding='utf8', error_handling='strict' )
         
         print html_lowbow[0].todense(), html_lowbow[0].shape, len(html_lowbow[1]) 
         

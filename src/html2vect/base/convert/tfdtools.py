@@ -98,7 +98,7 @@ class TFDictTools(object):
     
     
     def keep_most(self, terms_d, terms_amout):
-        """ keep_most(): is getting a dictionary of Terms-Frequencies and 
+        """ keep_most(): is getting a SHORTED dictionary of Terms-Frequencies and 
             the amount of Terms to return as arguments. It is returning the number
             of Terms equal to the argument 'terms_amount' with the Highest Frequency. """
         terms_l = [(v, k) for (k, v) in terms_d.iteritems()]
@@ -109,4 +109,28 @@ class TFDictTools(object):
         terms_d = dict( [ (k, v) for (v, k) in most_terms_l ] )
         
         return terms_d    
+    
+    def keep_atleast(self, term_d, terms_amount):
+        """ keep_atleast(): is getting a dictionary of Terms-Frequencies and 
+            the amount of Terms to return as arguments. It is returning the number
+            of Terms equal to the argument 'terms_amount' with the Highest Frequency.
+            However if the subsequent terms have the same Frequency with the last
+            one if the Returned dictionary then it will include this terms. """
+            
+        #Get the TF list
+        tf_l = term_d.items()
+        #Short by Frequency Max frequency goes first (Descending Order)
+        tf_l = sorted(tf_l, key=lambda tf_l: tf_l[1], reverse=True)
+        
+        atlest_tf_l = tf_l[0:terms_amount]
+ 
+        last_freq = tf_l[-1][0]
+
+        for term, freq in tf_l[terms_amount:]:
+            if freq == last_freq:
+                atlest_tf_l.append( (freq, term) )
+                
+        terms_d = dict( atlest_tf_l )
+        
+        return terms_d
     

@@ -20,6 +20,7 @@ from ..base.termstypes.cngrams import String2CNGramsList
 from ..base.termstypes.words import String2WordList
 
 import scipy.sparse as ssp
+import numpy as np
 from scipy import stats
 
 
@@ -54,7 +55,7 @@ class Html2LBN(BaseString2LB, BaseString2TF, TFDictTools, BaseHTML2Attributes, I
         
         #Pack it as a sparse vstack and return it
         smth_copus_mtrx = ssp.vstack( lowbow_lst )
-        return ( ssp.csr_matrix(smth_copus_mtrx, shape=smth_copus_mtrx.shape), tid_dictionary ) 
+        return ( ssp.csr_matrix(smth_copus_mtrx, shape=smth_copus_mtrx.shape, dtype=np.float64), tid_dictionary ) 
     
     
     def _text(self, html_str):
