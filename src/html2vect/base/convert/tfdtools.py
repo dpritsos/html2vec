@@ -124,11 +124,11 @@ class TFDictTools(object):
         
         atlest_tf_l = tf_l[0:terms_amount]
  
-        last_freq = tf_l[-1][0]
+        last_freq = tf_l[-1][1]
 
         for term, freq in tf_l[terms_amount:]:
             if freq == last_freq:
-                atlest_tf_l.append( (freq, term) )
+                atlest_tf_l.append( (term, freq) )
                 
         terms_d = dict( atlest_tf_l )
         

@@ -26,55 +26,61 @@ from scipy import stats
 
 class Html2LBN(BaseString2LB, BaseString2TF, TFDictTools, BaseHTML2Attributes, IO):
     
-    def __init__(self, n, lowercase, valid_html, smoothing_kernel=stats.norm):
+    def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm):
         IO.__init__(self)
         BaseHTML2Attributes.__init__(self, valid_html)
         BaseString2LB.__init__(self, String2CNGramsList( n ), smoothing_kernel)
         BaseString2TF.__init__(self, String2CNGramsList( n ) )
+        if attrib == "text":
+            self._attrib_ = self.text
+        elif attrib == "tags":
+            self._attrib_ = self.tags            
         if lowercase:
-            self._text = self._text_lowercase
+            self._attrib_ = self._lower( self._attrib_ )
     
-    
+ 
     def _attrib(self, xhtml_file_l, smth_pos_l, smth_sigma, tid_dictionary, encoding, error_handling):  
         #Create the Dictionary from the given corpus if not given form the use
-        print "Creating Dicitonary"
         if tid_dictionary == None:
+            print "Creating Dictionary"
             tf_d = dict()
-            
             #Merge All Term-Frequency Dictionaries created by the Raw Texts
             for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-                tf_d = self.merge_tfds( tf_d, self.tf_dict( self._text( html_str ) ) )
+                tf_d = self.merge_tfds( tf_d, self.tf_dict( self._attrib_( html_str ) ) )
                 
             #Create The Terms-Index Dictionary that is shorted by Frequency descending order
             tid_dictionary = self.tf2tidx( tf_d )
+            
         print "Creating LowBOWs"
         #Create the LowBow Sparse Matrix for the whole corpus
         lowbow_lst = list()
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            lowbow_lst.append( self.lowbow( self._text( html_str ), smth_pos_l, smth_sigma, tid_dictionary) )
+            lowbow_lst.append( self.lowbow( self._attrib_( html_str ), smth_pos_l, smth_sigma, tid_dictionary) )
         
         #Pack it as a sparse vstack and return it
         smth_copus_mtrx = ssp.vstack( lowbow_lst )
         return ( ssp.csr_matrix(smth_copus_mtrx, shape=smth_copus_mtrx.shape, dtype=np.float64), tid_dictionary ) 
     
     
-    def _text(self, html_str):
-        return self.text( html_str )
-    
-    
-    def _text_lowercase(self, html_str):
-        return self.text( html_str ).lower()
-    
-    
+    def _lower(self, methd):
+        def lowerCase(*args, **kwrgs):
+            return methd(*args, **kwrgs).lower()
+        return lowerCase
+        
+        
 
 class Html2LBW(Html2LBN):
     
-    def __init__(self, lowercase, valid_html, smoothing_kernel=stats.norm):
+    def __init__(self, attrib, lowercase, valid_html, smoothing_kernel=stats.norm):
         IO.__init__(self)
         BaseHTML2Attributes.__init__(self, valid_html)
         BaseString2LB.__init__(self, String2WordList(), smoothing_kernel)
         BaseString2TF.__init__(self, String2WordList() )
+        if attrib == "text":
+            self._attrib_ = self.text
+        elif attrib == "tags":
+            self._attrib_ = self.tags            
         if lowercase:
-            self._text = self._text_lowercase
+            self._attrib_ = self._lower( self._attrib_ )
   
     

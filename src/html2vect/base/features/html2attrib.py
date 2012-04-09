@@ -191,7 +191,37 @@ class BaseHTML2Attributes(object):
     
     
     def tags(self, xhtml_str):
-        pass
+        
+        if self.valid_html:
+            properhtml = self.proper_html.findall(xhtml_str)
+        else:
+            properhtml = xhtml_str
+            
+        if not properhtml:
+            return ""
+        else:
+            #Concatenate HTML parts in case there is an tag soup and we have a case of several <html></html> tag pairs
+            if isinstance(properhtml, list) and properhtml > 1:
+                text  = " ".join( properhtml )
+            else:
+                text  = properhtml
+            
+            #Clean-up comments
+            text = self.html_comments.sub('', text)
+            
+            #Clean-up <!DOCTYPE> tag
+            text = self.html_doctype_tag.sub('', text)
+            
+            #Clean-up Scripts
+            text = self.html_scripts.sub('', text)
+            
+            #Clean-up Style tags
+            text = self.html_style.sub('', text)
+            
+            #Get only HTML tags
+            text = " ".join( self.html_tags.findall(text) )
+            
+        return text 
     
     
     def scripts(self, xhtml_str):
