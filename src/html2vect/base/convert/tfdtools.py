@@ -41,7 +41,7 @@ class TFDictTools(object):
         """ gen_tfds_frmlist(): is getting a list of Term-Frequency Dictionaries and creates a 
             TF Dictionary of all terms occurred in the list. """
             
-        return self.merge_tf_dicts( *tf_d_l )
+        return self.merge_tfds( *tf_d_l )
     
     
     def tf2tidx(self, term_d):
@@ -122,15 +122,15 @@ class TFDictTools(object):
         #Short by Frequency Max frequency goes first (Descending Order)
         tf_l = sorted(tf_l, key=lambda tf_l: tf_l[1], reverse=True)
         
-        atlest_tf_l = tf_l[0:terms_amount]
+        atleast_tf_l = tf_l[0:terms_amount]
  
-        last_freq = tf_l[-1][1]
-
+        last_freq = atleast_tf_l[-1][1]
+        
         for term, freq in tf_l[terms_amount:]:
             if freq == last_freq:
-                atlest_tf_l.append( (term, freq) )
+                atleast_tf_l.append( (term, freq) )
                 
-        terms_d = dict( atlest_tf_l )
+        terms_d = dict( atleast_tf_l )
         
         return terms_d
     
