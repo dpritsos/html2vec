@@ -47,7 +47,7 @@ class BaseString2LB(object):
             terms_l = [ 0 ]
             
         #Define Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-        ts_mtrx = ssp.csr_matrix( (np.ones(len(terms_l), dtype=np.float64), (np.array(rows_idx_l), np.arange(len(terms_l))) ),\
+        ts_mtrx = ssp.csr_matrix( (np.ones(len(terms_l), dtype=np.float32), (np.array(rows_idx_l), np.arange(len(terms_l))) ),\
                                     shape=(len(self.tid_d), len(terms_l)) )
         
         #Prepare positions to be Smoothed-out 
@@ -55,7 +55,7 @@ class BaseString2LB(object):
         text_posz = (text_posz - 0.5) / text_posz.shape[0]
         
         #Smoothing Process for all Smoothing positions
-        smoothd_sums = ssp.lil_matrix((len(smth_pos_l), len(self.tid_d)), dtype=np.float64)
+        smoothd_sums = ssp.lil_matrix((len(smth_pos_l), len(self.tid_d)), dtype=np.float32)
         for i, smth_pos in enumerate(smth_pos_l):
             #PDF Re-Normalised based for the range [0,1]
             smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) / (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
@@ -83,6 +83,6 @@ class BaseString2LB(object):
         #Get Normalised Sum of Sums
         norm_smthd_sums = smthd_sums_sum / np.max(smthd_sums_sum) 
                 
-        return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float64)   
+        return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float32)   
     
     

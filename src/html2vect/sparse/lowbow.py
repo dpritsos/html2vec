@@ -60,7 +60,7 @@ class Html2LBN(BaseString2LB, BaseString2TF, TFDictTools, BaseHTML2Attributes, I
         
         #Pack it as a sparse vstack and return it
         smth_copus_mtrx = ssp.vstack( lowbow_lst )
-        return ( ssp.csr_matrix(smth_copus_mtrx, shape=smth_copus_mtrx.shape, dtype=np.float64), tid_dictionary ) 
+        return ( ssp.csr_matrix(smth_copus_mtrx, shape=smth_copus_mtrx.shape, dtype=np.float32), tid_dictionary ) 
     
     
     def _lower(self, methd):
