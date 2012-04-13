@@ -81,7 +81,7 @@ class BaseString2LB(object):
         #Sum up and return the sparse matrix for this string/text
         smthd_sums_sum = smoothd_sums.sum(0)
         #Get Normalised Sum of Sums
-        norm_smthd_sums = smthd_sums_sum / np.sum(smthd_sums_sum) 
+        norm_smthd_sums = smthd_sums_sum / np.max(smthd_sums_sum) 
                 
         return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float64)   
     

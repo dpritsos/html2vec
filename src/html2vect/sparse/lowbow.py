@@ -22,6 +22,7 @@ from ..base.termstypes.words import String2WordList
 import scipy.sparse as ssp
 import numpy as np
 from scipy import stats
+import string
 
 
 class Html2LBN(BaseString2LB, BaseString2TF, TFDictTools, BaseHTML2Attributes, IO):
