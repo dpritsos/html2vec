@@ -73,10 +73,11 @@ class BaseString2LB(object):
         
             #Get the proper weights respectively to the row indices and put them to the smoothd_sums matrix
             if smoothd[0, rows_idx_l].shape[1] != 1:
-                smoothd_sums[i,:] = smoothd[0, rows_idx_l]
+                #print smoothd[0, rows_idx_l]
+                smoothd_sums[i, rows_idx_l] = smoothd[0, rows_idx_l]
             else: 
                 #if there is only one element requires direct assignment
-                smoothd_sums[i, 0] = smoothd[0, rows_idx_l[0]]
+                smoothd_sums[i, rows_idx_l[0]] = smoothd[0, rows_idx_l[0]]
          
         #Sum up and return the sparse matrix for this string/text
         smthd_sums_sum = smoothd_sums.sum(0)
