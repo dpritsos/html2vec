@@ -73,7 +73,7 @@ class BaseString2LB(object):
         
             #Get the proper weights respectively to the row indices and put them to the smoothd_sums matrix
             if smoothd[0, rows_idx_l].shape[1] != 1:
-                #print smoothd[0, rows_idx_l]
+    
                 smoothd_sums[i, rows_idx_l] = smoothd[0, rows_idx_l]
             else: 
                 #if there is only one element requires direct assignment
