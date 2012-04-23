@@ -34,3 +34,18 @@ class String2CNGramsList(object):
             terms_l.append( text[i : i+self.n]  )
                
         return terms_l
+    
+    def terms_lst_segments(self, text):
+        
+        #In case not text is given it returns None. The outer code layer should handle this if caused due to error. 
+        if not text:
+            return None
+        
+        #Cut the text into tokens size defined in instantiation of this class and put them in a List 
+        terms_l_seg =  list()
+        for i in range( len(text) - self.n + 1 ): 
+            terms_l_seg.append( [ text[i : i+self.n] ]  )
+               
+        return terms_l_seg
+        
+        

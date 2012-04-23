@@ -24,17 +24,7 @@ class BaseString2LB(object):
         self.kernel = smoothing_kernel 
     
     
-    def lowbow(self, text, smth_pos_l, smth_sigma, tid_dictionary):
-        
-        #The Dictionary/Vocabulary 
-        self.tid_d = tid_dictionary
-        
-        #Create Terms List 
-        terms_l = self.tt.terms_lst(text)
-        
-        #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
-        if terms_l == None:
-            return None 
+    def _lowbow(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
         
         #Get the indices for rows based on the Dictionary - Required for Terms-Sequence-Sparse-Matrix 
         rows_idx_l = [ self.tid_d[term] for term in terms_l if term in self.tid_d ]
@@ -84,6 +74,42 @@ class BaseString2LB(object):
         #Get Normalised Sum of Sums
         norm_smthd_sums = smthd_sums_sum / np.max(smthd_sums_sum) 
                 
-        return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float32)   
+        return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float32)
+    
+        
+    def lowbow(self, text, smth_pos_l, smth_sigma, tid_dictionary):
+    
+        #The Dictionary/Vocabulary 
+        self.tid_d = tid_dictionary
+        
+        #Create Terms List 
+        terms_l = self.tt.terms_lst(text)
+        
+        #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
+        if terms_l == None:
+            return None
+        
+        return self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
+    
+    
+    def lowbow4seg(self, text, smth_pos_l, smth_sigma, tid_dictionary): 
+        
+        #The Dictionary/Vocabulary 
+        self.tid_d = tid_dictionary
+        
+        #Create Terms List 
+        terms_l_seg = self.tt.terms_lst_segments(text)
+        
+        #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
+        if terms_l_seg == None:
+            return None
+        
+        segment_lst = list()
+        for terms_l in terms_l_seg:
+            segment_lst.append( self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
+        
+        segments2matrix = ssp.hstack( segment_lst )
+        
+        return ssp.csr_matrix( segments2matrix, shape=segments2matrix.shape, dtype=np.float32)
     
     
