@@ -43,8 +43,8 @@ class String2CNGramsList(object):
         
         #Cut the text into tokens size defined in instantiation of this class and put them in a List 
         terms_l_seg =  list()
-        for i in range( len(text) - self.n + 1 ): 
-            terms_l_seg.append( [ text[i : i+self.n] ]  )
+        for j in range(3):#range(len(text) - self.n + 1):
+            terms_l_seg.append( [ text[j+i : j+i+self.n] for i in range(0, len(text) - j - self.n + 1, 3) ] )
                
         return terms_l_seg
         

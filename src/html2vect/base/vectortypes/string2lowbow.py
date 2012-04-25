@@ -24,7 +24,7 @@ class BaseString2LB(object):
         self.kernel = smoothing_kernel 
     
     
-    def _lowbow(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
+    def lowbow_(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
         
         #Get the indices for rows based on the Dictionary - Required for Terms-Sequence-Sparse-Matrix 
         rows_idx_l = [ self.tid_d[term] for term in terms_l if term in self.tid_d ]
@@ -89,7 +89,7 @@ class BaseString2LB(object):
         if terms_l == None:
             return None
         
-        return self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
+        return self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
     
     
     def lowbow4seg(self, text, smth_pos_l, smth_sigma, tid_dictionary): 
@@ -105,9 +105,10 @@ class BaseString2LB(object):
             return None
         
         segment_lst = list()
-        for terms_l in terms_l_seg:
-            segment_lst.append( self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
-        
+        for terms_l in terms_l_seg: 
+            print len(terms_l) 
+            segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
+            
         segments2matrix = ssp.hstack( segment_lst )
         
         return ssp.csr_matrix( segments2matrix, shape=segments2matrix.shape, dtype=np.float32)
