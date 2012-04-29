@@ -105,12 +105,16 @@ class BaseString2LB(object):
             return None
         
         segment_lst = list()
-        for terms_l in terms_l_seg: 
-            print len(terms_l) 
+        for terms_l in terms_l_seg:
+            #print len(terms_l) 
             segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
             
-        segments2matrix = ssp.hstack( segment_lst )
+        segments2matrix = ssp.vstack(segment_lst)
+        #Sum up and return the sparse matrix for this string/text
+        segments2matrix_sum = segments2matrix.sum(0)
+        #Get Normalised Sum of Sums
+        segments2matrix_sum_sums = segments2matrix_sum / np.max(segments2matrix_sum)
         
-        return ssp.csr_matrix( segments2matrix, shape=segments2matrix.shape, dtype=np.float32)
+        return ssp.csr_matrix(segments2matrix_sum_sums, shape=segments2matrix_sum_sums.shape, dtype=np.float32)
     
     
