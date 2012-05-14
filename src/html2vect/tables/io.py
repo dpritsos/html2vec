@@ -17,6 +17,10 @@ from ..base.io.baseio import BaseIO
 
 class IO(BaseIO):
     
+    def __init__(self):
+        BaseIO.__init__(self)
+        
+    
     def from_src(self, fileh, tablesGroup, xhtml_str, tbname="tbarray1"):
         T_F_or_P_arr = self._attrib(xhtml_str)
         #This line has been add to prevent error when None is returned from cngrams.BaseString2TFTP methods
@@ -29,6 +33,7 @@ class IO(BaseIO):
         terms_tb_arr._v_attrs.status = status_code
         return terms_tb_arr
         
+        
     def from_files(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
         for i, xhtml_str in enumerate(self.load_files(xhtml_file_l, encoding, error_handling)):
             table_name = xhtml_file_l[ i ].split('/')[-1]
@@ -39,6 +44,7 @@ class IO(BaseIO):
             terms_tb_arr._v_attrs.filepath = xhtml_file_l[ i ] 
             terms_tb_arr.flush()
         return tablesGroup  
+    
         
     def from_paths(self, fileh, tablesGroup, grn_wpg_tbl_name, basepath, filepath_l, encoding='utf8', error_handling='strict'):
         xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
@@ -57,3 +63,4 @@ class IO(BaseIO):
             GenrePageListTable.row.append()
         GenrePageListTable.flush() 
         return (tablesGroup, GenrePageListTable) 
+    

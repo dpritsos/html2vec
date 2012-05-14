@@ -17,12 +17,14 @@ from .basefilehandlers import BaseFileHandler
 class BaseIO(BaseFileHandler):
     __metaclass__ = abc.ABCMeta
     
-    def __init_(self):
+    def __init__(self):
         BaseFileHandler.__init__(self)
+    
     
     @abc.abstractmethod
     def _attrib(self, xhtml_str): #Abstract method cannot be private (__methodname) method!
         pass
+    
     
     def from_src(self, xhtml_str):
         return self._attrib(xhtml_str)

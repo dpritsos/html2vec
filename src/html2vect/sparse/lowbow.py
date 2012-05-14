@@ -11,7 +11,7 @@
 """ html2vect.sparse.lowbow: submodule of `html2vect` module defines the classes: Html2LBN(), Html2LBW()"""
 
 from ..base.features.html2attrib import BaseHTML2Attributes
-from ..base.vectortypes.string2lowbow import BaseString2LB
+from ..base.vectortypes.string2lowbow import BaseString2LB, BaseString2LB_2TT_Level
 from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.convert.tfdtools import TFDictTools
 from io import IO
@@ -93,8 +93,24 @@ class Html2LBN4SEG(Html2LBN):
         #Pack it as a sparse vstack and return it
         smth_copus_mtrx = ssp.vstack( lowbow_lst )
         return ( ssp.csr_matrix(smth_copus_mtrx, shape=smth_copus_mtrx.shape, dtype=np.float32), tid_dictionary )
+
         
         
+class Html2LBN_L1_BW(Html2LBN, BaseString2LB_2TT_Level):
+    
+    def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm):
+        IO.__init__(self)
+        BaseHTML2Attributes.__init__(self, valid_html)
+        BaseString2LB_2TT_Level.__init__(self, String2WordList(), String2CNGramsList( n ), smoothing_kernel)
+        BaseString2TF.__init__(self, String2CNGramsList( n ) )
+        if attrib == "text":
+            self._attrib_ = self.text
+        elif attrib == "tags":
+            self._attrib_ = self.tags            
+        if lowercase:
+            self._attrib_ = self._lower( self._attrib_ )       
+
+
 
 class Html2LBW(Html2LBN):
     

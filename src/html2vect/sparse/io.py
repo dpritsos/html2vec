@@ -16,7 +16,7 @@ from ..base.io.baseio import BaseIO
 class IO(BaseIO):
     __metaclass__ = abc.ABCMeta
     
-    def __init_(self):
+    def __init__(self):
         BaseIO.__init__(self)
     
     @abc.abstractmethod
