@@ -27,10 +27,10 @@ import string
 
 class Html2LBN(BaseString2LB, BaseString2TF, TFDictTools, BaseHTML2Attributes, IO):
     
-    def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm):
+    def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm, norm_func=None):
         IO.__init__(self)
         BaseHTML2Attributes.__init__(self, valid_html)
-        BaseString2LB.__init__(self, String2CNGramsList( n ), smoothing_kernel)
+        BaseString2LB.__init__(self, String2CNGramsList( n ), smoothing_kernel, norm_func)
         BaseString2TF.__init__(self, String2CNGramsList( n ) )
         if attrib == "text":
             self._attrib_ = self.text
@@ -98,10 +98,10 @@ class Html2LBN4SEG(Html2LBN):
         
 class Html2LBN_L1_BW(Html2LBN, BaseString2LB_2TT_Level):
     
-    def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm):
+    def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm, norm_func=None):
         IO.__init__(self)
         BaseHTML2Attributes.__init__(self, valid_html)
-        BaseString2LB_2TT_Level.__init__(self, String2WordList(), String2CNGramsList( n ), smoothing_kernel)
+        BaseString2LB_2TT_Level.__init__(self, String2WordList(), String2CNGramsList( n ), smoothing_kernel, norm_func)
         BaseString2TF.__init__(self, String2CNGramsList( n ) )
         if attrib == "text":
             self._attrib_ = self.text
@@ -114,10 +114,10 @@ class Html2LBN_L1_BW(Html2LBN, BaseString2LB_2TT_Level):
 
 class Html2LBW(Html2LBN):
     
-    def __init__(self, attrib, lowercase, valid_html, smoothing_kernel=stats.norm):
+    def __init__(self, attrib, lowercase, valid_html, smoothing_kernel=stats.norm, norm_func=None):
         IO.__init__(self)
         BaseHTML2Attributes.__init__(self, valid_html)
-        BaseString2LB.__init__(self, String2WordList(), smoothing_kernel)
+        BaseString2LB.__init__(self, String2WordList(), smoothing_kernel, norm_func)
         BaseString2TF.__init__(self, String2WordList() )
         if attrib == "text":
             self._attrib_ = self.text

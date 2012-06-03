@@ -30,7 +30,7 @@ class ABSBaseString2LB(object):
     
     
     def lowbow_(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
-        
+        trm_l_len = len(terms_l)
         #Get the indices for rows based on the Dictionary - Required for Terms-Sequence-Sparse-Matrix 
         rows_idx_l = [ self.tid_d[term] for term in terms_l if term in self.tid_d ]
         if not rows_idx_l:
@@ -54,7 +54,6 @@ class ABSBaseString2LB(object):
         for i, smth_pos in enumerate(smth_pos_l):
             #PDF Re-Normalised based for the range [0,1]
             smth_k = self.kernel.pdf([text_posz], smth_pos, smth_sigma) / (self.kernel.cdf(1, smth_pos, smth_sigma) - self.kernel.cdf(0, smth_pos, smth_sigma))
-            
             #Normalise Smoothing Kernel
             smth_k = smth_k / smth_k.sum()
             
@@ -73,13 +72,25 @@ class ABSBaseString2LB(object):
             else: 
                 #if there is only one element requires direct assignment
                 smoothd_sums[i, rows_idx_l[0]] = smoothd[0, rows_idx_l[0]]
-         
-        #Sum up and return the sparse matrix for this string/text
-        smthd_sums_sum = smoothd_sums.sum(0)
-        #Get Normalised Sum of Sums
-        norm_smthd_sums = smthd_sums_sum / np.max(smthd_sums_sum) 
+        
+        #Get Normalised Smoothed Sums
+        if self.norm_func:
+            norm_smoothd_sums = self.norm_func( smoothd_sums, trm_l_len)
+        else:
+            norm_smoothd_sums = self.normalise( smoothd_sums )
                 
-        return ssp.csr_matrix( norm_smthd_sums, shape=smthd_sums_sum.shape, dtype=np.float32)
+        return ssp.csr_matrix( norm_smoothd_sums, shape=norm_smoothd_sums.shape, dtype=np.float32)
+    
+    
+    def normalise(self, smoothd_sums):
+        
+        #Sum up and return the sparse matrix for this string/text
+        smoothd_sums_sum = smoothd_sums.sum(0)
+    
+        #Get Normalised Sum of Sums
+        norm_smoothd_sums_sum = smoothd_sums_sum / np.max(smoothd_sums_sum)
+        
+        return norm_smoothd_sums_sum
     
 
 
@@ -87,9 +98,10 @@ class BaseString2LB(ABSBaseString2LB):
     """ BaseString2LB: Class
         tid_dictionary must have index starting from 1 """
     
-    def __init__(self, termstype, smoothing_kernel=stats.norm):
+    def __init__(self, termstype, smoothing_kernel=stats.norm, norm_func=None):
         self.tt = termstype
-        self.kernel = smoothing_kernel 
+        self.kernel = smoothing_kernel
+        self.norm_func = norm_func
     
         
     def lowbow(self, text, smth_pos_l, smth_sigma, tid_dictionary):
@@ -125,12 +137,14 @@ class BaseString2LB(ABSBaseString2LB):
             segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
             
         segments2matrix = ssp.vstack(segment_lst)
-        #Sum up and return the sparse matrix for this string/text
-        segments2matrix_sum = segments2matrix.sum(0)
-        #Get Normalised Sum of Sums
-        segments2matrix_sum_sums = segments2matrix_sum / np.max(segments2matrix_sum)
         
-        return ssp.csr_matrix(segments2matrix_sum_sums, shape=segments2matrix_sum_sums.shape, dtype=np.float32)
+        #Get Normalised Segments Sums
+        if self.norm_func:
+            norm_segments2matrix = self.norm_func( segments2matrix )
+        else:
+            norm_segments2matrix = self.normalise( segments2matrix )
+        
+        return ssp.csr_matrix(norm_segments2matrix, shape=norm_segments2matrix.shape, dtype=np.float32)
 
 
 
@@ -138,7 +152,7 @@ class BaseString2LB_2TT_Level(ABSBaseString2LB):
     """ BaseString2LB: Class
         tid_dictionary must have index starting from 1 """
     
-    def __init__(self, termstype_L1, termstype_L2, smoothing_kernel=stats.norm):
+    def __init__(self, termstype_L1, termstype_L2, smoothing_kernel=stats.norm, norm_func=None):
         self.tt_L1 = termstype_L1
         self.tt_L2 = termstype_L2
         self.kernel = smoothing_kernel 
@@ -178,14 +192,16 @@ class BaseString2LB_2TT_Level(ABSBaseString2LB):
         ###
         segment_lst = list()
         for terms_l in terms_ll: 
-            segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
-            
+            segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )    
+        
         segments2matrix = ssp.vstack(segment_lst)
-        #Sum up and return the sparse matrix for this string/text
-        segments2matrix_sum = segments2matrix.sum(0)
-        #Get Normalised Sum of Sums
-        segments2matrix_sum_sums = segments2matrix_sum / np.max(segments2matrix_sum)          
+        
+        #Get Normalised Segments Sums
+        if self.norm_func:
+            norm_segments2matrix = self.norm_func( segments2matrix )
+        else:
+            norm_segments2matrix = self.normalise( segments2matrix )  
             
-        return ssp.csr_matrix(segments2matrix_sum_sums, shape=segments2matrix_sum_sums.shape, dtype=np.float32)
+        return ssp.csr_matrix(norm_segments2matrix, shape=norm_segments2matrix.shape, dtype=np.float32)
     
     
