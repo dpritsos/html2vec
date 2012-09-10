@@ -30,6 +30,7 @@ class ABSBaseString2LB(object):
     
     
     def lowbow_(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
+        
         trm_l_len = len(terms_l)
         #Get the indices for rows based on the Dictionary - Required for Terms-Sequence-Sparse-Matrix 
         rows_idx_l = [ self.tid_d[term] for term in terms_l if term in self.tid_d ]
@@ -115,7 +116,7 @@ class BaseString2LB(ABSBaseString2LB):
         #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
         if terms_l == None:
             return None
-        
+    
         return self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
     
     

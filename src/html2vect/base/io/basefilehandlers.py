@@ -13,6 +13,8 @@
 import codecs
 import os
 
+
+
 class BasePathFileHandler(object):
     
     def __init__(self):
@@ -59,16 +61,17 @@ class BasePathFileHandler(object):
         os.unlink(source)
         
 
+
 class BaseFileHandler(BasePathFileHandler):
     
     def __init__(self):
         self.filename_lst = []
         self.file_count = None 
-        #self.encoding = 'utf-8' 
-        #self.error_handling = 'strict'
+        
         
     def __iter__(self):
         return self
+    
     
     def next(self):
         if len(self.filename_lst) == self.file_count:
@@ -76,6 +79,7 @@ class BaseFileHandler(BasePathFileHandler):
         xhtml = self.__load_file(self.filename_lst[ self.file_count ], self.encoding, self.error_handling)
         self.file_count += 1 
         return xhtml 
+
 
     def __load_file(self, filename, encoding='utf-8', error_handling='strict'):
         """ """
@@ -93,6 +97,7 @@ class BaseFileHandler(BasePathFileHandler):
             fenc.close()    
         return fstr  
     
+    
     def load_files(self, filename_l, encoding='utf-8', error_handling='strict'):
         """ """
         if isinstance(filename_l, str):
@@ -105,6 +110,7 @@ class BaseFileHandler(BasePathFileHandler):
             return self.__iter__()
         else:
             raise Exception("A String or a list of Strings was Expected as input")
+    
     
     #### DEPRICATED BECAUSE IS ITS IS EXTREMELY MEMORY COSUMING ####
     #def load_frmpaths(self, basepath, filepath_l, encoding='utf-8', error_handling='strict'):
