@@ -93,7 +93,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
             ng_num_real += float(nf)
         self.assertEqual(ng_num_real, ng_num_expected)
         
-        
+"""      
 class Test_Html2TPL__3grams(unittest.TestCase):
     
     def setUp(self):
@@ -169,11 +169,11 @@ class Test_Html2TPL__3grams(unittest.TestCase):
         
         #html_ngrams_tp_l[0][  0 <-- ] contains the filenames
         self.assertEqual(html_ngrams_tp_l[0][1], pos_lst[0])
-         
+         """
     
 suite = unittest.TestSuite()
 suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TF__3grams) )
-suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TPL__3grams) )
+#suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_Html2TPL__3grams) )
 unittest.TextTestRunner(verbosity=2).run(suite)        
     
         

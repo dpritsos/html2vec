@@ -65,9 +65,8 @@ class TFDictTools(object):
     def __tf2idxf(self, tf_d, tidx_d):
         """ __tf2idxf(): Don't use it directly, use tf2idxf instead.
             This function is getting a TF dictionary representing the TF Vector,
-            and a TF-Index as defined in VHTools.tf_dict_idxing(). It returns
-            a Index-Frequency dictionary where each term of the TF dictionary has been 
-            replaced with the Index number of the TF-Index. In case the term of the 
+            and a TF-Index. It returns a Index-Frequency dictionary where each term of the TF 
+            dictionary has been replaced with the Index number of the TF-Index. In case the term of the 
             TF Dictionary is not in the TF-Index then the term is just Dropped. Therefore,
             the Index-Frequency dictionary it will no more include the missing (from TF-Index) term. """
             
@@ -88,9 +87,12 @@ class TFDictTools(object):
             
         if isinstance(tf_d_l, list):
             idxed_d = list()
+            
             for tf_d in tf_d_l:
                 idxed_d.append( self.__tf2idxf(tf_d, tf_idx_d) )
+                
             return idxed_d
+        
         elif isinstance(tf_d_l, dict):
             return self.__tf2idxf(tf_d_l, tf_idx_d)
         else:

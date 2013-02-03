@@ -14,53 +14,100 @@ import re
 import unicodedata
 import htmlentitydefs as hedfs
 
-htmltags = [ 'a', 'abbr', 'acronym', 'address', 'applet', 'area', 'b', 'base', 'basefont', 'bdo', 'big', 'blockquote', 'body',\
-             'br', 'button', 'caption', 'center', 'cite', 'code', 'col', 'colgroup', 'dd', 'del', 'dfn', 'dir', 'div', 'dl',\
-             'dt', 'em', 'fieldset', 'font', 'form', 'frame', 'frameset', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'hr',\
-             'html', 'i', 'iframe', 'img', 'input', 'ins', 'isindex', 'kbd', 'label', 'legend', 'li', 'link', 'map', 'menu',\
-             'meta', 'noframes', 'noscript', 'object', 'ol', 'optgroup', 'option', 'p', 'param', 'pre', 'q', 's', 'samp',\
-             'script', 'select', 'small', 'span', 'strike', 'strong', 'style', 'sub', 'sup', 'table', 'tbody', 'td', 'textarea',\
-             'tfoot', 'th', 'thead', 'title', 'tr', 'tt', 'u', 'ul', 'var', 'xmp' ]
 
-htmltags.sort(reverse=True)
+#The HTML tags list cosist of the full W3C tag list including HTML 5.0 and HTML 4.0.1 which they are depricated in HTML5 
+html_tags_lst = ['<!--', '<!DOCTYPE', '<a', '<abbr', '<acronym', '<address', '<applet', '<area', '<article', '<aside', '<audio', '<b',\
+                 '<base', '<basefont', '<bdi', '<bdo', '<big', '<blockquote', '<body', '<br', '<button', '<canvas', '<caption', '<center',\
+                 '<cite', '<code', '<col', '<colgroup', '<command', '<datalist', '<dd', '<del', '<details', '<dfn', '<dir', '<div', '<dl',\
+                 '<dt', '<em', '<embed', '<fieldset', '<figcaption', '<figure', '<font', '<footer', '<form', '<frame', '<frameset', '<head',\
+                 '<header', '<hgroup', '<h1', '<h6', '<hr', '<html', '<i', '<iframe', '<img', '<input', '<ins', '<kbd', '<keygen', '<label',\
+                 '<legend', '<li', '<link', '<map', '<mark', '<menu', '<meta', '<meter', '<nav', '<noframes', '<noscript', '<object', '<ol',\
+                 '<optgroup', '<option', '<output', '<p', '<param', '<pre', '<progress', '<q', '<rp', '<rt', '<ruby', '<s', '<samp', '<script',\
+                 '<section', '<select', '<small', '<source', '<span', '<strike', '<strong', '<style', '<sub', '<summary', '<sup', '<table', '<tbody',\
+                 '<td', '<textarea', '<tfoot', '<th', '<thead', '<time', '<title', '<tr', '<track', '<tt', '<u', '<ul', '<var', '<video', '<wbr' ]
+html_tags_lst.sort(reverse=True)
 
 
 class BaseHTML2Attributes(object):
     
     def __init__(self, valid_html=False):
+        
+        #Option whether or not to return a valid HTML
         self.valid_html = valid_html
+        
+        #RegEx General for all HTML tags
+        self.html_tags = re.compile(r'<[^>]+>')
+                
+        #RegEx using only for keeping only the proper HTML document, i.e. starts with <html> and ends with </html>        
         self.proper_html = re.compile(r'<html[^>]*>[\S\s]+</html>', re.UNICODE|re.IGNORECASE)
+        
+        #RegEx for HTML comemts
         self.html_comments = re.compile(r'<!--[\s\S]*?-->', re.UNICODE|re.IGNORECASE)
+        
+        #RegEx for HTML document type
         self.html_doctype_tag = re.compile(r'<!DOCTYPE[^>]*?>')
         
         #This meta tag content extraction regular expression is rejecting http-equiv content 
         #and can extract content inside or outside quotes while quotes are discarded 
         self.html_meta = re.compile(r'<meta(?![\s]*name="??http-equiv"??)[\s\S]*content="?([\S\s]*?)"?[\s]*/>', re.UNICODE|re.IGNORECASE)
-        self.html_tags = re.compile(r'<[^>]+>')
+               
+        #RegEx for embedded Scripts in HTML
         self.html_scripts = re.compile(r'<script[^>]*>[\S\s]*?</script>', re.UNICODE|re.IGNORECASE)
+        
+        #RegEx for embedded Styles in HTML
         self.html_style = re.compile(r'<style[^>]*>[\S\s]*?</style>', re.UNICODE|re.IGNORECASE)
+        
+        #RegEx for white space characters, i.e., space, tab, carriage return, etc.
         self.whitespace_chars = re.compile(r'[\s]+', re.UNICODE)   # {2,}')
+        
+        #RegEx for NULL character
         self.NULL_chars = re.compile(r'[\x00]', re.UNICODE)   # {2,}')
+        
+        #RegEx for UTF-8 Replacement Character 
         self.unknown_char_seq = re.compile(r'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+', re.UNICODE|re.IGNORECASE) #{2,}')
-        #'['+ unicodedata.lookup('REPLACEMENT CHARACTER') +']+ <-- plus added 8-June-2011
+        
+        #RegEx for HTML entities
         self.html_entities_name = re.compile(r'(&([\w]{2,8});)')
+        
+        #RegEx for HTML entities with omitted semicolon
         self.html_entname_nosemicolon = re.compile(r'(&([\w]{2,8}))')
+        
+        #RegEx for HTML entities with numerical form
         self.html_entities_number = re.compile(r'(&#([\d]+?);)')
+        
+        #RegEx for HTML entities with numerical form and omitted semicolon
         self.html_entnum_nosemicolon = re.compile(r'(&#([\d]+?))')
         
-        #Build and Define a Regular Expression for matching incomplite html tags
+        #Build and Define a Regular Expression for matching incomplete HTML tags
         find_tgs = r'('
         condition_tgs = r'(?:'
-        for tag in htmltags:
+        
+        for tag in html_tags_lst:
             find_tgs += '<' +tag + r'|'
             condition_tgs += r'(?<=<' + tag + r')|'
+            
         find_tgs = find_tgs.rstrip(r'|')
         condition_tgs = condition_tgs.rstrip(r'|')
         find_tgs += r')'
         condition_tgs += r')'  
         missclosed_tags_regex = find_tgs + condition_tgs + r'((?:[\s]+?[\S]+=[\S]+)*)'
+        
         self.html_missclosed_tags = re.compile( missclosed_tags_regex )           
-                    
+
+
+    def removehtmltags(self, text, repalce_char=' '):
+        
+        #Clean-up HTML tags
+        text = self.html_tags.sub(repalce_char, text)
+        
+        #Clean-up miss-closed HTML tags
+        missclosed_tags_lst = self.html_missclosed_tags.findall(text)
+        if missclosed_tags_lst:
+            for tag_str, attribs_str in missclosed_tags_lst:
+                text =  text.replace((tag_str + attribs_str), '')
+                
+        return text
+        
                     
     def encoding_norm(self, str):
         """ NOT WORKING AS EXPECTED - TO BE FIXED """
@@ -74,21 +121,7 @@ class BaseHTML2Attributes(object):
             print ("STRING ASSUMED TO BE ENCODED-UTF8-BYTE-STRING and DECODED TO PROPER UTF-8")
             
         return encod_str
-    
-    
-    def removehtmltags(self, text, repalce_char=' '):
-        
-        #Clean-up HTML tags
-        text = self.html_tags.sub(repalce_char, text)
-        
-        #Clean-up miss-closed HTML tags
-        missclosed_tags_lst = self.html_missclosed_tags.findall(text)
-        if missclosed_tags_lst:
-            for tag_str, attribs_str in missclosed_tags_lst:
-                text =  text.replace((tag_str + attribs_str), '')
-                
-        return text
-    
+
     
     def htmlentities2utf8(self, str):
         
@@ -205,19 +238,7 @@ class BaseHTML2Attributes(object):
                 text  = " ".join( properhtml )
             else:
                 text  = properhtml
-            
-            #Clean-up comments
-            text = self.html_comments.sub('', text)
-            
-            #Clean-up <!DOCTYPE> tag
-            text = self.html_doctype_tag.sub('', text)
-            
-            #Clean-up Scripts
-            text = self.html_scripts.sub('', text)
-            
-            #Clean-up Style tags
-            text = self.html_style.sub('', text)
-            
+                       
             #Get only HTML tags
             text = " ".join( self.html_tags.findall(text) )
             

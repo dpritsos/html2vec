@@ -13,23 +13,20 @@
 from scipy import stats
 import scipy.sparse as ssp
 import numpy as np
-import abc
 
 
-class ABSBaseString2LB(object):
-    __metaclass__ = abc.ABCMeta
+
+class BaseString2LB(ABSBaseString2LB):
+    """ BaseString2LB: Class
+        tid_dictionary must have index starting from 1 """
     
-    @abc.abstractmethod
-    def __init__(self):
-        pass
+    def __init__(self, termstype, smoothing_kernel=stats.norm, norm_func=None):
+        self.tt = termstype
+        self.kernel = smoothing_kernel
+        self.norm_func = norm_func
+        
     
-    
-    @abc.abstractmethod
-    def lowbow(self):
-        pass
-    
-    
-    def lowbow_(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
+    def _lowbow(self, terms_l, smth_pos_l, smth_sigma, tid_dictionary):
         
         trm_l_len = len(terms_l)
         #Get the indices for rows based on the Dictionary - Required for Terms-Sequence-Sparse-Matrix 
@@ -82,28 +79,6 @@ class ABSBaseString2LB(object):
                 
         return ssp.csr_matrix( norm_smoothd_sums, shape=norm_smoothd_sums.shape, dtype=np.float32)
     
-    
-    def normalise(self, smoothd_sums):
-        
-        #Sum up and return the sparse matrix for this string/text
-        smoothd_sums_sum = smoothd_sums.sum(0)
-    
-        #Get Normalised Sum of Sums
-        norm_smoothd_sums_sum = smoothd_sums_sum / np.max(smoothd_sums_sum)
-        
-        return norm_smoothd_sums_sum
-    
-
-
-class BaseString2LB(ABSBaseString2LB):
-    """ BaseString2LB: Class
-        tid_dictionary must have index starting from 1 """
-    
-    def __init__(self, termstype, smoothing_kernel=stats.norm, norm_func=None):
-        self.tt = termstype
-        self.kernel = smoothing_kernel
-        self.norm_func = norm_func
-    
         
     def lowbow(self, text, smth_pos_l, smth_sigma, tid_dictionary):
     
@@ -117,7 +92,7 @@ class BaseString2LB(ABSBaseString2LB):
         if terms_l == None:
             return None
     
-        return self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
+        return self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
     
     
     def lowbow4seg(self, text, smth_pos_l, smth_sigma, tid_dictionary): 
@@ -135,7 +110,7 @@ class BaseString2LB(ABSBaseString2LB):
         segment_lst = list()
         for terms_l in terms_l_seg:
             #print len(terms_l) 
-            segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
+            segment_lst.append( self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )
             
         segments2matrix = ssp.vstack(segment_lst)
         
@@ -146,63 +121,17 @@ class BaseString2LB(ABSBaseString2LB):
             norm_segments2matrix = self.normalise( segments2matrix )
         
         return ssp.csr_matrix(norm_segments2matrix, shape=norm_segments2matrix.shape, dtype=np.float32)
-
-
-
-class BaseString2LB_2TT_Level(ABSBaseString2LB):
-    """ BaseString2LB: Class
-        tid_dictionary must have index starting from 1 """
     
-    def __init__(self, termstype_L1, termstype_L2, smoothing_kernel=stats.norm, norm_func=None):
-        self.tt_L1 = termstype_L1
-        self.tt_L2 = termstype_L2
-        self.kernel = smoothing_kernel 
     
+    def normalise(self, smoothd_sums):
         
-    def lowbow(self, text, smth_pos_l, smth_sigma, tid_dictionary):
+        #Sum up and return the sparse matrix for this string/text
+        smoothd_sums_sum = smoothd_sums.sum(0)
     
-        #The Dictionary/Vocabulary 
-        self.tid_d = tid_dictionary
+        #Get Normalised Sum of Sums
+        norm_smoothd_sums_sum = smoothd_sums_sum / np.max(smoothd_sums_sum)
         
-        #Create Terms List 
-        terms_l_L1 = self.tt_L1.terms_lst(text)
-        
-        #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
-        if terms_l_L1 == None:
-            return None
-        
-        #Append one space after each Terms derived for Level1 (L1) Tokenization
-        terms_l_L1 = [ term + ' ' for term in terms_l_L1 ]        
-        
-        #Level2 (L2) Tokenization procedure for each token derived for the Level1 procedure 
-        terms_l_L2 = list()
-        for term in terms_l_L1:
-            trm_l = self.tt_L2.terms_lst(term)
-            if trm_l:
-                terms_l_L2.append( trm_l )
-        
-        ###
-        terms_ll = [ list(tpl) for tpl in map(None, terms_l_L2) ]
-        
-        ###
-        for i, trms_l in enumerate(terms_ll):
-            for j, trm in enumerate(trms_l):
-                if trm == None:
-                    terms_ll[i][j] = ' '
-        
-        ###
-        segment_lst = list()
-        for terms_l in terms_ll: 
-            segment_lst.append( self.lowbow_(terms_l, smth_pos_l, smth_sigma, tid_dictionary) )    
-        
-        segments2matrix = ssp.vstack(segment_lst)
-        
-        #Get Normalised Segments Sums
-        if self.norm_func:
-            norm_segments2matrix = self.norm_func( segments2matrix )
-        else:
-            norm_segments2matrix = self.normalise( segments2matrix )  
-            
-        return ssp.csr_matrix(norm_segments2matrix, shape=norm_segments2matrix.shape, dtype=np.float32)
+        return norm_smoothd_sums_sum
+    
     
     

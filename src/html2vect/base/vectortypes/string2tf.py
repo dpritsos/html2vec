@@ -13,6 +13,8 @@
 import numpy as np
 import scipy.sparse as ssp
 
+
+
 class BaseString2TF(object):
     """ BaseString2TF: Class
         Instance requires a TermsType Class to given as argument.
@@ -22,15 +24,15 @@ class BaseString2TF(object):
             - .
             - . 
         Methods:
-            - tf_dict(text): is getting a Text and returns a TF in native Python Dictionary 
+            - tf_dict(text,[tid_vocabulary* Optional]): is getting a Text and returns a TF in native Python Dictionary 
             - tf_narray(text, ndtype): is getting a Text and returns a TF in Numpy Array 
-            - f_sparse(text, tid_dictionary): ......"""
-    
+            - f_sparse(text, tid_vocabulary): ......"""
+             
     def __init__(self, termstype):
         self.tt = termstype
     
-    
-    def tf_dict(self, text):
+       
+    def tf_dict(self, text, tid_vocabulary=None):
         
         #Create Terms List 
         terms_l = self.tt.terms_lst(text)
@@ -39,18 +41,33 @@ class BaseString2TF(object):
         if terms_l == None:
             return None 
         
-        #Count Terms and Build the Terms-Frequency (TF) dictionary 
-        TF_d = dict()
-        for trm in terms_l:
-            if trm in TF_d: #if the dictionary of terms has the 'terms' as a key 
-                TF_d[ trm ] += 1
-            else: 
-                TF_d[ trm ] = 1
+        #Use the Vocabulary argument if any
+        if tid_vocabulary:
+            #If a Vocabulary was given as argument
+            TF_d = dict( [(voc_term, 0) for voc_term in tid_vocabulary] )
+            
+            #Count Terms and Build the Terms-Frequency (TF) dictionary 
+            for trm in terms_l:
+                if trm in TF_d: #if the dictionary of terms has the 'terms' as a key 
+                    TF_d[ trm ] += 1
+                #else: 
+                    #Not in the Vocabulary DROP THEM
+            
+        else:
+            #If a Vocabulary was None
+            TF_d = dict()
+        
+            #Count Terms and Build the Terms-Frequency (TF) dictionary 
+            for trm in terms_l:
+                if trm in TF_d: #if the dictionary of terms has the 'terms' as a key 
+                    TF_d[ trm ] += 1
+                else: 
+                    TF_d[ trm ] = 1
                  
         return TF_d  
     
     
-    def tf_narray(self, text, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')]) ):
+    def tf_narray(self, text,  norm_func, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')])):
         
         #Create Terms List
         terms_l = self.tt.terms_lst(text)
@@ -63,12 +80,19 @@ class BaseString2TF(object):
         terms, inds = np.unique1d(terms_l, return_inverse=True)
         freqs = np.bincount(inds)
         
+        #Get Normalised Smoothed Sums
+        if norm_func:
+            norm_freqs = norm_func( freqs, len(terms_l))
+        else:
+            norm_freqs = freqs /  freqs.max() # OR f_mtrx.sum() 
+        
         #Build Terms-Frequency (TF) dictionary
         #We need a Recored arrays to be created thus using numpy.rec.array.fromarrays() to be invoked as follows 
         #(alternatively fromarrays() can be used directly print terms
-        TF_arr = np.rec.array([terms, freqs], dtype=ndtype)
+        TF_arr = np.rec.array([terms, norm_freqs], dtype=ndtype)
         
         return TF_arr
+    
     
     def f_sparse(self, text, tid_dictionary, norm_func):
         

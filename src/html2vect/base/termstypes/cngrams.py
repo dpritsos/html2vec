@@ -19,6 +19,8 @@ class String2CNGramsList(object):
                 equal to the size defined while instantiation """
     
     def __init__(self, n):
+    
+        #N-Grams size
         self.n = n
     
     
@@ -34,6 +36,7 @@ class String2CNGramsList(object):
             terms_l.append( text[i : i+self.n]  )
                
         return terms_l
+    
     
     def terms_lst_segments(self, text):
         
