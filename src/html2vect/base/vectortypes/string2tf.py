@@ -123,7 +123,7 @@ class BaseString2TF(object):
         if norm_func:
             norm_f_mtrx = norm_func( f_mtrx, len(self.tid_d))
         else:
-            norm_f_mtrx = f_mtrx /  f_mtrx.sum() #OR f_mtrx.todense().max() 
+            norm_f_mtrx = f_mtrx /  f_mtrx.todense().max() # OR f_mtrx.sum() 
             
             
         return ssp.csr_matrix( norm_f_mtrx, shape=norm_f_mtrx.shape, dtype=np.float32)
