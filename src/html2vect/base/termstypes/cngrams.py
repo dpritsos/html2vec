@@ -18,8 +18,14 @@ class String2CNGramsList(object):
             - terms_lst(text): is getting a Text and returns a list of NGrams with size
                 equal to the size defined while instantiation """
     
-    def __init__(self, n):
+    def __init__(self, n=1):
     
+        #N-Grams size
+        self.n = n
+    
+    
+    def reset_N(self, n):
+        
         #N-Grams size
         self.n = n
     

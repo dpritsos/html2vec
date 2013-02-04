@@ -249,7 +249,7 @@ class BaseHTML2Attributes(object):
         pass
     
     
-    def styles(self, xhtml_str):
+    def get_styles(self, xhtml_str):
         pass
     
     

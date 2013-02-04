@@ -18,7 +18,7 @@ from basefilehandlers import BasePathFileHandler
 class TFdictFilesHandler(BasePathFileHandler):
     
     def __init__(self):
-        BasePathFileHandler.__init__(self)
+        super(BasePathFileHandler, self).__init__()
     
     
     def __load_tf_dict(self, filename, encoding='utf-8', error_handling='strict', force_lower_case=False):

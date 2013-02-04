@@ -16,7 +16,7 @@ import numpy as np
 
 
 
-class BaseString2LB(ABSBaseString2LB):
+class BaseString2LB(object):
     """ BaseString2LB: Class
         tid_dictionary must have index starting from 1 """
     
@@ -95,7 +95,7 @@ class BaseString2LB(ABSBaseString2LB):
         return self._lowbow(terms_l, smth_pos_l, smth_sigma, tid_dictionary)
     
     
-    def lowbow4seg(self, text, smth_pos_l, smth_sigma, tid_dictionary): 
+    def yield_lowbow4seg(self, text, smth_pos_l, smth_sigma, tid_dictionary): 
         
         #The Dictionary/Vocabulary 
         self.tid_d = tid_dictionary

@@ -11,27 +11,24 @@
 """ html2vect.dict.wngrams: submodule of `html2vect` module defines the classes: HtmlTF(), HtmlTPL()"""
 
 from cngrams import Html2TF as CHtml2TF
-from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.termstypes.wngrams import String2WNGramsList
 
 
 
 class Html2TF(CHtml2TF):
     
+    #Define the TermsType to be produced from this class 
+    s2ngl = String2WNGramsList()
     
     def __init__(self, n, attrib, lowercase, valid_html):
-        
-        #Initialise Character N Grams Class 
-        CHtml2TF.__init__(self, n, attrib, lowercase, valid_html)
-        
-        #Change the BaseSting Class to be initialised with Word N-grams
-        self.s2tf = BaseString2TF( String2WNGramsList( n ) )
-        
+            
+        #Initialise Character BaseHtml2TF Class 
+        super(Html2TF, self).__init__(n, attrib, lowercase, valid_html)
               
         
 
 #Deleted from the previous version now is need to be re-written    
-class Html2TPL():
+class Html2TPL(object):
     
     def __init__(self):
         pass

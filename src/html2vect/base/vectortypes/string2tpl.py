@@ -26,6 +26,8 @@ class BaseString2TPL(object):
             - tpl_narray(text, ndtype): is getting a Text and returns a TPL in Numpy Array of positions-list"""
     
     def __init__(self, termstype):
+        
+        #Initialise Term Types
         self.tt = termstype
     
     
@@ -49,7 +51,7 @@ class BaseString2TPL(object):
         return TPL_d        
     
     
-    def tpl_array(self, text, ndtype=np.dtype( [('terms', 'S126'), ('pos', 'uint16', (200,))] ) ):
+    def tpl_narray(self, text, ndtype=np.dtype( [('terms', 'S126'), ('pos', 'uint16', (200,))] ) ):
         
         #NOTE REQUIRES RE-FACTORING
         

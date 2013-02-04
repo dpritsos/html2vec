@@ -29,6 +29,8 @@ class BaseString2TF(object):
             - f_sparse(text, tid_vocabulary): ......"""
              
     def __init__(self, termstype):
+        
+        #Initialise Term Types
         self.tt = termstype
     
        
@@ -67,7 +69,7 @@ class BaseString2TF(object):
         return TF_d  
     
     
-    def tf_narray(self, text,  norm_func, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')])):
+    def tf_narray(self, text, norm_func, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')])):
         
         #Create Terms List
         terms_l = self.tt.terms_lst(text)

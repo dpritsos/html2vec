@@ -15,7 +15,7 @@ import re
 class String2WNGramsList(object):
     
     
-    def __init__(self, n):
+    def __init__(self, n=1):
         
         #N-Grams size
         self.n = n 
@@ -38,7 +38,13 @@ class String2WNGramsList(object):
         
         #Find proper number
         self.proper_num = re.compile(r'(^[0-9]+$)|(^[0-9]+[,][0-9]+$)|(^[0-9]+[.][0-9]+$)|(^[0-9]{1,3}(?:[.][0-9]{3})+[,][0-9]+$)|(^[0-9]{1,3}(?:[,][0-9]{3})+[.][0-9]+$)', re.UNICODE)
+    
+    
+    def reset_N(self, n):
         
+        #N-Grams size
+        self.n = n    
+    
         
     def terms_lst(self, text):
         
