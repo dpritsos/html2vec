@@ -24,12 +24,10 @@ class Html2TF(BaseHtml2TF):
     s2ngl = String2CNGramsList()
     
        
-    def __init__(self, n, attrib, lowercase, valid_html):
-        
-        self.__class__.s2ngl.reset_N(n)
+    def __init__(self, *args, **kwrgs):
             
-        #Initialise Character BaseHtml2TF Class   
-        super(Html2TF, self).__init__(attrib, lowercase, valid_html)
+        #Initialise BaseHtml2TF Class   
+        super(Html2TF, self).__init__(*args, **kwrgs)
             
         
     def yield_(self, xhtml_file_l, tid_dictionary, norm_func, encoding, error_handling):

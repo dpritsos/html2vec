@@ -25,13 +25,16 @@ class BaseHtml2TF(BaseFileHandler):
     tfdtools = TFDictTools()
     
     
-    def __init__(self, attrib, lowercase, valid_html):
+    def __init__(self, n, attrib, lowercase, valid_html):
         
         #Initialise BaseFileHandler Class
         super(BaseHtml2TF, self).__init__()   
         
         #HTML to attributes Class
         self.h2attr = BaseHTML2Attributes( valid_html )
+        
+        #Initialised the TermsType to be produced from this class stored in as class attribute 
+        self.__class__.s2ngl.reset_N(n)
         
         #String to Term Frequency Class using  
         self.s2tf = BaseString2TF( self.__class__.s2ngl )    

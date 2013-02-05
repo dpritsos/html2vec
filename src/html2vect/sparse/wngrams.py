@@ -21,10 +21,10 @@ class Html2TF(CHtml2TF):
     s2ngl = String2WNGramsList()
     
     
-    def __init__(self, n, attrib, lowercase, valid_html):
-        
-        #Initialise Character BaseHtml2TF Class 
-        super(Html2TF, self).__init__(n, attrib, lowercase, valid_html)
+    def __init__(self, *args, **kwrgs):
+            
+        #Initialise BaseHtml2TF Class   
+        super(Html2TF, self).__init__(*args, **kwrgs)
                
         
 #To Be Written    
