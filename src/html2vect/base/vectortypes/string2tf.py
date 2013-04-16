@@ -46,12 +46,15 @@ class BaseString2TF(object):
         #Use the Vocabulary argument if any
         if tid_vocabulary:
             #If a Vocabulary was given as argument
-            TF_d = dict( [(voc_term, 0) for voc_term in tid_vocabulary] )
+            TF_d = dict()
             
             #Count Terms and Build the Terms-Frequency (TF) dictionary 
             for trm in terms_l:
-                if trm in TF_d: #if the dictionary of terms has the 'terms' as a key 
-                    TF_d[ trm ] += 1
+                if trm in tid_vocabulary:
+                    if trm in TF_d: #if the dictionary of terms has the 'terms' as a key 
+                        TF_d[ trm ] += 1
+                    else: 
+                        TF_d[ trm ] = 1
                 #else: 
                     #Not in the Vocabulary DROP THEM
             
@@ -97,10 +100,7 @@ class BaseString2TF(object):
     
     
     def f_sparse(self, text, tid_dictionary, norm_func):
-        
-        #The Dictionary/Vocabulary 
-        self.tid_d = tid_dictionary
-        
+               
         #Create Term-Frequency Dictionary 
         tf_d = self.tf_dict(text)
         
@@ -108,22 +108,22 @@ class BaseString2TF(object):
         terms_l = tf_d.keys()
         
         #Get the indices for terms following the sequence occurs in terms_l  
-        col_idx_l = [ self.tid_d[term] for term in terms_l if term in self.tid_d ]
+        col_idx_l = [ tid_dictionary[term] for term in terms_l if term in tid_dictionary ]
         if not col_idx_l:
-            col_idx_l = [ len(self.tid_d) - 1 ]
+            col_idx_l = [ len(tid_dictionary) - 1 ]
         col_idx_a = np.array(col_idx_l)
         
         #Get the frequencies for terms following the sequence occurs in terms_l IN ORDER TO BE ALLIGNED WITH ids_l
-        freq_l = [ tf_d[term] for term in terms_l if term in self.tid_d ]
+        freq_l = [ tf_d[term] for term in terms_l if term in tid_dictionary ]
         if not freq_l:
             freq_l = [ 0 ]
         
         #Define Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-        f_mtrx = ssp.csr_matrix( ( freq_l, (np.zeros_like(col_idx_a), col_idx_a) ), shape=(1, len(self.tid_d)), dtype=np.float32)
+        f_mtrx = ssp.csr_matrix( ( freq_l, (np.zeros_like(col_idx_a), col_idx_a) ), shape=(1, len(tid_dictionary)), dtype=np.float32)
         
         #Get Normalised Smoothed Sums
         if norm_func:
-            norm_f_mtrx = norm_func( f_mtrx, len(self.tid_d))
+            norm_f_mtrx = norm_func( f_mtrx, len(tid_dictionary))
         else:
             norm_f_mtrx = f_mtrx /  f_mtrx.todense().max() # OR f_mtrx.sum() 
             

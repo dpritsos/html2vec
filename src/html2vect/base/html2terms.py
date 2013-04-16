@@ -17,6 +17,8 @@ from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.io.basefilehandlers import BaseFileHandler
 from ..base.convert.tfdtools import TFDictTools
 
+from ..base.termstypes.cngrams import String2CNGramsList
+
 
 class BaseHtml2TF(BaseFileHandler):
     __metaclass__ = abc.ABCMeta
@@ -37,15 +39,17 @@ class BaseHtml2TF(BaseFileHandler):
         self.__class__.s2ngl.reset_N(n)
         
         #String to Term Frequency Class using  
-        self.s2tf = BaseString2TF( self.__class__.s2ngl )    
+        self.s2tf = BaseString2TF( String2CNGramsList(3) ) #self.__class__.s2ngl )    
         
         if attrib == "text":
-            self._attrib = self.h2attr.text
+            self.attrib__ = self.h2attr.text
         elif attrib == "tags":
-            self._attrib = self.s2tf.tags
+            self.attrib__ = self.h2attr.tags
                         
         if lowercase:
-            self._attrib = self._lower( self._attrib )    
+            self._attrib = self._lower( self.attrib__ )    
+        else:
+            self._attrib = self.attrib__
    
     
     def _lower(self, methd):
@@ -65,7 +69,9 @@ class BaseHtml2TF(BaseFileHandler):
             tf_d = self.__class__.tfdtools.merge_tfds( tf_d, self.s2tf.tf_dict( self._attrib( html_str ) ) )
             
         #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
-        tid_vocabulary = self.__class__.tfdtools.tf2tidx( tf_d )
+        #tid_vocabulary = self.__class__.tfdtools.tf2tidx( tf_d )
+
+        tid_vocabulary = tf_d
         
         return tid_vocabulary
     
@@ -76,7 +82,7 @@ class BaseHtml2TF(BaseFileHandler):
         warnings.warn("Automated Vocabulary Building has been triggered: NONE tid_vocabulary was given as argument")
         
         #Build and return the Vocabulary
-        return elf.build_vocabulary(*args, **kwrgs)
+        return self.build_vocabulary(*args, **kwrgs)
         
         
     @abc.abstractmethod        
