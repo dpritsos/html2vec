@@ -17,8 +17,6 @@ from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.io.basefilehandlers import BaseFileHandler
 from ..base.convert.tfdtools import TFDictTools
 
-from ..base.termstypes.cngrams import String2CNGramsList
-
 
 class BaseHtml2TF(BaseFileHandler):
     __metaclass__ = abc.ABCMeta
@@ -39,7 +37,7 @@ class BaseHtml2TF(BaseFileHandler):
         self.__class__.s2ngl.reset_N(n)
         
         #String to Term Frequency Class using  
-        self.s2tf = BaseString2TF( String2CNGramsList(3) ) #self.__class__.s2ngl )    
+        self.s2tf = BaseString2TF( self.__class__.s2ngl )    
         
         if attrib == "text":
             self.attrib__ = self.h2attr.text
