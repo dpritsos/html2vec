@@ -13,7 +13,7 @@
 from scipy import stats
 import scipy.sparse as ssp
 import numpy as np
-
+import warnings
 
 
 class BaseString2LB(object):
@@ -118,6 +118,9 @@ class BaseString2LB(object):
         if self.norm_func:
             norm_segments2matrix = self.norm_func( segments2matrix )
         else:
+            #Warn that default normalisation will be performed
+            warnings.warn('norm_func argument was None. Default normalisation will be performed (division by max value)')
+            #Perform default normilisation 
             norm_segments2matrix = self.normalise( segments2matrix )
         
         return ssp.csr_matrix(norm_segments2matrix, shape=norm_segments2matrix.shape, dtype=np.float32)

@@ -89,7 +89,7 @@ class BaseString2TF(object):
         if norm_func:
             norm_freqs = norm_func( freqs, len(terms_l))
         else:
-            norm_freqs = freqs /  freqs.max() # OR f_mtrx.sum() 
+            norm_freqs = freqs # If norm_func is None or 0 then do not normalise
         
         #Build Terms-Frequency (TF) dictionary
         #We need a Recored arrays to be created thus using numpy.rec.array.fromarrays() to be invoked as follows 
@@ -103,6 +103,10 @@ class BaseString2TF(object):
                
         #Create Term-Frequency Dictionary 
         tf_d = self.tf_dict(text)
+
+        #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
+        if tf_d == None:
+            return None 
         
         #Get Terms_l
         terms_l = tf_d.keys()
@@ -125,7 +129,7 @@ class BaseString2TF(object):
         if norm_func:
             norm_f_mtrx = norm_func( f_mtrx, len(tid_dictionary))
         else:
-            norm_f_mtrx = f_mtrx /  f_mtrx.todense().max() # OR f_mtrx.sum() 
+            norm_f_mtrx = f_mtrx # If norm_func is None or 0 then do not normalise
             
             
         return ssp.csr_matrix( norm_f_mtrx, shape=norm_f_mtrx.shape, dtype=np.float32)
