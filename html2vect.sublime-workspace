@@ -1,0 +1,298 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"va",
+				"values"
+			],
+			[
+				"class_",
+				"class_RV_lst"
+			],
+			[
+				"std",
+				"stdout  (variable)"
+			],
+			[
+				"py",
+				"pyplot  (module)"
+			],
+			[
+				"to",
+				"toarray"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/html2vect/base/vectortypes/string2tf.py",
+			"settings":
+			{
+				"buffer_size": 5025,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/base/html2terms.py",
+			"settings":
+			{
+				"buffer_size": 3303,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"",
+				"Build: Cancel"
+			]
+		],
+		"width": 602.0
+	},
+	"console":
+	{
+		"height": 139.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/convert/tfdtools.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/io/basefilehandlers.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2lowbow.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/cngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/lowbow.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cnlowbow.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/wngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2tpl.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/html2terms.py",
+		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/KeywordBuilder.py",
+		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/Seed1.txt",
+		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/Seed2.txt",
+		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/Seed3.txt",
+		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/testt.txt",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/plot_resaults_frm_pytables_II.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/convert/convert.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/crossval_experiments_RF.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/crossplot_PR_CUR_IV_EnsblAlgo_n_EnsblOCSVM.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/crossplot_PR_CUR_IV_EnsblAlgo_Bagging_n_EnsblOCSVM.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/plot_resaults_frm_pytables_IV_Bagging.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/plot_PR_CUR_frm_pytables_IV.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/crossval_experiments_Koppels_method.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/PR_curves_to_11_standard_recall_levels.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ploting/plot_PR_CUR_frm_pytables_III.py",
+		"/home/dimitrios/Documents/pan13tools/pan13performance.py",
+		"/home/dimitrios/Desktop/pan13performance.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/TEST.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/evaluate_Koppels_method_for_sigma_values.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/evaluate_Koppels_method_for_F05_values.py",
+		"/home/dimitrios/Documents/pan13tools/pan13rnd.py",
+		"/home/dimitrios/ExtremePro_Workspace/ArtDesign_Site_ExtremePro.gr/Notify_Promo_Grangers_Oct_2012/Promo_Grangers_Nov_2012.html",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/ParamGridCrossVal_RFSE.py",
+		"/home/dimitrios/Documents/pan13tools/Answers.txt",
+		"/home/dimitrios/ExtremePro_Workspace/ArtDesign_Site_ExtremePro.gr/EOLO-SPORTS_Aetoi-KATHARODEYTERA/Email_HTML/EMAIL_to_Retail_Customers.html",
+		"/home/dimitrios/Desktop/untitled.py",
+		"/usr/local/lib/python2.7/dist-packages/sklearn/metrics/metrics.py",
+		"/home/dimitrios/Desktop/Profff/pan13tools.py",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/Author_Attribution_lowbow.py",
+		"/home/dimitrios/Desktop/Profff/ROC_Algo.txt",
+		"/home/dimitrios/Desktop/pan13tools.py",
+		"/home/dimitrios/ExtremePro_Workspace/ArtDesign_Site_ExtremePro.gr/Newsletter_Building_Scripts/build_html_snippets.py",
+		"/home/dimitrios/.config/sublime-text-2/Packages/Default/Default (Linux).sublime-keymap",
+		"/etc/modprobe.d/hid_apple.conf",
+		"/home/dimitrios/.config/sublime-text-2/Packages/User/Default (Linux).sublime-keymap",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/crossval_experiments_OC-SVM.py",
+		"/home/dimitrios/Desktop/test.py",
+		"/usr/local/lib/python2.7/dist-packages/django/bin/__init__.py",
+		"/home/dimitrios/.config/sublime-text-2/Packages/SublimeCodeIntel/Base File.sublime-settings",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/webgenreidentification.sublime-project",
+		"/home/dimitrios/Development_Workspace/webgenreidentification/src/crossval_experiments_lowbow_multiclass.py"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"dx = [0].extend(dx)",
+			"None",
+			"import",
+			"bin",
+			".\n",
+			"contrib"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/html2vect/base/vectortypes/string2tf.py",
+					"settings":
+					{
+						"buffer_size": 5025,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3769,
+								3769
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1343.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/html2vect/base/html2terms.py",
+					"settings":
+					{
+						"buffer_size": 3303,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1868,
+								1868
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 561.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 241.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"crossval_experiments_RF.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+			[
+				"",
+				"/home/dimitrios/Development_Workspace/html2vectors/html2vect.sublime-project"
+			]
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 193.0,
+	"status_bar_visible": true
+}
