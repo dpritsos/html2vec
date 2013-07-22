@@ -1,5 +1,5 @@
 #
-#    Module: Character Words - from html row text/files to PyTables EArrays Words TF dictionaries
+#    Module: Words N-Grams - from html row text/files to PyTables EArrays Words N-Grams Earrays 
 # 
 #    Author: Dimitiros Pritsos 
 #    
@@ -8,10 +8,9 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2vect.dict.words: submodule of `html2vect` module defines the classes: HtmlTF(), HtmlTPL()"""
+""" html2vect.tables.wngrams: submodule of `html2vect` module defines the classes: Html2TF() """
 
 from .cngrams import Html2TF as CHtml2TF
-from .cngrams import Html2TPL as CHtml2TPL
 from ..base.termstypes.wngrams import String2WNGramsList
 
 
@@ -26,19 +25,10 @@ class Html2TF(CHtml2TF):
             
         #Initialise BaseHtml2TF Class   
         super(Html2TF, self).__init__(*args, **kwrgs)
-
-
-
-class Html2TPL(CHtml2TPL):
-    
-    #Define the TermsType to be produced from this class 
-    s2ngl = String2WNGramsList()
-    
-    
-    def __init__(self, *args, **kwrgs):
-            
-        #Initialise BaseHtml2TF Class   
-        super(Html2TPL, self).__init__(*args, **kwrgs)
+               
         
-        
-        
+#To Be Written    
+class Html2TPL(object):
+    
+    def __init__(self):
+        pass

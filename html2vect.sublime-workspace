@@ -42,6 +42,30 @@
 				"buffer_size": 3303,
 				"line_ending": "Unix"
 			}
+		},
+		{
+			"file": "src/html2vect/base/io/tfdfileshandler.py",
+			"settings":
+			{
+				"buffer_size": 12887,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/tables/cngrams.py",
+			"settings":
+			{
+				"buffer_size": 4007,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/sparse/cngrams.py",
+			"settings":
+			{
+				"buffer_size": 2659,
+				"line_ending": "Unix"
+			}
 		}
 	],
 	"build_system": "",
@@ -72,8 +96,8 @@
 	},
 	"file_history":
 	[
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cngrams.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/convert/tfdtools.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cngrams.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/io/basefilehandlers.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2lowbow.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/cngrams.py",
@@ -140,6 +164,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"sorted",
+			"sort",
 			"dx = [0].extend(dx)",
 			"None",
 			"import",
@@ -178,8 +204,8 @@
 						"selection":
 						[
 							[
-								3769,
-								3769
+								3760,
+								3760
 							]
 						],
 						"settings":
@@ -189,7 +215,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1343.0,
+						"translation.y": 1139.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -206,8 +232,8 @@
 						"selection":
 						[
 							[
-								1868,
-								1868
+								1774,
+								1774
 							]
 						],
 						"settings":
@@ -217,7 +243,91 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 561.0,
+						"translation.y": 867.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/html2vect/base/io/tfdfileshandler.py",
+					"settings":
+					{
+						"buffer_size": 12887,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								75,
+								75
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2091.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/html2vect/tables/cngrams.py",
+					"settings":
+					{
+						"buffer_size": 4007,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 510.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/html2vect/sparse/cngrams.py",
+					"settings":
+					{
+						"buffer_size": 2659,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -293,6 +403,6 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 193.0,
+	"side_bar_width": 260.0,
 	"status_bar_visible": true
 }

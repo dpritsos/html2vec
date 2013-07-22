@@ -1,5 +1,5 @@
 #
-#    Module: Words-TF - from html row text/files to scipy.sparse.csr_matrix Words-TF
+#    Module: Character NGrams -TF - from html row text/files to scipy.sparse.csr_matrix Character NGrams-TF
 # 
 #    Author: Dimitiros Pritsos 
 #    

@@ -43,6 +43,8 @@ class BaseHtml2TF(BaseFileHandler):
             self.attrib__ = self.h2attr.text
         elif attrib == "tags":
             self.attrib__ = self.h2attr.tags
+        else:
+            raise Exception("Invalid attribute: only HTML 'text' or 'tags' can be retured for now")
                         
         if lowercase:
             self._attrib = self._lower( self.attrib__ )    

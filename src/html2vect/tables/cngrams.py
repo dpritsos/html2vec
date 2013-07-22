@@ -1,5 +1,5 @@
 #
-#    Module: Character NGrams - from html row text/files to PyTables EArrays character ngrams TF dictionaries
+#    Module: Character NGrams - from html row text/files to PyTables EArrays character NGrams Frequencies
 # 
 #    Author: Dimitiros Pritsos 
 #    
@@ -8,11 +8,13 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2vect.dict.cngrams: submodule of `html2vect` module defines the classes: HtmlTF(), HtmlTPL()"""
+""" html2vect.tables.cngrams: submodule of `html2vect` module defines the classes: Html2TF() """
 
 from ..base.html2terms import BaseHtml2TF
 from ..base.termstypes.cngrams import String2CNGramsList
-from ..base.vectortypes.string2tpl import BaseString2TPL
+ 
+import numpy as np
+import tables as tb
 
 
 class Html2TF(BaseHtml2TF):
@@ -22,79 +24,55 @@ class Html2TF(BaseHtml2TF):
     
        
     def __init__(self, *args, **kwrgs):
-            
+
         #Initialise BaseHtml2TF Class   
         super(Html2TF, self).__init__(*args, **kwrgs)
             
-                
-    def yield_(self, xhtml_str):
-        return self.s2tf.tf_narray( self.h2attr.text( xhtml_str ), self.ndtype )
+        
+    def yield_(self, xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling):
+        
+        #Creating h5file
+        h5f = tb.openFile(h5_fname, 'w')
+
+        #Initializing EArray. NOTE: expectedrow is critical for very large scale corpora
+        fq_earray = tb.createEArray(h5f, 'corpus_earray', tb.Float64Atom(), shape=(0,), expectedrows=len(xhtml_file_l) )
+
+        #Creating the Dictionary from the given corpus if not given form the use
+        if tid_dictionary == None:
+            tid_dictionary = self.__build_vocabulery(xhtml_file_l, encoding, error_handling)
+            
+        print "Creating NGrams-TF"
+        #Create the NGrams-TF Sparse Matrix for the whole corpus
+        for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
+            fq_earray.append( self.s2tf.f_narray(self._attrib( html_str ), tid_dictionary, norm_func) )
+        
+        #Return Corpus Frequencie's-per-Document EArray
+        return (fq_earray, h5f, tid_dictionary)
     
     
-    def from_src(self, fileh, tablesGroup, xhtml_str, tbname="tbarray1"):
-        T_F_or_P_arr = self.yield_(xhtml_str)
-        #This line has been add to prevent error when None is returned from cngrams.BaseString2TFTP methods
-        status_code = 0
-        if T_F_or_P_arr == "":
-            T_F_or_P_arr = np.zeros(1 ,dtype=tbtools.default_TF_dtype)
-            status_code = 1
-        terms_tb_arr = fileh.createTable(tablesGroup, tbname, T_F_or_P_arr)
-        terms_tb_arr._v_attrs.terms_num = np.sum(terms_tb_arr.read()['freq'])
-        terms_tb_arr._v_attrs.status = status_code
-        return terms_tb_arr
-        
-        
-    def from_files(self, fileh, tablesGroup, xhtml_file_l, encoding='utf8', error_handling='strict'):
-        for i, xhtml_str in enumerate(self.load_files(xhtml_file_l, encoding, error_handling)):
-            table_name = xhtml_file_l[ i ].split('/')[-1]
-            table_name = table_name.replace('.','_')
-            table_name = table_name.replace('-','__')
-            table_name = table_name.replace(' ','')
-            terms_tb_arr = self.from_src(fileh, tablesGroup, xhtml_str, tbname=table_name)
-            terms_tb_arr._v_attrs.filepath = xhtml_file_l[ i ] 
-            terms_tb_arr.flush()
-        return tablesGroup  
+    def from_src(self, xhtml_str):
+        raise Exception("Please use from_files() or from_paths() methods instead")
     
         
-    def from_paths(self, fileh, tablesGroup, grn_wpg_tbl_name, basepath, filepath_l, encoding='utf8', error_handling='strict'):
+    def from_files(self, xhtml_file_l, h5_fname, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'):
+        return self.yield_(xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling)  
+    
+        
+    def from_paths(self, basepath, filepath_l, h5_fname, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'):
+        
+        #Get the filenames located in the paths given 
         xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
-        tablesGroup = self.from_files(fileh, tablesGroup, xhtml_file_l, encoding, error_handling)
-        GenrePageListTable = fileh.createTable(tablesGroup, grn_wpg_tbl_name, tbtools.default_GenreTable_Desc)
-        for i, file_tb in enumerate(fileh.walkNodes(tablesGroup, classname='Table')):
-            #This line preventing to update the GenrePageListTable with its own meta-attributes (not available anyway) 
-            if file_tb.name == GenrePageListTable.name: 
-                continue 
-            GenrePageListTable.row['id'] = i
-            GenrePageListTable.row['table_name'] = file_tb.name
-            GenrePageListTable.row['filename'] = file_tb._v_attrs.filepath
-            GenrePageListTable.row['terms_num'] = file_tb._v_attrs.terms_num 
-            GenrePageListTable.row['status_code'] = file_tb._v_attrs.status
-            #GenrePageListTable.row['link_lst' ] = np.zeros(100)
-            GenrePageListTable.row.append()
-        GenrePageListTable.flush() 
-        return (tablesGroup, GenrePageListTable) 
-    
-    
-    
-class Html2TPL(Html2TF):
-    
-    #Define the TermsType to be produced from this class 
-    s2ngl = String2CNGramsList()
-    
-       
-    def __init__(self, *args, **kwrgs):
-            
-        #Initialise BaseHtml2TF Class   
-        super(Html2TPL, self).__init__(*args, **kwrgs)
         
-        #Initialise BaseString2TPL class
-        self.s2tpl = BaseString2TPL(self.__class__.s2ngl)
-            
-                
-    def yield_(self, xhtml_str):
-        return self.s2tpl.tpl_narray( self.h2attr.text( xhtml_str ), self.ndtype)
+        #Create the vectors sparse matrix for this files
+        matrix, h5f, tid_dict = self.from_files(xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling)
+        
+        #Return the matrix, the dictionary created and the xhtml_files_list
+        return (matrix, h5f, tid_dict, xhtml_file_l)
     
-
-
-
     
+    
+#To Be Written    
+class Html2TPL(object):
+    
+    def __init__(self):
+        pass

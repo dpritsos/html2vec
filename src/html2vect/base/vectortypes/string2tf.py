@@ -133,6 +133,19 @@ class BaseString2TF(object):
             
             
         return ssp.csr_matrix( norm_f_mtrx, shape=norm_f_mtrx.shape, dtype=np.float32)
-    
+
+
+    def f_narray(self, text, tid_dictionary, norm_func):
+
+        #Getting the sparse matrix aligned along to the Terms-Index of the Corpus' Vocabulary
+        sparse_mtrx = self.fsparse( self, text, tid_dictionary, norm_func )
+
+        #Convering the spaser matric to dense array
+        dense_arr = sparse_mtrx.toarray()    
+
+        #Getting only the dimention contains the documents frequencies because array is 2d due to matrix-to-array conversion
+        freq_arr = dense_arr[0]
+
+        return freq_arr
     
      
