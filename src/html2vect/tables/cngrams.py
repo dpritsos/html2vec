@@ -34,8 +34,12 @@ class Html2TF(BaseHtml2TF):
         #Creating h5file
         h5f = tb.openFile(h5_fname, 'w')
 
+        #Defning pytables Filters
+        filters = tb.Filters(complevel=1, complib='lzo', shuffle=True, fletcher32=True)
+
         #Initializing EArray. NOTE: expectedrow is critical for very large scale corpora
-        fq_earray = tb.createEArray(h5f, 'corpus_earray', tb.Float64Atom(), shape=(0,), expectedrows=len(xhtml_file_l) )
+        fq_earray = h5f.createEArray('/', 'corpus_earray', tb.Float32Atom(), shape=(0, len(tid_dictionary)),\
+                                        expectedrows=len(xhtml_file_l), filters=filters)  
 
         #Creating the Dictionary from the given corpus if not given form the use
         if tid_dictionary == None:
@@ -44,7 +48,7 @@ class Html2TF(BaseHtml2TF):
         print "Creating NGrams-TF"
         #Create the NGrams-TF Sparse Matrix for the whole corpus
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            fq_earray.append( self.s2tf.f_narray(self._attrib( html_str ), tid_dictionary, norm_func) )
+            fq_earray.append( self.s2tf.f_narray(self._attrib( html_str ), tid_dictionary, norm_func, d2=True) )
         
         #Return Corpus Frequencie's-per-Document EArray
         return (fq_earray, h5f, tid_dictionary)
