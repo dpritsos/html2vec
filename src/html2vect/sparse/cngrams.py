@@ -50,7 +50,6 @@ class Html2TF(BaseHtml2TF):
     def from_src(self, xhtml_str):
         raise Exception("Please use from_files() or from_paths() methods instead")
     
-        
     def from_files(self, xhtml_file_l, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'):
         return self.yield_(xhtml_file_l, tid_dictionary, norm_func, encoding, error_handling)  
     
