@@ -16,6 +16,7 @@ from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.io.baseio import BaseIO
 from ..base.termstypes.cngrams import String2CNGramsList
 from ..base.termstypes.words import String2WNGramsList
+from ..tools import tfdtools
 
 import scipy.sparse as ssp
 import numpy as np
@@ -23,11 +24,7 @@ from scipy import stats
 import string
 
 
-class Html2LBC(BaseIO):
-    
-    #Term Frequency Dictionary Tools Class
-    tfdtools = TFDictTools()
-            
+class Html2LBC(BaseIO):          
             
     def __init__(self, n, attrib, lowercase, valid_html, smoothing_kernel=stats.norm, norm_func=None):
         

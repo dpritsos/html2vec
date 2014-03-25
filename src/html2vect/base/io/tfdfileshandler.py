@@ -10,25 +10,38 @@
 
 """ html2vect.base.io.tfdfileshadlers: submodule of `html2vect` module defines the class TFdictFilesHandler """ 
 
+
+
+
+
+
+
+""" This module seams not be need anymore, however, let it be for GreenThreading paradigm and future usage. """
+
+
+
+
+
+
 import eventlet
 import codecs
-from basefilehandlers import BasePathFileHandler
+basefillers import file_list_frmpaths
 
 
-class TFdictFilesHandler(BasePathFileHandler):
+class TFdictFilesHandler(object):
     
     def __init__(self):
-        super(BasePathFileHandler, self).__init__()
-    
+        pass
+
     
     def __load_tf_dict(self, filename, encoding='utf-8', error_handling='strict', force_lower_case=False):
-        """ __load_tf_dict(): do not use this function prefer the VHTools.load_tf_dict(). 
+        """ __load_tf_dict(): do not use this function prefer the TFdictFilesHandler.load_tf_dict(). 
             This function is getting a filename and a lower case force option and returns a 
             Term-Frequency dictionary loaded from the file given as argument. """
         try:
             fenc = codecs.open( filename, 'rb', encoding, error_handling)   
         except IOError as e:
-            print("VHTools.load_dict() FILE %s ERROR: %s" % (filename,e))
+            print("TFdictFilesHandler.load_dict() FILE %s ERROR: %s" % (filename,e))
             return None
         
         #The following for loop is an alternative approach to reading lines instead of using f.readline() or f.readlines()
@@ -49,7 +62,7 @@ class TFdictFilesHandler(BasePathFileHandler):
                     tf_d[ Term ] = float( Freq )
                     
         except Exception as e:
-            print("VHTools.__load_tf_dict() Error: %s" % e)
+            print("TFdictFilesHandler.__load_tf_dict() Error: %s" % e)
             return None
         
         finally:
@@ -85,7 +98,7 @@ class TFdictFilesHandler(BasePathFileHandler):
     def load_tfd_frmpaths(self, basepath, filepath_l, encoding, error_handling, force_lower_case=False):
         """ laod_tf_frmpaths: is getting a list of paths as argument and a base path as optional argument. 
             Returns a merge of all Term-Frequency Dictionaries found in the file paths list. """
-        fname_lst = self.file_list_frmpaths(basepath, filepath_l)
+        fname_lfile_list_frmpaths(basepath, filepath_l)
         return self.load_tf_dict(fname_lst, encoding, error_handling, force_lower_case)
 
 
@@ -98,7 +111,7 @@ class TFdictFilesHandler(BasePathFileHandler):
             fenc = codecs.open( str(filename), 'rb', encoding, error_handling )
             
         except IOError, e:
-            print("VHTools.__load_dict_l() FILE %s ERROR: %s" % (filename,e))
+            print("TFdictFilesHandler.__load_dict_l() FILE %s ERROR: %s" % (filename,e))
             return None
         
         #The following for loop is an alternative approach to reading lines instead of using f.readline() or f.readlines()
@@ -131,7 +144,7 @@ class TFdictFilesHandler(BasePathFileHandler):
                     break
                 
         except Exception as e:
-            print("VHTools.__load_dict_l() FILE %s ERROR: %s" % (filename,e))
+            print("TFdictFilesHandler.__load_dict_l() FILE %s ERROR: %s" % (filename,e))
             return None
         
         finally:
@@ -173,7 +186,7 @@ class TFdictFilesHandler(BasePathFileHandler):
             as arguments. In addition it has the page_lim argument for constraining the amount of web page vectors to be
             loaded if requested using this argument. It returns a list of TF-Dictionaries and a list of the Web-pages related to 
             the TF-Dictionaries, of all the files found in the file-paths lists."""
-        fname_lst = self.file_list_frmpaths(basepath, filepath_l)
+        fname_lst = file_list_frmpaths(basepath, filepath_l)
         return self.load_tf_dict_l(fname_lst, page_lim, encoding, error_handling, force_lower_case)
            
            
@@ -235,12 +248,12 @@ class TFdictFilesHandler(BasePathFileHandler):
 
     
 class GreenTFdictFilesHandler(TFdictFilesHandler):
-    """ GreenVHTools Class is a GreenLet/Eventlet version of VHTools Class.
+    """ GreenTFdictFilesHandler Class is a GreenLet/Eventlet version of TFdictFilesHandler Class.
         Actually it just overrides the load_tf_dict() and load_tf_dict_l() with an Eventlet-Based
         version of them """
     
     def __init__(self):
-        TFdictFilesHandler.__init_(self)
+        super(GreenTFdictFilesHandler, self).__init__()
     
     
     def load_tf_dict(self, filename_l, encoding='utf-8', error_handling='strict', force_lower_case=False):

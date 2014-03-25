@@ -33,6 +33,17 @@
 			]
 		]
 	},
+	"buffers":
+	[
+		{
+			"file": "src/html2vect/base/io/basefilehandlers.py",
+			"settings":
+			{
+				"buffer_size": 4463,
+				"line_ending": "Unix"
+			}
+		}
+	],
 	"build_system": "",
 	"command_palette":
 	{
@@ -48,7 +59,12 @@
 	},
 	"console":
 	{
-		"height": 139.0
+		"height": 139.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)",
+			"import urllib2,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); os.makedirs( ipp ) if not os.path.exists(ipp) else None; urllib2.install_opener( urllib2.build_opener( urllib2.ProxyHandler()) ); by = urllib2.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); open( os.path.join( ipp, pf), 'wb' ).write(by) if dh == h else None; print('Error validating download (got %s instead of %s), please try manual install' % (dh, h) if dh != h else 'Please restart Sublime Text to finish installation')"
+		]
 	},
 	"distraction_free":
 	{
@@ -61,6 +77,8 @@
 	},
 	"file_history":
 	[
+		"/home/dimitrios/Desktop/TNF_BARCODE_SS14/tnfsamples.fmt",
+		"/home/dimitrios/Desktop/TNF_BARCODE_SS14/tnf_fw13_samples.fmt",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cngrams.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/TEST.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/io/basefilehandlers.py",
@@ -154,6 +172,45 @@
 		"whole_word": false,
 		"wrap": true
 	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/html2vect/base/io/basefilehandlers.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 4463,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2417,
+								2417
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
 	"incremental_find":
 	{
 		"height": 0.0
@@ -189,6 +246,11 @@
 	{
 		"height": 241.0
 	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "html2vect.sublime-project",
 	"replace":
 	{
 		"height": 64.0
@@ -218,10 +280,24 @@
 		],
 		"width": 380.0
 	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"settings":
+	{
+	},
 	"show_minimap": true,
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
 	"side_bar_width": 260.0,
-	"status_bar_visible": true
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
 }

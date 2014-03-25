@@ -15,17 +15,14 @@ import warnings
 from ..base.features.html2attrib import BaseHTML2Attributes
 from ..base.vectortypes.string2tf import BaseString2TF
 from ..base.io.basefilehandlers import BaseFileHandler
-from ..base.convert.tfdtools import TFDictTools
+from ..tools import tfdtools 
 
 
 class BaseHtml2TF(BaseFileHandler):
     __metaclass__ = abc.ABCMeta
 
-    #Term Frequency Dictionary Tools Class
-    tfdtools = TFDictTools()
-    
-    
-    def __init__(self, n, attrib, lowercase, valid_html):
+ 
+    def __init__(self, attrib, lowercase, valid_html):
         
         #Initialise BaseFileHandler Class
         super(BaseHtml2TF, self).__init__()   
@@ -66,10 +63,10 @@ class BaseHtml2TF(BaseFileHandler):
         tf_d = dict()
         #Merge All Term-Frequency Dictionaries created by the Raw Texts
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            tf_d = self.__class__.tfdtools.merge_tfds( tf_d, self.s2tf.tf_dict( self._attrib( html_str ) ) )
+            tf_d = tfdtools.merge_tfds( tf_d, self.s2tf.tf_dict( self._attrib( html_str ) ) )
             
         #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
-        #tid_vocabulary = self.__class__.tfdtools.tf2tidx( tf_d )
+        #tid_vocabulary = tfdtools.tf2tidx( tf_d )
 
         tid_vocabulary = tf_d
         
@@ -79,7 +76,7 @@ class BaseHtml2TF(BaseFileHandler):
     def __build_vocabulary(self,*args, **kwrgs):
         
         #Warn me that a Vocabulary is automaticaly buildined  
-        warnings.warn("Automated Vocabulary Building has been triggered: NONE tid_vocabulary was given as argument")
+        warnings.warn("Automated Vocabulary Building has been triggered: NONE tid_vocabulary has been given as argument")
         
         #Build and return the Vocabulary
         return self.build_vocabulary(*args, **kwrgs)
