@@ -13,16 +13,17 @@
 import abc
 import warnings
 from ..base.features.html2attrib import BaseHTML2Attributes
-from ..base.vectortypes.string2tf import BaseString2TF
+from ..base.vectortypes import termslist2tf 
 from ..base.io.basefilehandlers import BaseFileHandler
-from ..tools import tfdtools 
+from ..utils import tfdutils
+
 
 
 class BaseHtml2TF(BaseFileHandler):
     __metaclass__ = abc.ABCMeta
 
- 
-    def __init__(self, attrib, lowercase, valid_html):
+
+    def __init__(self, n, html_attrib, lowercase, valid_html):
         
         #Initialise BaseFileHandler Class
         super(BaseHtml2TF, self).__init__()   
@@ -31,22 +32,22 @@ class BaseHtml2TF(BaseFileHandler):
         self.h2attr = BaseHTML2Attributes( valid_html )
         
         #Initialised the TermsType to be produced from this class stored in as class attribute 
-        self.__class__.s2ngl.reset_N(n)
+        self.__class__.s2ngl.n = n
         
         #String to Term Frequency Class using  
-        self.s2tf = BaseString2TF( self.__class__.s2ngl )    
+        self.tl2tf = termslist2tf 
         
-        if attrib == "text":
-            self.attrib__ = self.h2attr.text
+        if html_attrib == "text":
+            self.html_attrib__ = self.h2attr.text
         elif attrib == "tags":
-            self.attrib__ = self.h2attr.tags
+            self.html_attrib__ = self.h2attr.tags
         else:
             raise Exception("Invalid attribute: only HTML 'text' or 'tags' can be retured for now")
                         
         if lowercase:
-            self._attrib = self._lower( self.attrib__ )    
+            self.html_attrib = self._lower( self.html_attrib__ )    
         else:
-            self._attrib = self.attrib__
+            self.html_attrib = self.html_attrib__
    
     
     def _lower(self, methd):
@@ -63,7 +64,7 @@ class BaseHtml2TF(BaseFileHandler):
         tf_d = dict()
         #Merge All Term-Frequency Dictionaries created by the Raw Texts
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            tf_d = tfdtools.merge_tfds( tf_d, self.s2tf.tf_dict( self._attrib( html_str ) ) )
+            tf_d = tfdutils.merge_tfds( tf_d, self.tl2tf.trms2tf_dict( self.__class__.s2ngl.terms_lst( self.html_attrib( html_str ) ) ) )
             
         #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
         #tid_vocabulary = tfdtools.tf2tidx( tf_d )

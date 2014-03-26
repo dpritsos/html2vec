@@ -10,7 +10,7 @@
 
 """ html2vect.sparse.cngrams: submodule of `html2vect` module defines the classes: Html2TF() """
 
-from ..base.html2terms import BaseHtml2TF
+from ..base.html2tf import BaseHtml2TF
 from ..base.termstypes.cngrams import String2CNGramsList
  
 import scipy.sparse as ssp
@@ -40,7 +40,7 @@ class Html2TF(BaseHtml2TF):
         #Create the NGrams-TF Sparse Matrix for the whole corpus
         fq_lst = list()
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            fq_lst.append( self.s2tf.f_sparse(self._attrib( html_str ), tid_dictionary, norm_func) )
+            fq_lst.append( self.tl2tf.trms2f_sparse( s2ngl.terms_lst( self.html_attrib( html_str ) ), tid_dictionary, norm_func) )
         
         #Pack it as a sparse vstack and return it
         copus_fq_array = ssp.vstack( fq_lst )

@@ -1,5 +1,5 @@
 #
-#    Module: TFDTools - Term-Frequency Dictionary (Native Python) tools
+#    Module: TFDUtils - Term-Frequency Dictionary (Native Python) Utilities
 # 
 #    Author: Dimitrios Pritsos 
 #    
@@ -8,7 +8,7 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
-""" html2vect.base.convert.tfdtools: submodule of `html2vect` """
+""" html2vect.base.convert.tfdutils: submodule of `html2vect` """
 
     
 def merge_tfds(*terms_d):
@@ -76,7 +76,7 @@ def _tf2idxf(tf_d, tidx_d):
 
 def tf2idxf(tf_d_l, tf_idx_d):
     """ tf2idxf(): is getting a TF-Dictionary or a list of TF-Dictionaries and TF-Index. It applies
-        the VHTools.__tf2idxf() function to the dictionaries and returns a list or single TF-Dictionary
+        the VHutils.__tf2idxf() function to the dictionaries and returns a list or single TF-Dictionary
         depending on the input. """
         
     if isinstance(tf_d_l, list):

@@ -40,10 +40,14 @@ class String2WNGramsList(object):
         self.proper_num = re.compile(r'(^[0-9]+$)|(^[0-9]+[,][0-9]+$)|(^[0-9]+[.][0-9]+$)|(^[0-9]{1,3}(?:[.][0-9]{3})+[,][0-9]+$)|(^[0-9]{1,3}(?:[,][0-9]{3})+[.][0-9]+$)', re.UNICODE)
     
     
-    def reset_N(self, n):
-        
-        #N-Grams size
-        self.n = n    
+    @property
+    def n(self):
+        return self.n
+
+    
+    @N.setter
+    def n(self, value):
+        self.n = value  
     
         
     def terms_lst(self, text):

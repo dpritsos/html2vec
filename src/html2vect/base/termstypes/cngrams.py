@@ -22,13 +22,17 @@ class String2CNGramsList(object):
     
         #N-Grams size
         self.n = n
+
     
+    @property
+    def n(self):
+        return self.n
     
-    def reset_N(self, n):
-        
-        #N-Grams size
-        self.n = n
-    
+
+    @N.setter
+    def n(self, value):
+        self.n = value
+
     
     def terms_lst(self, text):
         

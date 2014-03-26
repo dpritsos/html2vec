@@ -10,7 +10,7 @@
 
 """ html2vect.dict.cngrams: submodule of `html2vect` module defines the classes: HtmlTF(), HtmlTPL()"""
 
-from ..base.html2terms import BaseHtml2TF
+from ..base.html2tf import BaseHtml2TF
 from ..base.termstypes.cngrams import String2CNGramsList
 
 
@@ -27,7 +27,7 @@ class Html2TF(BaseHtml2TF):
         
         
     def yield_(self, xhtml_str, tid_vocabulary):
-        return self.s2tf.tf_dict( self._attrib( xhtml_str ), tid_vocabulary)
+        return self.tl2tf.trms2tf_dict( s2ngl.terms_lst( self.html_attrib( xhtml_str ) ), tid_vocabulary)
     
    
     def from_src(self, xhtml_str, tid_vocabulary=None):

@@ -10,7 +10,7 @@
 
 """ html2vect.tables.cngrams: submodule of `html2vect` module defines the classes: Html2TF() """
 
-from ..base.html2terms import BaseHtml2TF
+from ..base.html2tf import BaseHtml2TF
 from ..base.termstypes.cngrams import String2CNGramsList
  
 import numpy as np
@@ -48,7 +48,7 @@ class Html2TF(BaseHtml2TF):
         print "Creating NGrams-TF"
         #Create the NGrams-TF Sparse Matrix for the whole corpus
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            fq_earray.append( self.s2tf.f_narray(self._attrib( html_str ), tid_dictionary, norm_func, d2=True) )
+            fq_earray.append( self.tl2tf.trms2f_narray( s2ngl.terms_lst( self.html_attrib( html_str ) ), tid_dictionary, norm_func, d2=True) )
         
         #Return Corpus Frequencie's-per-Document EArray
         return (fq_earray, h5f, tid_dictionary)

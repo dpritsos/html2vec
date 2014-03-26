@@ -10,7 +10,7 @@
 
 """ html2vect.sparse.lowbow: submodule of `html2vect` module defines the classes: Html2LBN(), Html2LBW()"""
 
-from ..base.html2terms import BaseHtml2TF
+from ..base.html2tf import BaseHtml2TF
 from ..base.vectortypes.string2lowbow import BaseString2LB
 from ..base.termstypes.cngrams import String2CNGramsList
 
@@ -46,7 +46,7 @@ class Html2TLoW(BaseHtml2TF):
         #Create the LowBow Sparse Matrix for the whole corpus
         lowbow_lst = list()
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            lowbow_lst.append( self.s2lb.lowbow( self._attrib( html_str ), smth_pos_l, smth_sigma, tid_dictionary) )
+            lowbow_lst.append( self.s2lb.lowbow( self.html_attrib( html_str ), smth_pos_l, smth_sigma, tid_dictionary) )
         
         #Pack it as a sparse vstack and return it
         smth_copus_mtrx = ssp.vstack( lowbow_lst )
@@ -90,7 +90,7 @@ class Html2TLoW4SEG(Html2TLoW):
             tf_d = dict()
             #Merge All Term-Frequency Dictionaries created by the Raw Texts
             for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-                tf_d = tfdtools.merge_tfds( tf_d, self.tf_dict( self._attrib_( html_str ) ) )
+                tf_d = tfdtools.merge_tfds( tf_d, self.tf_dict( self.html_attrib( html_str ) ) )
                 
             #Create The Terms-Index Dictionary that is shorted by Frequency descending order
             tid_dictionary = tfdtools.tf2tidx( tf_d )
@@ -99,7 +99,7 @@ class Html2TLoW4SEG(Html2TLoW):
         #Create the LowBow Sparse Matrix for the whole corpus
         lowbow_lst = list()
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            lowbow_lst.append( self.s2lb.lowbow4seg( self._attrib_( html_str ), smth_pos_l, smth_sigma, tid_dictionary) )
+            lowbow_lst.append( self.s2lb.lowbow4seg( self.html_attrib( html_str ), smth_pos_l, smth_sigma, tid_dictionary) )
         
         #Pack it as a sparse vstack and return it
         smth_copus_mtrx = ssp.vstack( lowbow_lst )
