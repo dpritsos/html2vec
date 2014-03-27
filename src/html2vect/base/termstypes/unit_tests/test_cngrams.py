@@ -8,6 +8,9 @@
 #    Last update: Please refer to the GIT tracking 
 # 
 
+import sys
+sys.path.append('../../../../')
+
 import unittest
 from html2vect.base.termstypes.cngrams import String2CNGramsList
 

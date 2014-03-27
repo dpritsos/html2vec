@@ -25,12 +25,12 @@ class String2CNGramsList(object):
 
     
     @property
-    def n(self):
+    def N(self):
         return self.n
     
 
     @N.setter
-    def n(self, value):
+    def N(self, value):
         self.n = value
 
     

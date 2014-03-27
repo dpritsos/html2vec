@@ -32,7 +32,7 @@ class BaseHtml2TF(BaseFileHandler):
         self.h2attr = BaseHTML2Attributes( valid_html )
         
         #Initialised the TermsType to be produced from this class stored in as class attribute 
-        self.__class__.s2ngl.n = n
+        self.__class__.s2ngl.N = n
         
         #String to Term Frequency Class using  
         self.tl2tf = termslist2tf 

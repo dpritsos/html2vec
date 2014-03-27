@@ -15,10 +15,13 @@ import re
 class String2WNGramsList(object):
     
     
-    def __init__(self, n=1):
+    def __init__(self, n=1, terms_size_reject=512):
         
         #N-Grams size
         self.n = n 
+
+        #Term Size Reject
+        self.terms_size_reject = terms_size_reject
             
         #Whitespace characters [<space>\t\n\r\f\v] matching, for splitting the raw text to terms
         self.white_spliter = re.compile(r'[\s]+', re.UNICODE)
@@ -34,19 +37,19 @@ class String2WNGramsList(object):
         self.dot_decomp = re.compile(r'[^.]+(?=\.)|(?<=\.)[^.]+|[.]+', re.UNICODE)
         
         #Symbol term decomposer 
-        self.fredsb_clean = re.compile(r'^[\W]|[^\w%]$', re.UNICODE) #front-end-symbol-cleaning => fredsb_clean
+        self.fredsb_clean = re.compile(r'(^[\W])([\w]+?)|([\w]+?)([^\w%]$)', re.UNICODE) #front-end-symbol-cleaning => fredsb_clean
         
         #Find proper number
         self.proper_num = re.compile(r'(^[0-9]+$)|(^[0-9]+[,][0-9]+$)|(^[0-9]+[.][0-9]+$)|(^[0-9]{1,3}(?:[.][0-9]{3})+[,][0-9]+$)|(^[0-9]{1,3}(?:[,][0-9]{3})+[.][0-9]+$)', re.UNICODE)
     
     
     @property
-    def n(self):
+    def N(self):
         return self.n
 
     
     @N.setter
-    def n(self, value):
+    def N(self, value):
         self.n = value  
     
         
@@ -64,55 +67,64 @@ class String2WNGramsList(object):
         #Initially split the text to terms separated by white-spaces [ \t\n\r\f\v] 
         terms_l = self.white_spliter.split(text)
         
-        #Any term has more than 512 characters is rejected
-        terms_l = self.__term_len_limit(terms_l, 512)
+        #Any term has more than self.terms_size_reject (default 512 chars) characters is rejected
+        terms_l = self.__term_len_limit(terms_l, self.terms_size_reject)
         
+        #Creating a list of numbered tuples for each term
+        terms_l = [ (i, trm) for i, trm in enumerate(terms_l) ]
+
         #Extract the Numbers form the terms_l
         num_trm_l, fidx_l = self.__extract_proper_numbers(terms_l)
         analysed_terms_l.extend(num_trm_l)
         fnd_idx_l.extend(fidx_l)
-        
-        #Remove the already analysed terms after finding the proper numbers
-        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]        
-        #Clean-up the index list because items already removed
-        fnd_idx_l = []
+
+        ###
         
         #Extract the terms to sub-terms of any symbol but comma (,) and comma sub-term(s)
         comma_trm_l, fidx_l  = self.__extract_comma_n_trms(terms_l)
         analysed_terms_l.extend(comma_trm_l)
         fnd_idx_l.extend(fidx_l)
+
+        ####
         
         #Extract term to words upon dot (.) and dot needs special treatment because we have the case of . or ... and so on
         dot_trm_l, fidx_l  = self.__extract_dot_n_trms(terms_l)
         analysed_terms_l.extend(dot_trm_l)
         fnd_idx_l.extend(fidx_l)
         
+        """
         #Remove the already analysed terms after finding dots and commas
-        terms_l = [trm for trm in terms_l if terms_l.index(trm) not in fnd_idx_l]
+        terms_l = [trm if terms_l.index(trm) not in fnd_idx_l else '' for trm in terms_l]
         #Clean-up the index list because items already removed
         fnd_idx_l = []
+        """
               
         #Extract the non-alphanumeric symbols ONLY from the Beginning and the End of the terms
         ##except dot (.) and percentage % at the end for the term)
         symb_trm_l, fidx_l  = self.__extract_propr_trms_n_symbs(terms_l)
         analysed_terms_l.extend(symb_trm_l)
-        fnd_idx_l.extend(fidx_l)      
+        fnd_idx_l.extend(fidx_l)
         
+        """
         #Remove the already analysed terms and put the return a tuple list including the indices of remaining terms list
-        terms_l = [(j, trm) for j, trm in enumerate(terms_l) if terms_l.index(trm) not in fnd_idx_l]
+        terms_l = [(j, trm) if terms_l.index(trm) not in fnd_idx_l else (j,'') for j, trm in enumerate(terms_l)]
+        """
         
+        print 'terms', terms_l
+        print 'analysed', analysed_terms_l
+        """
         #Merge the main terms list with the list of analysed terms
         analysed_terms_l.extend(terms_l)
         
         #Short tuple list by indices i.e. using the fist element of the tuple
-        analysed_terms_l.sort()
+        analysed_terms_l = sorted(analysed_terms_l, key=lambda analysed_terms_l: analysed_terms_l[0])
         
         #Discard indices and keep only the terms list and Remove any empty string
-        analysed_terms_l = [trm[1] for trm in analysed_terms_l if trm[1] != ""]
-        
+        analysed_terms_l = [trm[1] for trm in analysed_terms_l if trm[1] != '']
+        """
         #Construct the Words N-Grams List
         analysed_terms_l = [" ".join( analysed_terms_l[i : i+self.n] ) for i in range( len(analysed_terms_l) - self.n + 1 ) ]
-        
+        #print analysed_terms_l  
         return analysed_terms_l      
         
         
@@ -138,7 +150,7 @@ class String2WNGramsList(object):
         for i, term in enumerate(terms_l):
             num_terms = self.proper_num.findall(term) # It returns a list of the proper numbers extracted from a raw term
             if num_terms:
-                num_terms_l.extend([(j+i, trm) for j, trm in enumerate(num_terms[0]) if trm != ""])
+                num_terms_l.extend([(j+i+1, trm) for j, trm in enumerate( (trm_ for trm_ in num_terms[0] if trm_ != '') )])
                 fnd_idx_l.append(i)
         
         return num_terms_l, fnd_idx_l
@@ -153,15 +165,15 @@ class String2WNGramsList(object):
         for i, term in enumerate(terms_l):
             #Decompose the terms that in their char set include comma symbol to a list of comma separated terms and the comma(s) 
             decomp_terms = self.comma_decomp.findall(term)
-            comma_terms_l.extend([(j+i, trm) for j, trm in enumerate(decomp_terms) if trm != ""])
             if decomp_terms:
+                comma_terms_l.extend([(j+i+1, trm) for j, trm in enumerate( (trm_ for trm_ in decomp_terms if trm_ != '') ) ] )
                 fnd_idx_l.append(i)
         
         return comma_terms_l, fnd_idx_l
     
     
     def __extract_dot_n_trms(self, terms_l):
-        
+       
         #The dot list and the list of indices where the dot-terms found in the original list    
         dot_terms_l = list()
         fnd_idx_l = list()
@@ -173,7 +185,7 @@ class String2WNGramsList(object):
             
             if dtrm_len > 1 and dtrm_len <= 3:
                 #Here we have the cases of ...CCC or .CC or CC.... or CCC. or CC.CCC or CCCC....CCCC so keep each sub-term
-                dot_terms_l.extend([(j+i, trm) for j, trm in enumerate(decomp_term) if trm != ""])
+                dot_terms_l.extend([(j+i+1, trm) for j, trm in enumerate( (trm_ for trm_ in decomp_term if trm_ != '') ) ])
                 fnd_idx_l.append(i)
                 
             elif dtrm_len > 3: #i.e. Greater than 3
@@ -191,15 +203,15 @@ class String2WNGramsList(object):
                     
                 #Save the sub-terms of the Decomposed term from the terms list 
                 dot_terms_l.append( (i,"".join(decomp_term)) )
-                dot_terms_l.extend([(j+i+1, trm) for j, trm in enumerate(sub_term_l) if trm != ""])
+                dot_terms_l.extend([(j+i+1, trm) for j, trm in enumerate( (trm_ for trm_ in sub_term_l if trm_ != '') ) ])
                 fnd_idx_l.append(i)
                 
             else:
                 #in case of one element in the list check if it is a dot-sequence
                 if self.dot_str.findall(term):     
-                    dot_terms_l.extend([(j+i, trm) for j, trm in enumerate(decomp_term) if trm != ""])
+                    dot_terms_l.extend([(j+i+1, trm) for j, trm in enumerate( (trm_ for trm_ in decomp_term if trm_ != '') ) ])
                     fnd_idx_l.append(i)
-                     
+
         return dot_terms_l, fnd_idx_l
         
         
@@ -214,13 +226,10 @@ class String2WNGramsList(object):
             symb_term_l = self.fredsb_clean.findall(term)
             
             if symb_term_l:
-                #Keep the symbols found 
-                symb_terms_l.extend([(j+i+1, trm) for j, trm in enumerate(symb_term_l) if trm != ""])
-                clean_trm = self.fredsb_clean.sub('', term)
-                
-                #Keep the terms free of symbols found
-                symb_terms_l.append((i+j,clean_trm))
-                
+
+                #Keep the preceding and ascending symbols separately to the rest of the term.
+                symb_terms_l.extend([(j+i+1, trm) for j, trm in enumerate( (trm_ for trm_ in symb_term_l[0] if trm_ != '') ) ])
+        
                 #Keep index symbols found
                 fnd_idx_l.append(i)
         
