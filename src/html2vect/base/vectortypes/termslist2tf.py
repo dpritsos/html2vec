@@ -14,20 +14,20 @@ import numpy as np
 import scipy.sparse as ssp
 
       
-def trms2tf_dict(terms_l, tid_vocabulary=None):
+def trms2tf_dict(terms_l, vocabulary=None):
      
     #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
     if terms_l == None:
         return None 
     
     #Use the Vocabulary argument if any
-    if tid_vocabulary:
+    if vocabulary:
         #If a Vocabulary was given as argument
         TF_d = dict()
         
         #Count Terms and Build the Terms-Frequency (TF) dictionary 
         for trm in terms_l:
-            if trm in tid_vocabulary:
+            if trm in vocabulary:
                 if trm in TF_d: #if the dictionary of terms has the 'terms' as a key 
                     TF_d[ trm ] += 1
                 else: 
@@ -56,7 +56,7 @@ def trms2tf_narray(terms_l, norm_func, ndtype=np.dtype([('terms', 'S128'), ('fre
         return None 
     
     #Count Terms and Terms-Frequencies  
-    terms, inds = np.unique1d(terms_l, return_inverse=True)
+    terms, inds = np.unique(terms_l, return_inverse=True)
     freqs = np.bincount(inds)
     
     #Get Normalised Smoothed Sums
@@ -73,43 +73,42 @@ def trms2tf_narray(terms_l, norm_func, ndtype=np.dtype([('terms', 'S128'), ('fre
     return TF_arr
 
 
-def trms2f_sparse(terms_l, tid_dictionary, norm_func):
+def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
            
-    #Create Term-Frequency Dictionary 
-    tf_d = trms2tf_dict(terms_l)
+    #Create Term-Frequency Dictionary Keeping only the terms of interest given into Terms-Index Vocabulary
+    tf_d = trms2tf_dict(terms_l, vocabulary=tid_vocabulary)
 
     #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
     if tf_d == None:
         return None 
      
-    #Get the indices for terms following the sequence occurs in terms_l  
-    col_idx_l = [ tid_dictionary[term] for term in terms_l if term in tid_dictionary ]
-    if not col_idx_l:
-        col_idx_l = [ len(tid_dictionary) - 1 ]
-    col_idx_a = np.array(col_idx_l)
+    #Getting the indices for terms indeceis for. Following the sequence stored into the current python dictionary.
+    col_idx_l = tid_vocabulary.values()
+
+    #Sice the return value will be a sparce vector first dimention of the matrix will be 0 for all terms.
+    dim0 = np.zeros(len(col_idx_l))
     
-    #Get the frequencies for terms following the sequence occurs in terms_l IN ORDER TO BE ALLIGNED WITH ids_l
-    freq_l = [ tf_d[term] for term in terms_l if term in tid_dictionary ]
+    #Getting the frequencies for terms of interst in order to be alligned idxs-list.
+    freq_l = [ tf_d[term] for term in tid_vocabulary.keys() ]
     if not freq_l:
         freq_l = [ 0 ]
-    
+
     #Define Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-    f_mtrx = ssp.csr_matrix( ( freq_l, (np.zeros_like(col_idx_a), col_idx_a) ), shape=(1, len(tid_dictionary)), dtype=np.float32)
+    f_mtrx = ssp.csr_matrix( ( freq_l, (dim0, col_idx_l) ), shape=(1, len(col_idx_l)), dtype=ndtype)
     
     #Get Normalised Smoothed Sums
     if norm_func:
-        norm_f_mtrx = norm_func( f_mtrx, len(tid_dictionary))
+        norm_f_mtrx = norm_func( f_mtrx, len(tid_vocabulary))
     else:
         norm_f_mtrx = f_mtrx # If norm_func is None or 0 then do not normalise
         
-        
-    return ssp.csr_matrix( norm_f_mtrx, shape=norm_f_mtrx.shape, dtype=np.float32)
+    return ssp.csr_matrix( norm_f_mtrx, shape=norm_f_mtrx.shape, dtype=ndtype)
 
 
-def trms2f_narray(terms_l, tid_dictionary, norm_func, d2=False):
+def trms2f_narray(terms_l, tid_vocabulary, norm_func=None, d2=False, ndtype=np.float32):
 
     #Getting the sparse matrix aligned along to the Terms-Index of the Corpus' Vocabulary
-    sparse_mtrx = trms2f_sparse(terms_l, tid_dictionary, norm_func)
+    sparse_mtrx = trms2f_sparse(terms_l, tid_vocabulary, norm_func, ndtype)
 
     #Convering the spaser matric to dense array
     dense_arr = sparse_mtrx.toarray()    
