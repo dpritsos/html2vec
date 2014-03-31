@@ -32,7 +32,7 @@ class Test_BaseString2TF(unittest.TestCase):
         #However the above string will be conveted first to the proper terms list which is the functions' input.
 
         #Terms-Indexs Vocabulary 
-        self.expected_c3grams_tid_vocab = { 
+        self.c3grams_tid_vocab = { 
             ' a ' : 0, ' cl' : 1, ' fo' : 2, ' ht' : 3, ' is' : 4, ' pa' : 5,\
             ' te' : 6, ' un' : 7, '.Ba' : 8, '.ch' : 9, '/mo' : 10, '2TF' : 11,\
             '2tf' : 12, '2ve' : 13, 'Bas' : 14, 'F c' : 15, 'Str' : 16, 'TF ' : 17,\
@@ -49,7 +49,7 @@ class Test_BaseString2TF(unittest.TestCase):
             'tml' : 78, 'tor' : 79, 'tri' : 80, 'ule' : 81, 'uni' : 82, 'vec' : 83\
         }
 
-        self.expected_c3grams_tid_vocab_small = { 
+        self.c3grams_tid_vocab_small = { 
             ' a ' : 0, ' cl' : 1, ' fo' : 2, ' ht' : 3, ' is' : 4, ' pa' : 5,\
             ' te' : 6, ' un' : 7, '.Ba' : 8, '.ch' : 9, '/mo' : 10, '2TF' : 11,\
             '2tf' : 12, '2ve' : 13, 'Bas' : 14, 'F c' : 15, 'Str' : 16, 'TF ' : 17,\
@@ -63,7 +63,7 @@ class Test_BaseString2TF(unittest.TestCase):
             'pac' : 60,\
         }
 
-        self.expected_c3grams_tid_vocab_large = { 
+        self.c3grams_tid_vocab_large = { 
             ' a ' : 0, ' cl' : 1, ' fo' : 2, ' ht' : 3, ' is' : 4, ' pa' : 5,\
             ' te' : 6, ' un' : 7, '.Ba' : 8, '.ch' : 9, '/mo' : 10, '2TF' : 11,\
             '2tf' : 12, '2ve' : 13, 'Bas' : 14, 'F c' : 15, 'Str' : 16, 'TF ' : 17,\
@@ -230,12 +230,12 @@ class Test_BaseString2TF(unittest.TestCase):
 
 
     def test_trms2tf_dict_c3grams_smallVocab(self):
-        cngrams_tf_dict = trms2tf_dict( self.s2ngl_c3grams.terms_lst( self.txt_sample ), vocabulary=self.expected_c3grams_tid_vocab_small )
+        cngrams_tf_dict = trms2tf_dict( self.s2ngl_c3grams.terms_lst( self.txt_sample ), vocabulary=self.c3grams_tid_vocab_small )
         self.assertEqual(cngrams_tf_dict, self.expected_c3grams_tf_dict_smallVocab)
 
 
     def test_trms2tf_dict_c3grams_largeVocab(self):
-        cngrams_tf_dict = trms2tf_dict( self.s2ngl_c3grams.terms_lst( self.txt_sample ), vocabulary=self.expected_c3grams_tid_vocab_large )
+        cngrams_tf_dict = trms2tf_dict( self.s2ngl_c3grams.terms_lst( self.txt_sample ), vocabulary=self.c3grams_tid_vocab_large )
         self.assertEqual(cngrams_tf_dict, self.expected_c3grams_tf_dict)
 
 
@@ -247,17 +247,17 @@ class Test_BaseString2TF(unittest.TestCase):
 
     """trms2f_sparse()"""
     def test_trms2f_sparse_c3grams(self):
-        cngrams_f_sparse = trms2f_sparse( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.expected_c3grams_tid_vocab, norm_func=None, ndtype=np.float32 )
+        cngrams_f_sparse = trms2f_sparse( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.c3grams_tid_vocab, norm_func=None, ndtype=np.float32 )
         self.assertTrue( np.all(cngrams_f_sparse.toarray() == self.expected_c3grams_f_sparse.toarray()) )
 
 
     def test_trms2f_sparse_c3grams_smallVocab(self):
-        cngrams_f_sparse = trms2f_sparse( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.expected_c3grams_tid_vocab_small, norm_func=None, ndtype=np.float32 )
+        cngrams_f_sparse = trms2f_sparse( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.c3grams_tid_vocab_small, norm_func=None, ndtype=np.float32 )
         self.assertTrue( np.all(cngrams_f_sparse.toarray() == self.expected_c3grams_f_sparse_small.toarray()) )
 
 
     def test_trms2f_sparse_c3grams_largeVocab(self):
-        cngrams_f_sparse = trms2f_sparse( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.expected_c3grams_tid_vocab_large, norm_func=None, ndtype=np.float32 )
+        cngrams_f_sparse = trms2f_sparse( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.c3grams_tid_vocab_large, norm_func=None, ndtype=np.float32 )
         self.assertTrue( np.all(cngrams_f_sparse.toarray() == self.expected_c3grams_f_sparse_large.toarray()) )
 
 
@@ -268,17 +268,17 @@ class Test_BaseString2TF(unittest.TestCase):
 
     """trms2f_narray"""
     def test_trms2f_narray_c3grams(self):
-        cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.expected_c3grams_tid_vocab, norm_func=None, ndtype=np.float32 )
+        cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.c3grams_tid_vocab, norm_func=None, ndtype=np.float32 )
         self.assertTrue( np.all(cngrams_f_narray == self.expected_c3grams_f_narray) )
 
 
     def test_trms2f_narray_c3grams_smallVocab(self):
-        cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.expected_c3grams_tid_vocab_small, norm_func=None, ndtype=np.float32 )
+        cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.c3grams_tid_vocab_small, norm_func=None, ndtype=np.float32 )
         self.assertTrue( np.all(cngrams_f_narray == self.expected_c3grams_f_narray_small) )
 
 
     def test_trms2f_narray_c3grams_largeVocab(self):
-        cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.expected_c3grams_tid_vocab_large, norm_func=None, ndtype=np.float32 )
+        cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ), tid_vocabulary=self.c3grams_tid_vocab_large, norm_func=None, ndtype=np.float32 )
         self.assertTrue( np.all(cngrams_f_narray == self.expected_c3grams_f_narray_large) )
 
 
