@@ -49,16 +49,23 @@ def trms2tf_dict(terms_l, vocabulary=None):
     return TF_d  
 
 
-def trms2tf_narray(terms_l, norm_func, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')])):
-    
+def trms2tf_narray(terms_l, vocabulary=None, norm_func=None, ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')])):
+
     #In case None is returned then return None again. The outer code layer should handle this if caused due to error.
     if terms_l == None:
         return None 
-    
-    #Count Terms and Terms-Frequencies  
-    terms, inds = np.unique(terms_l, return_inverse=True)
-    freqs = np.bincount(inds)
-    
+
+    if vocabulary:
+
+        tf_d = trms2tf_dict(terms_l, vocabulary=vocabulary)
+        terms = np.array( tf_d.keys() )
+        freqs = np.array( tf_d.values() )
+
+    else:
+        #Count Terms and Terms-Frequencies  
+        terms, inds = np.unique(terms_l, return_inverse=True)
+        freqs = np.bincount(inds)
+        
     #Get Normalised Smoothed Sums
     if norm_func:
         norm_freqs = norm_func( freqs, len(terms_l))
@@ -74,6 +81,10 @@ def trms2tf_narray(terms_l, norm_func, ndtype=np.dtype([('terms', 'S128'), ('fre
 
 
 def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
+
+    #Checking prerecusites: Vocabulary (Terms-Index) should not be None or empty.
+    if not tid_vocabulary or not isinstance(tid_vocabulary, dict):
+        raise ValueError("tid_vocabulary (2nd) argument should be a non-empty python dictionary.")
            
     #Create Term-Frequency Dictionary Keeping only the terms of interest given into Terms-Index Vocabulary
     tf_d = trms2tf_dict(terms_l, vocabulary=tid_vocabulary)
@@ -82,19 +93,21 @@ def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
     if tf_d == None:
         return None 
      
-    #Getting the indices for terms indeceis for. Following the sequence stored into the current python dictionary.
-    col_idx_l = tid_vocabulary.values()
+    #Getting the indices for the terms of our interest. Incaticular tf_d containd the terms that both are occuring 
+    #into the input Vocabulary and the input terms-list. Following the sequence stored into the current python dictionary tf_d.
+    col_idx_l = [tid_vocabulary[trm] for trm in tf_d.keys()]
+    col_idx_a = np.array(col_idx_l)
 
     #Sice the return value will be a sparce vector first dimention of the matrix will be 0 for all terms.
     dim0 = np.zeros(len(col_idx_l))
     
     #Getting the frequencies for terms of interst in order to be alligned idxs-list.
-    freq_l = [ tf_d[term] for term in tid_vocabulary.keys() ]
+    freq_l = tf_d.values()
     if not freq_l:
         freq_l = [ 0 ]
 
     #Define Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-    f_mtrx = ssp.csr_matrix( ( freq_l, (dim0, col_idx_l) ), shape=(1, len(col_idx_l)), dtype=ndtype)
+    f_mtrx = ssp.csr_matrix( ( freq_l, (dim0, col_idx_a) ), shape=(1, len(tid_vocabulary)), dtype=ndtype)
     
     #Get Normalised Smoothed Sums
     if norm_func:

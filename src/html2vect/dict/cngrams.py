@@ -27,7 +27,7 @@ class Html2TF(BaseHtml2TF):
         
         
     def yield_(self, xhtml_str, tid_vocabulary):
-        return self.tl2tf.trms2tf_dict( s2ngl.terms_lst( self.html_attrib( xhtml_str ) ), tid_vocabulary)
+        return self.tl2tf.trms2tf_dict( Html2TF.s2ngl.terms_lst( self.html_attrib( xhtml_str ) ), tid_vocabulary)
     
    
     def from_src(self, xhtml_str, tid_vocabulary=None):
