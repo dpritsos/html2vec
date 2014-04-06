@@ -106,9 +106,20 @@ def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
     if not freq_l:
         freq_l = [ 0 ]
 
-    #Define Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
-    f_mtrx = ssp.csr_matrix( ( freq_l, (dim0, col_idx_a) ), shape=(1, len(tid_vocabulary)), dtype=ndtype)
+    ###Defining Terms-Sequence-Sparse-Matrix i.e a 2D matrix of Dictionary(Rows) vs Terms occurring at several Text's Positions
     
+    #Finding the proper output vector size, which it should be as the size of the Vocabulary-Index or +1 incase the index of
+    #the Vocabulary-Index start at 1 and not at 0.
+    if min(tid_vocabulary.values()) == 0:
+        outp_vect_size = len(tid_vocabulary)
+    else:
+        outp_vect_size = len(tid_vocabulary) + 1
+    
+    #Now defining the Terms-Sequence-Sparse-Matrix with the proper output-vector-size.
+    f_mtrx = ssp.csr_matrix( ( freq_l, (dim0, col_idx_a) ), shape=(1, outp_vect_size), dtype=ndtype)
+    
+    ###
+
     #Get Normalised Smoothed Sums
     if norm_func:
         norm_f_mtrx = norm_func( f_mtrx, len(tid_vocabulary))

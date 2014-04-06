@@ -41,7 +41,7 @@ class Test_String2WNGramsList__wngrams(unittest.TestCase):
             'remove 10% and', '10% and comma', 'and comma ,,,', 'comma ,,, ,', ',,, , comma', ', comma dot', 'comma dot .',\
             'dot . after', '. after .', 'after . dot', '. dot before', 'dot before and', 'before and ...'
         ]
-    
+
 
     def test_words_terms_lst(self):
         terms_l = self.str2wng.terms_lst( self.txt_sample )

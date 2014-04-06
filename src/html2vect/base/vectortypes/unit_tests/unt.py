@@ -1,86 +1,19 @@
 
-import collections as coll 
-
-
-[('s i', 1.0) ('t t', 1.0) ('ase', 1.0) ('s a', 1.0) ('htm', 2.0)
- ('ram', 1.0) ('rs ', 1.0) ('TF ', 1.0) ('s f', 1.0) ('.ch', 1.0)
- ('t f', 1.0) (' un', 1.0) ('2tf', 1.0) ('l2t', 1.0) ('l2v', 1.0)
- ('s p', 1.0) ('eSt', 1.0) ('tes', 1.0) ('ge/', 1.0) ('ams', 1.0)
- ('or ', 2.0) ('cha', 1.0) ('est', 1.0) ('st ', 1.0) ('Str', 1.0)
- ('for', 2.0) ('tor', 1.0) (' is', 1.0) ('ing', 1.0) ('cla', 1.0)
- ('e/m', 1.0) ('fd.', 1.0) ('ml2', 2.0) ('pac', 1.0) ('arn', 1.0)
- ('ngr', 1.0) ('r h', 2.0) ('2TF', 1.0) ('har', 1.0) ('is ', 2.0)
- ('tml', 2.0) ('F c', 1.0) ('ass', 1.0) ('tri', 1.0) ('g2T', 1.0)
- ('his', 1.0) ('kag', 1.0) ('Bas', 1.0) ('2ve', 1.0) ('tfd', 1.0)
- ('gra', 1.0) ('rng', 1.0) ('ors', 1.0) ('it ', 1.0) ('odu', 1.0)
- ('mod', 1.0) (' pa', 1.0) ('ect', 1.0) ('ule', 1.0) ('Thi', 1.0)
- ('s.B', 1.0) (' te', 1.0) ('.Ba', 1.0) ('nit', 1.0) ('las', 1.0)
- (' a ', 1.0) ('rin', 1.0) ('seS', 1.0) ('cka', 1.0) (' cl', 1.0)
- ('d.c', 1.0) ('dul', 1.0) ('ack', 1.0) ('age', 1.0) (' ht', 2.0)
- ('ms.', 1.0) ('/mo', 1.0) ('ng2', 1.0) ('ss ', 1.0) ('uni', 1.0)
- ('cto', 1.0) ('vec', 1.0) (' fo', 2.0) ('a u', 1.0)]
-ok
-test_trms2tf_narray_c3grams_largeVocab (__main__.Test_BaseString2TF) ... 
-[('s i', 1.0) ('t t', 1.0) ('ase', 1.0) ('s a', 1.0) ('htm', 2.0)
- ('ram', 1.0) ('rs ', 1.0) ('TF ', 1.0) ('s f', 1.0) ('.ch', 1.0)
- ('t f', 1.0) (' un', 1.0) ('2tf', 1.0) ('l2t', 1.0) ('l2v', 1.0)
- ('s p', 1.0) ('eSt', 1.0) ('tes', 1.0) ('ge/', 1.0) ('ams', 1.0)
- ('or ', 2.0) ('cha', 1.0) ('est', 1.0) ('st ', 1.0) ('Str', 1.0)
- ('for', 2.0) ('tor', 1.0) (' is', 1.0) ('ing', 1.0) ('cla', 1.0)
- ('e/m', 1.0) ('fd.', 1.0) ('ml2', 2.0) ('pac', 1.0) ('arn', 1.0)
- ('ngr', 1.0) ('r h', 2.0) ('2TF', 1.0) ('har', 1.0) ('is ', 2.0)
- ('tml', 2.0) ('F c', 1.0) ('ass', 1.0) ('tri', 1.0) ('g2T', 1.0)
- ('his', 1.0) ('kag', 1.0) ('Bas', 1.0) ('2ve', 1.0) ('tfd', 1.0)
- ('gra', 1.0) ('rng', 1.0) ('ors', 1.0) ('it ', 1.0) ('odu', 1.0)
- ('mod', 1.0) (' pa', 1.0) ('ect', 1.0) ('ule', 1.0) ('Thi', 1.0)
- ('s.B', 1.0) (' te', 1.0) ('.Ba', 1.0) ('nit', 1.0) ('las', 1.0)
- (' a ', 1.0) ('rin', 1.0) ('seS', 1.0) ('cka', 1.0) (' cl', 1.0)
- ('d.c', 1.0) ('dul', 1.0) ('ack', 1.0) ('age', 1.0) (' ht', 2.0)
- ('ms.', 1.0) ('/mo', 1.0) ('ng2', 1.0) ('ss ', 1.0) ('uni', 1.0)
- ('cto', 1.0) ('vec', 1.0) (' fo', 2.0) ('a u', 1.0)]
 
 
 
 
-d1 = coll.OrderedDict(\
-[('s i', 1.0), ('t t', 1.0), ('ase', 1.0), ('s a', 1.0), ('htm', 2.0),\
- ('ram', 1.0), ('rs ', 1.0), ('TF ', 1.0), ('s f', 1.0), ('.ch', 1.0),\
- ('t f', 1.0), (' un', 1.0), ('2tf', 1.0), ('l2t', 1.0), ('l2v', 1.0),\
- ('s p', 1.0), ('eSt', 1.0), ('tes', 1.0), ('ge/', 1.0), ('ams', 1.0),\
- ('or ', 2.0), ('cha', 1.0), ('est', 1.0), ('st ', 1.0), ('Str', 1.0),\
- ('for', 2.0), ('tor', 1.0), (' is', 1.0), ('ing', 1.0), ('cla', 1.0),\
- ('e/m', 1.0), ('fd.', 1.0), ('ml2', 2.0), ('pac', 1.0), ('arn', 1.0),\
- ('ngr', 1.0), ('r h', 2.0), ('2TF', 1.0), ('har', 1.0), ('is ', 2.0),\
- ('tml', 2.0), ('F c', 1.0), ('ass', 1.0), ('tri', 1.0), ('g2T', 1.0),\
- ('his', 1.0), ('kag', 1.0), ('Bas', 1.0), ('2ve', 1.0), ('tfd', 1.0),\
- ('gra', 1.0), ('rng', 1.0), ('ors', 1.0), ('it ', 1.0), ('odu', 1.0),\
- ('mod', 1.0), (' pa', 1.0), ('ect', 1.0), ('ule', 1.0), ('Thi', 1.0),\
- ('s.B', 1.0), (' te', 1.0), ('.Ba', 1.0), ('nit', 1.0), ('las', 1.0),\
- (' a ', 1.0), ('rin', 1.0), ('seS', 1.0), ('cka', 1.0), (' cl', 1.0),\
- ('d.c', 1.0), ('dul', 1.0), ('ack', 1.0), ('age', 1.0), (' ht', 2.0),\
- ('ms.', 1.0), ('/mo', 1.0), ('ng2', 1.0), ('ss ', 1.0), ('uni', 1.0),\
- ('cto', 1.0), ('vec', 1.0), (' fo', 2.0), ('a u', 1.0)\
- ])
 
-d2 = coll.OrderedDict(\
- [(' a ', 1.0), (' cl', 1.0), (' fo', 2.0), (' ht', 2.0), (' is', 1.0),\
- (' pa', 1.0), (' te', 1.0), (' un', 1.0), ('.Ba', 1.0), ('.ch', 1.0),\
- ('/mo', 1.0), ('2TF', 1.0), ('2tf', 1.0), ('2ve', 1.0), ('Bas', 1.0),\
- ('F c', 1.0), ('Str', 1.0), ('TF ', 1.0), ('Thi', 1.0), ('a u', 1.0),\
- ('ack', 1.0), ('age', 1.0), ('ams', 1.0), ('arn', 1.0), ('ase', 1.0),\
- ('ass', 1.0), ('cha', 1.0), ('cka', 1.0), ('cla', 1.0), ('cto', 1.0),\
- ('d.c', 1.0), ('dul', 1.0), ('e/m', 1.0), ('eSt', 1.0), ('ect', 1.0),\
- ('est', 1.0), ('fd.', 1.0), ('for', 2.0), ('g2T', 1.0), ('ge/', 1.0),\
- ('gra', 1.0), ('har', 1.0), ('his', 1.0), ('htm', 2.0), ('ing', 1.0),\
- ('is ', 2.0), ('it ', 1.0), ('kag', 1.0), ('l2t', 1.0), ('l2v', 1.0),\
- ('las', 1.0), ('ml2', 2.0), ('mod', 1.0), ('ms.', 1.0), ('ng2', 1.0),\
- ('ngr', 1.0), ('nit', 1.0), ('odu', 1.0), ('or ', 2.0), ('ors', 1.0),\
- ('pac', 1.0), ('r h', 2.0), ('ram', 1.0), ('rin', 1.0), ('rng', 1.0),\
- ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0), ('s p', 1.0),\
- ('s.B', 1.0), ('seS', 1.0), ('ss ', 1.0), ('st ', 1.0), ('t f', 1.0),\
- ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0), ('tor', 1.0),\
- ('tri', 1.0), ('ule', 1.0), ('uni', 1.0), ('vec', 1.0)\
- ])
+d1 =  {'a unit test': 1, 'html2tfd.charngrams.BaseString2TF class for': 1, 'test for html2tfd.charngrams.BaseString2TF': 1,\
+ 'for html2tfd.charngrams.BaseString2TF class': 1, 'is a unit': 1, 'for html2vectors package/module': 1, 'This is a': 1,\
+ 'unit test for': 1} 
 
-print [t1 for t1 in d1.keys() if t1 in d1.keys()]
-print len([t1 for t1 in d1.keys() if t1 in d1.keys()]), len(d1), len(d2)
+d2 = {'is a unit': 1, 'test for html2tfd.charngrams.BaseString2TF': 1, 'a unit test': 1, 'This is a': 1,\
+ 'html2tfd.charngrams.BaseString2TF class for': 1, 'for html2tfd.charngrams.BaseString2TF class': 1, 'unit test for': 1,\
+ 'class for html2vectors package/module': 1, 'for html2vectors package/module': 1}
+
+
+
+
+print [t1 for t1 in d2.keys() if t1 not in d1.keys()]
+print len([t1 for t1 in d2.keys() if t1 in d1.keys()]), len(d1), len(d2)
