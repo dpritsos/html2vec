@@ -97,10 +97,14 @@ def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
     #into the input Vocabulary and the input terms-list. Following the sequence stored into the current python dictionary tf_d.
     col_idx_l = [tid_vocabulary[trm] for trm in tf_d.keys()]
     col_idx_a = np.array(col_idx_l)
+    if not col_idx_a:
+        col_idx_a = np.array([0])
 
     #Sice the return value will be a sparce vector first dimention of the matrix will be 0 for all terms.
     dim0 = np.zeros(len(col_idx_l))
-    
+    if not dim0:
+        dim0 = np.array([0])
+
     #Getting the frequencies for terms of interst in order to be alligned idxs-list.
     freq_l = tf_d.values()
     if not freq_l:
@@ -114,7 +118,7 @@ def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
         outp_vect_size = len(tid_vocabulary)
     else:
         outp_vect_size = len(tid_vocabulary) + 1
-    
+
     #Now defining the Terms-Sequence-Sparse-Matrix with the proper output-vector-size.
     f_mtrx = ssp.csr_matrix( ( freq_l, (dim0, col_idx_a) ), shape=(1, outp_vect_size), dtype=ndtype)
     
