@@ -11,7 +11,7 @@
 """ html2vect.base.vectortypes.termslist2tfavgspeed: submodule of `html2tf` module defines the class BaseString2TPL """ 
 
 import numpy as np
-from .termslist2tf import *
+from termslist2tf import *
 
 
 def trms2tpl_dict(terms_l):
@@ -40,7 +40,7 @@ def trms2tfspd_dict(terms_l, vocabulary=None):
     trms_tf = trms2tf_dict(terms_l, vocabulary)
 
     #Creating the list of average-frequency-speeds of terms found in terms_lst.
-    tfs_list = [ (t, ( (f / float(max(trms_pos[t]) - min(trms_pos[t]))) / float(1000) ) ) for t, f in trms_tf.items() ]
+    tfs_list = [ (t, f / (float(max(trms_pos[t]) - min(trms_pos[t])) + 1.0) ) for t, f in trms_tf.items() ]
 
     #Retunring the terms dictonary of average-frequency-speeds.
     return dict(tfs_list)
