@@ -64,9 +64,6 @@ class BaseHtml2TF(BaseFileHandler):
         tf_d = dict()
         #Merge All Term-Frequency Dictionaries created by the Raw Texts
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            #print self.html_attrib( html_str ).encode('utf8')
-            print self.__class__.s2ngl.terms_lst( self.html_attrib( html_str ) )
-            0/0
             tf_d = tfdutils.merge_tfds( tf_d, self.tl2tf.trms2tf_dict( self.__class__.s2ngl.terms_lst( self.html_attrib( html_str ) ) ) )
             
         #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
