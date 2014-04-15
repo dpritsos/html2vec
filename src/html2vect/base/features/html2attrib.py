@@ -219,7 +219,7 @@ class BaseHTML2Attributes(object):
             #        print meta_content
             #        0/0
             #        text = meta_content + " " + text 
-            
+        
         return text
     
     

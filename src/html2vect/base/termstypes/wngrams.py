@@ -81,11 +81,11 @@ class String2WNGramsList(object):
         #Creating the analyzed terms list by puting the analyzed and non-analyzed terms in a single list.
         analyzed_terms_lst = list()
         for trm in terms_l: 
-            if isinstance(trm, str):
-                analyzed_terms_lst.append(trm)
-            else:
+            if isinstance(trm, list):
                 analyzed_terms_lst.extend(trm)
-     
+            else:
+                analyzed_terms_lst.append(trm)
+                
         #Removing any empty string (if any).
         analyzed_terms_lst = [trm for trm in analyzed_terms_lst if trm != '']
         
