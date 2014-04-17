@@ -103,6 +103,10 @@ def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
 
     #Getting the frequencies for terms of interst in order to be alligned idxs-list.
     freq_l = tf_d.values()
+
+    #This line is added only for testing purposes.
+    freq_l = np.square(freq_l)
+
     if not freq_l:
         freq_l = [ 0 ]
         col_idx_a = np.array([0])
