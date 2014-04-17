@@ -4,6 +4,54 @@
 		"selected_items":
 		[
 			[
+				"utf",
+				"utf-8"
+			],
+			[
+				"coll",
+				"collections"
+			],
+			[
+				"ex",
+				"expected_c3grams_tid_vocab_large  (variable)"
+			],
+			[
+				"expected_",
+				"expected_c3grams_tid_vocab_small  (variable)"
+			],
+			[
+				"trm2_",
+				"trms2tf_dict"
+			],
+			[
+				"v",
+				"ValueError  (class)"
+			],
+			[
+				"assertE",
+				"assertEquals  (function)"
+			],
+			[
+				"assert",
+				"assertMultiLineEqual  (function)"
+			],
+			[
+				"assertL",
+				"assertListEqual  (function)"
+			],
+			[
+				"s2gnl_",
+				"s2ngl_words"
+			],
+			[
+				"ter",
+				"terms_l"
+			],
+			[
+				"E",
+				"Exception  (class)"
+			],
+			[
 				"True",
 				"True"
 			],
@@ -36,10 +84,50 @@
 	"buffers":
 	[
 		{
-			"file": "src/html2vect/base/io/basefilehandlers.py",
+			"file": "src/html2vect/base/html2tf.py",
 			"settings":
 			{
-				"buffer_size": 4463,
+				"buffer_size": 3333,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/tables/wngrams.py",
+			"settings":
+			{
+				"buffer_size": 810,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/base/vectortypes/unit_tests/test_termslist2tf.py",
+			"settings":
+			{
+				"buffer_size": 41077,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/tables/cngrams.py",
+			"settings":
+			{
+				"buffer_size": 3109,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/base/vectortypes/termslist2tf.py",
+			"settings":
+			{
+				"buffer_size": 5400,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/html2vect/base/termstypes/wngrams.py",
+			"settings":
+			{
+				"buffer_size": 7618,
 				"line_ending": "Unix"
 			}
 		}
@@ -77,20 +165,48 @@
 	},
 	"file_history":
 	[
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/cngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/features/html2attrib.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/wngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/unit_tests/test_wngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/unt.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/termslist2tfavgspeed.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/test_termslist2tfavgspeed.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/tables/wngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/tables/cngrams.py",
+		"/home/dimitrios/Desktop/e-mails",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/test.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/test_string2lowbow.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/dict/cngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/html2tf.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/unicode_handling_future_refactoring.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/utils/tfdutils.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/unit_test_data/html/test_01.html",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/untitled.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/untitled1.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/untitled3.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/unit_tests/test_cngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/unit_tests/test_termslist2tf.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/examples/exec_html2ascii_perl_1.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cnlowbow.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/termslist2tf.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2lowbow.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2tpl.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/dict/wngrams.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/tools/tfdutils.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2tf.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/io/tfdfileshandler.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/io/basefilehandlers.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/tools/tfttools.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/tools/convert.py",
+		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/lowbow.py",
 		"/home/dimitrios/Desktop/TNF_BARCODE_SS14/tnfsamples.fmt",
 		"/home/dimitrios/Desktop/TNF_BARCODE_SS14/tnf_fw13_samples.fmt",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cngrams.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/TEST.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/io/basefilehandlers.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/tables/io.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/dict/cngrams.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/convert/tfdtools.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2lowbow.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/termstypes/cngrams.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/lowbow.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/cnlowbow.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/sparse/wngrams.py",
-		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/vectortypes/string2tpl.py",
 		"/home/dimitrios/Development_Workspace/html2vectors/src/html2vect/base/html2terms.py",
 		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/KeywordBuilder.py",
 		"/home/dimitrios/ExtremePro_Workspace/AdKeywordsGenerator_Scripts/Seed1.txt",
@@ -150,14 +266,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"sorted",
-			"sort",
-			"dx = [0].extend(dx)",
-			"None",
-			"import",
-			"bin",
-			".\n",
-			"contrib"
+			"white_spliter",
+			"words",
+			"narray",
+			"ssp.csr_matrix",
+			"sparse",
+			"expected_w3grams_f_sparse_largeVocab",
+			"words",
+			"self.expected_w3grams_tf_arr_Voca",
+			"expected_w3grams_tf_arr",
+			"expected_w3grams_tf_arr_smallVocab",
+			"w3grams_tid_vocab_small",
+			"expected_w3grams_tf_arr_Vocab",
+			"self.expected_w3grams_tf_arr_Vocab",
+			"expected_w3grams_tf_arr",
+			"test_trms2tf_narray_w3grams_NoVocab",
+			"w3grams_tid_vocab",
+			"w3grams_tid_vocab_small",
+			"w3grams_tid_vocab",
+			" : 1",
+			" : ",
+			", ",
+			"words",
+			"expected_w3grams_tf_dict",
+			"expected_w3grams_tf_dict_smallVocab",
+			"test_trms2tf_dict_w3grams_Vocab ",
+			",        ",
+			"test for html2tfd.charngrams.BaseString2TF",
+			"is a unit",
+			"html2tfd.charngrams.BaseString2TF class for",
+			"unit test for",
+			"class for html2vectors package/module",
+			",      ",
+			"for html2vectors package/module",
+			"for html2tfd.charngrams.BaseString2TF class",
+			"a unit test",
+			"class for html2vectors package/module",
+			"a unit test' : 7, 'for html2tfd.charngrams.BaseString2TF class' : 8, 'for html2vectors package/module'",
+			"is a unit",
+			"html2tfd.charngrams.BaseString2TF class for",
+			"unit test for",
+			"This is a",
+			"', '",
+			"is",
+			"', '",
+			",",
+			"for html2tfd.charngrams.BaseString2TF class",
+			"a unit test",
+			"class for html2vectors",
+			"test for html2tfd.charngrams.BaseString2TF",
+			"html2tfd.charngrams.BaseString2TF class for",
+			"unit test for",
+			"class for html2vectors",
+			"'class for html2vectors' : ,",
+			"class for html2vectors",
+			"html2tfd.charngrams.BaseString2TF class for",
+			"unit test for",
+			"class for html2vectors",
+			"test for html2tfd.charngrams.BaseString2TF",
+			"is a unit",
+			"html2tfd.charngrams.BaseString2TF class for",
+			"unit test for",
+			"This is a",
+			"'",
+			" '",
+			"for html2vectors package/modul",
+			"test for html2tfd.charngrams.BaseString2TF",
+			"is a unit",
+			"html2tfd.charngrams.BaseString2TF class for",
+			"unit test for",
+			"expected_words_f_narray_largeVocab",
+			"sparse",
+			"cngrams",
+			"c3grams",
+			"f_sparse_small",
+			"expected_c3grams_f_sparse_smallVocab",
+			"c3grams_f_sparse_",
+			"c3grams_f_sparse",
+			"self.expected_words_f_sparse",
+			"self.expected_words_f_sparse_largeVocab",
+			"self.expected_words_f_sparse_largeVocab ",
+			"self.expected_words_f_sparse_largeVocab",
+			"self.expected_words_f_sparse_smallVocab",
+			"self.expected_c3grams_f_narray_small",
+			"self.expected_c3grams_f_narray",
+			"vector_size",
+			"expected_words_f_sparse_large",
+			" ],\\",
+			"expected_c3grams_f_narray",
+			"expected_c3grams_f_narray_large",
+			"expected_c3grams_f_narray",
+			")\n",
+			"expected_c3grams_f_narray",
+			"expected_words_f_sparse",
+			"), (",
+			"np.array",
+			"expected_words_tf_arr",
+			"cngrams",
+			"words",
+			"c3grams",
+			"self.expected_words_tf_arr",
+			"expected_words_tf_arr_Vocab",
+			"self.expected_words_tf_arr",
+			"expected_words_tf_arr_",
+			"expected_words_tf_arr_vocab",
+			"expected_words_tf_arr",
+			") (",
+			"expected_words_tf_arr",
+			"c3grams_tid_vocab_large",
+			") (",
+			"elf.expected_c3grams_tf_arr_smallVocab",
+			"tid_vocabulary",
+			"expected_c3grams_tid_vocab",
+			" ,",
+			": ",
+			"print",
+			" a ",
+			", (",
+			"),",
+			": ",
+			"arrayes",
+			",\\\n            (np.zeros(84), np.arange(84))\n          ",
+			"ssp.csr_matrix",
+			"sparse",
+			".toarray()",
+			"sparse",
+			"tid_vocabulary",
+			"s2ngl",
+			"self.expected_c3grams_f_sparse"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -175,24 +411,320 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 3,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "src/html2vect/base/io/basefilehandlers.py",
-					"semi_transient": true,
+					"file": "src/html2vect/base/html2tf.py",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4463,
+						"buffer_size": 3333,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2417,
-								2417
+								1960,
+								1960
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 459.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/html2vect/tables/wngrams.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 810,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								539,
+								539
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/html2vect/base/vectortypes/unit_tests/test_termslist2tf.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 41077,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5101,
+								5101
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2346.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/html2vect/tables/cngrams.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3109,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
 							]
 						],
 						"settings":
@@ -206,6 +738,274 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/html2vect/base/vectortypes/termslist2tf.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5400,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4441,
+								4441
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 765.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/html2vect/base/termstypes/wngrams.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7618,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3458,
+								3458
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"sublime_auto_complete": true,
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 918.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -244,7 +1044,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 241.0
+		"height": 457.0
 	},
 	"output.find_results":
 	{
@@ -295,7 +1095,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 260.0,
+	"side_bar_width": 248.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
