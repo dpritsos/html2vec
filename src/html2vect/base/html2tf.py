@@ -69,9 +69,9 @@ class BaseHtml2TF(BaseFileHandler):
         #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
         #tid_vocabulary = tfdtools.tf2tidx( tf_d )
 
-        tid_vocabulary = tf_d
+        tf_vocabulary = tf_d
         
-        return tid_vocabulary
+        return tf_vocabulary
     
     
     def __build_vocabulary(self,*args, **kwrgs):
