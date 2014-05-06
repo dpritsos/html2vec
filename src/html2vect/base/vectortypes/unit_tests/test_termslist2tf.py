@@ -740,6 +740,8 @@ class Test_BaseString2TF(unittest.TestCase):
         
         cngrams_f_narray = trms2f_narray( self.s2ngl_c3grams.terms_lst( self.txt_sample ),\
             tid_vocabulary=self.c3grams_tid_vocab, norm_func=None, ndtype=np.float32 )
+
+        print cngrams_f_narray
         
         self.assertTrue( np.all(cngrams_f_narray == self.expected_c3grams_f_narray_Vocab) )
 
