@@ -18,7 +18,7 @@ from html2vect.base.termstypes.cngrams import String2CNGramsList
 from html2vect.base.termstypes.wngrams import String2WNGramsList
 from html2vect.base.vectortypes.termslist2tf import trms2tf_dict, trms2tf_narray, trms2f_sparse, trms2f_narray
 
-class Test_BaseString2TF(unittest.TestCase):
+class Test_TermsList2TF(unittest.TestCase):
     
     def setUp(self):
         
@@ -823,5 +823,5 @@ class Test_BaseString2TF(unittest.TestCase):
 
 
 suite = unittest.TestSuite()
-suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_BaseString2TF) )
+suite.addTest( unittest.TestLoader().loadTestsFromTestCase(Test_TermsList2TF) )
 unittest.TextTestRunner(verbosity=2).run(suite)        

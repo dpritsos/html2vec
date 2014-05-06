@@ -8,31 +8,42 @@
 #    Last update: Please refer to the GIT tracking 
 #
 
+
+import sys
+sys.path.append('../../../')
+
 import unittest
-import html2vect.tables.cngrams as cngrams
-from html2vect.string.attrib_text import HtmlFullText
-
 import numpy as np
-import tables as tb
+import scipy.sparse as ssp
+#from html2vect.string.attrib_text import HtmlFullText
+#self.htmltext = HtmlFullText(valid_html=True)
 
-################################### REQUIRES A UNIT TEST FOR words.Html2TPL Class ################################# 
+from html2vect.base.termstypes.cngrams import String2CNGramsList
+from html2vect.base.termstypes.wngrams import String2WNGramsList
+
+#Do I need this.
+from html2vect.base.vectortypes.termslist2tf import trms2tf_dict, trms2tf_narray, trms2f_sparse, trms2f_narray
+
+from html2vect.tables.cngrams as Html2TF
+
 
 class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
-        self.n = 3
-        self.html2tf = cngrams.Html2TF( self.n, lowercase=False, valid_html=True, ndtype=np.dtype([('terms', 'S3'), ('freq', 'float32')]) )
-        self.html2tf_lowercase = cngrams.Html2TF( self.n, lowercase=True, valid_html=True, ndtype=np.dtype([('terms', 'S3'), ('freq', 'float32')]) )
-        self.htmltext = HtmlFullText(valid_html=True)
         
-        self.html_sample = "<html> \
-                            <head> \
-                            </head> \
-                            <body>\
-                             <p>This is a unit test for <b>html2tfd.charngrams.BaseString2TF</b> class for html2vectors package/module</p>\
-                            </body>\
-                           </html>"
-                           
+        #Instantiating string to character N-Grams object.
+        s2ngl_c3grams = String2CNGramsList(n=3)
+        #self.s2ngl_words = String2WNGramsList(n=1)
+        #self.s2ngl_w3grams = String2WNGramsList(n=3)
+
+        #Instantiating Html2TF object with several different arguments.
+        self.h2tf_c3grams = Html2TF(s2ngl_c3grams, html_attrib='text', lowercase=True, valid_html=False)
+    
+        #Defining the data files and paths required for this unit test.
+        self.pathto_htmls = "../../../unit_test_data/html/"
+        self.tables_filename = "../../../unit_test_data/hd5files/CorpusTable.h5"
+        self.xhtml_file_l = [ "../../../unit_test_data/html/test_01.html" ]
+        self.txt_file_l = [ "../../../unit_test_data/txt/test_01.txt" ]                    
         
         self.expected_ngrams_freq_arr = np.array( [(' a ', 1.0), (' cl', 1.0), (' fo', 2.0), (' ht', 2.0), (' is', 1.0),\
                                                    (' pa', 1.0), (' te', 1.0), (' un', 1.0), ('.Ba', 1.0), ('.ch', 1.0),\
@@ -52,37 +63,13 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                                    ('t f', 1.0), ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0),\
                                                    ('tor', 1.0), ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)],\
                                                    np.dtype([('terms', 'S3'), ('freq', 'float32')])) 
-        
-        #NOTICE the 'le ':1 on the above dictionary which is extra 3gram compare toTest_BaseString2NgramList__3grams because of HTML clean-up process 
-        self.expected_ngrams_freq_arr_lowercase = np.array( [(' a ', 1.0), (' cl', 1.0), (' fo', 2.0), (' ht', 2.0), (' is', 1.0),\
-                                                             (' pa', 1.0), (' te', 1.0), (' un', 1.0), ('.ba', 1.0), ('.ch', 1.0),\
-                                                             ('/mo', 1.0), ('2tf', 2.0), ('2ve', 1.0), ('a u', 1.0), ('ack', 1.0),\
-                                                             ('age', 1.0), ('ams', 1.0), ('arn', 1.0), ('ase', 1.0), ('ass', 1.0),\
-                                                             ('bas', 1.0), ('cha', 1.0), ('cka', 1.0), ('cla', 1.0), ('cto', 1.0),\
-                                                             ('d.c', 1.0), ('dul', 1.0), ('e/m', 1.0), ('ect', 1.0), ('est', 2.0),\
-                                                             ('f c', 1.0), ('fd.', 1.0), ('for', 2.0), ('g2t', 1.0), ('ge/', 1.0),\
-                                                             ('gra', 1.0), ('har', 1.0), ('his', 1.0), ('htm', 2.0), ('ing', 1.0),\
-                                                             ('is ', 2.0), ('it ', 1.0), ('kag', 1.0), ('l2t', 1.0), ('l2v', 1.0),\
-                                                             ('las', 1.0), ('le ', 1.0), ('ml2', 2.0), ('mod', 1.0), ('ms.', 1.0),\
-                                                             ('ng2', 1.0), ('ngr', 1.0), ('nit', 1.0), ('odu', 1.0), ('or ', 2.0),\
-                                                             ('ors', 1.0), ('pac', 1.0), ('r h', 2.0), ('ram', 1.0), ('rin', 1.0),\
-                                                             ('rng', 1.0), ('rs ', 1.0), ('s a', 1.0), ('s f', 1.0), ('s i', 1.0),\
-                                                             ('s p', 1.0), ('s.b', 1.0), ('ses', 1.0), ('ss ', 1.0), ('st ', 1.0),\
-                                                             ('str', 1.0), ('t f', 1.0), ('t t', 1.0), ('tes', 1.0), ('tf ', 1.0),\
-                                                             ('tfd', 1.0), ('thi', 1.0), ('tml', 2.0), ('tor', 1.0), ('tri', 1.0),\
-                                                             ('ule', 1.0), ('uni', 1.0), ('vec', 1.0)],\
-                                                             np.dtype([('terms', 'S3'), ('freq', 'float32')]))
-        
-        self.tables_filename = "../../../unit_test_data/hd5files/CorpusTable.h5"
-        self.pathto_htmls = "../../../unit_test_data/html/"
-        self.xhtml_file_l = [ "../../../unit_test_data/html/test_01.html" ]
-           
-           
+"""
     def test_html2tf_from_src(self):
         #Create the h5file and a test Group for the puropse of this Unit test
         h5file = tb.openFile(self.tables_filename, 'w')
         group_h5 = h5file.createGroup(h5file.root, "testgroup")
         
+        self.h2tf_c3grams
         #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
         #which is called again and again for each of the test_ methods into this Unit-test Class
         tb_trms_frq_arr = self.html2tf.from_src(h5file, group_h5, self.html_sample, tbname="tbarray1")
@@ -108,16 +95,21 @@ class Test_Html2TF__3grams(unittest.TestCase):
         
         #Close the file for the next Loop of Unit-Test
         h5file.close()
-
+"""
        
     def test_html2tf_from_files(self):
         #Create the h5file and a test Group for the puropse of this Unit test
         h5file = tb.openFile(self.tables_filename, 'w')
         group_h5 = h5file.createGroup(h5file.root, "testgroup")
         
-        html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        #html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
         
-        tb_trms_frq_arrz_group = self.html2tf.from_files(h5file, group_h5, self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        f_earray_extended = self.html2tf.from_files(h5file, self.xhtml_file_l, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'
+        #f_erray is a tuple where:
+        #   f_earray_extended[0] == term's frequiencies expandable_array of pytables.
+        #   f_earray_extended[1] == the HD5 Files given as input.
+        #   f_earray_extended[2] == the terms-index (tid_dictionary) dictionary created from the input in case of tid_dictionary argument is equal to None.
+
         
         ng_num_expected = len(html_text[0]) - self.n + 1
         ng_num_real = 0
@@ -154,8 +146,7 @@ class Test_Html2TF__3grams(unittest.TestCase):
         #Close the file for the next Loop of Unit-Test
         h5file.close()
 
-
-"""           
+        
 class Test_Html2TP__3grams(unittest.TestCase):
     
     def setUp(self):

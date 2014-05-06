@@ -43,7 +43,7 @@ class Html2TF(BaseHtml2TF):
 
         #Creating the Dictionary from the given corpus if not given form the use
         if tid_dictionary == None:
-            tid_dictionary = self.__build_vocabulery(xhtml_file_l, encoding, error_handling)
+            tid_dictionary = self.__build_vocabulary(xhtml_file_l, encoding, error_handling)
             
         print "Creating NGrams-TF"
         #Create the NGrams-TF Sparse Matrix for the whole corpus
