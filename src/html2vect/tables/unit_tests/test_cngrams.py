@@ -13,31 +13,28 @@ import sys
 sys.path.append('../../../')
 
 import unittest
+
 import numpy as np
 import scipy.sparse as ssp
+import tables as tb
 #from html2vect.string.attrib_text import HtmlFullText
 #self.htmltext = HtmlFullText(valid_html=True)
-
-from html2vect.base.termstypes.cngrams import String2CNGramsList
-from html2vect.base.termstypes.wngrams import String2WNGramsList
 
 #Do I need this.
 from html2vect.base.vectortypes.termslist2tf import trms2tf_dict, trms2tf_narray, trms2f_sparse, trms2f_narray
 
-from html2vect.tables.cngrams as Html2TF
+from html2vect.tables.wngrams import Html2TF
 
 
 class Test_Html2TF__3grams(unittest.TestCase):
     
     def setUp(self):
         
-        #Instantiating string to character N-Grams object.
-        s2ngl_c3grams = String2CNGramsList(n=3)
-        #self.s2ngl_words = String2WNGramsList(n=1)
-        #self.s2ngl_w3grams = String2WNGramsList(n=3)
-
+        #Setting Character n-grams size.
+        cngrams_size = 1
+        
         #Instantiating Html2TF object with several different arguments.
-        self.h2tf_c3grams = Html2TF(s2ngl_c3grams, html_attrib='text', lowercase=True, valid_html=False)
+        self.h2tf_c3grams = Html2TF(cngrams_size, html_attrib='text', lowercase=True, valid_html=False)
     
         #Defining the data files and paths required for this unit test.
         self.pathto_htmls = "../../../unit_test_data/html/"
@@ -63,66 +60,71 @@ class Test_Html2TF__3grams(unittest.TestCase):
                                                    ('t f', 1.0), ('t t', 1.0), ('tes', 1.0), ('tfd', 1.0), ('tml', 2.0),\
                                                    ('tor', 1.0), ('tri', 1.0), ('ule', 1.0), ('uni', 1), ('vec', 1)],\
                                                    np.dtype([('terms', 'S3'), ('freq', 'float32')])) 
-"""
-    def test_html2tf_from_src(self):
-        #Create the h5file and a test Group for the puropse of this Unit test
-        h5file = tb.openFile(self.tables_filename, 'w')
-        group_h5 = h5file.createGroup(h5file.root, "testgroup")
+    """
+        def test_html2tf_from_src(self):
+            #Create the h5file and a test Group for the puropse of this Unit test
+            h5file = tb.openFile(self.tables_filename, 'w')
+            group_h5 = h5file.createGroup(h5file.root, "testgroup")
+            
+            self.h2tf_c3grams
+            #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
+            #which is called again and again for each of the test_ methods into this Unit-test Class
+            tb_trms_frq_arr = self.html2tf.from_src(h5file, group_h5, self.html_sample, tbname="tbarray1")
+            
+            for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr):
+                self.assertEqual(val, exp_val)
+            
+            #Close the file for the next Loop of Unit-Test
+            h5file.close()
         
-        self.h2tf_c3grams
-        #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
-        #which is called again and again for each of the test_ methods into this Unit-test Class
-        tb_trms_frq_arr = self.html2tf.from_src(h5file, group_h5, self.html_sample, tbname="tbarray1")
-        
-        for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr):
-            self.assertEqual(val, exp_val)
-        
-        #Close the file for the next Loop of Unit-Test
-        h5file.close()
+
+        def test_html2tf_from_src_lowercase(self):
+            #Create the h5file and a test Group for the puropse of this Unit test
+            h5file = tb.openFile(self.tables_filename, 'w')
+            group_h5 = h5file.createGroup(h5file.root, "testgroup")
+            
+            #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
+            #which is called again and again for each of the test_ methods into this Unit-test Class
+            tb_trms_frq_arr = self.html2tf_lowercase.from_src(h5file, group_h5, self.html_sample, tbname="tbarray1")
+            
+            for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr_lowercase):
+                self.assertEqual(val, exp_val) 
+            
+            #Close the file for the next Loop of Unit-Test
+            h5file.close()
+    """
     
 
-    def test_html2tf_from_src_lowercase(self):
-        #Create the h5file and a test Group for the puropse of this Unit test
-        h5file = tb.openFile(self.tables_filename, 'w')
-        group_h5 = h5file.createGroup(h5file.root, "testgroup")
-        
-        #NOTE: the above comands should run into this fucntion (ie on the fly) and not in the setUP() method 
-        #which is called again and again for each of the test_ methods into this Unit-test Class
-        tb_trms_frq_arr = self.html2tf_lowercase.from_src(h5file, group_h5, self.html_sample, tbname="tbarray1")
-        
-        for val, exp_val in zip(tb_trms_frq_arr.read(), self.expected_ngrams_freq_arr_lowercase):
-            self.assertEqual(val, exp_val) 
-        
-        #Close the file for the next Loop of Unit-Test
-        h5file.close()
-"""
-       
     def test_html2tf_from_files(self):
+
         #Create the h5file and a test Group for the puropse of this Unit test
-        h5file = tb.openFile(self.tables_filename, 'w')
-        group_h5 = h5file.createGroup(h5file.root, "testgroup")
+        #h5file = tb.open_file(self.tables_filename, 'w')
         
-        #html_text = self.htmltext.from_files( self.xhtml_file_l, encoding='utf8', error_handling='strict' )
+        f_earray_extended = self.h2tf_c3grams.from_files(self.xhtml_file_l, self.tables_filename, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict')
         
-        f_earray_extended = self.html2tf.from_files(h5file, self.xhtml_file_l, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'
         #f_erray is a tuple where:
         #   f_earray_extended[0] == term's frequiencies expandable_array of pytables.
         #   f_earray_extended[1] == the HD5 Files given as input.
         #   f_earray_extended[2] == the terms-index (tid_dictionary) dictionary created from the input in case of tid_dictionary argument is equal to None.
 
+
+        print f_earray_extended[0].read()
+
         
-        ng_num_expected = len(html_text[0]) - self.n + 1
-        ng_num_real = 0
-        test_table = h5file.getNode(tb_trms_frq_arrz_group, 'test_01_html') 
-        ng_num_real += np.sum( test_table.read()['freq'] )        
-        self.assertEqual(ng_num_real, ng_num_expected)
-        self.assertEqual(test_table._v_attrs.filepath, self.xhtml_file_l[0]) 
-        self.assertEqual(test_table._v_attrs.terms_num, ng_num_expected)
+        #ng_num_expected = len(html_text[0]) - self.n + 1
+        #ng_num_real = 0
+        #test_table = h5file.getNode(tb_trms_frq_arrz_group, 'test_01_html') 
+        #g_num_real += np.sum( test_table.read()['freq'] )        
+        #self.assertEqual(ng_num_real, ng_num_expected)
+        ##
+        #self.assertEqual(test_table._v_attrs.terms_num, ng_num_expected)
         
         #Close the file for the next Loop of Unit-Test
         h5file.close()
 
-      
+
+
+"""    
     def test_html2tf_from_paths(self):
         #Create the h5file and a test Group for the puropse of this Unit test
         h5file = tb.openFile(self.tables_filename, 'w')

@@ -138,7 +138,7 @@ def trms2f_narray(terms_l, tid_vocabulary, norm_func=None, d2=False, ndtype=np.f
     sparse_mtrx = trms2f_sparse(terms_l, tid_vocabulary, norm_func, ndtype)
 
     #Convering the spaser matric to dense array
-    dense_arr = sparse_mtrx.toarray()    
+    dense_arr = sparse_mtrx.toarray()
 
     #Getting the containent of the documents frequencies in 2d of 1d array depending on the argument
     if d2:

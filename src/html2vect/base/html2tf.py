@@ -65,16 +65,13 @@ class BaseHtml2TF(BaseFileHandler):
         #Merge All Term-Frequency Dictionaries created by the Raw Texts
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
             tf_d = tfdutils.merge_tfds( tf_d, self.tl2tf.trms2tf_dict( self.__class__.s2ngl.terms_lst( self.html_attrib( html_str ) ) ) )
-            
-        #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
-        #tid_vocabulary = tfdtools.tf2tidx( tf_d )
 
         tf_vocabulary = tf_d
         
         return tf_vocabulary
     
     
-    def __build_vocabulary(self,*args, **kwrgs):
+    def _build_vocabulary(self,*args, **kwrgs):
         
         #Warn me that a Vocabulary is automaticaly buildined  
         warnings.warn("Automated Vocabulary Building has been triggered: NONE tid_vocabulary has been given as argument")

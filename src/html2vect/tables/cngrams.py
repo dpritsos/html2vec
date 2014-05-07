@@ -15,6 +15,7 @@ from ..base.termstypes.cngrams import String2CNGramsList
  
 import numpy as np
 import tables as tb
+from ..utils import tfdutils
 
 
 class Html2TF(BaseHtml2TF):
@@ -31,27 +32,48 @@ class Html2TF(BaseHtml2TF):
         
     def yield_(self, xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling):
         
+        #Creating the Dictionary from the given corpus if not given form the use
+        if tid_dictionary == None:
+
+            #Creating Terms-Frequnecies Vocabulary. 
+            tf_vocabulary = self._build_vocabulary(xhtml_file_l, encoding, error_handling)
+
+            #Create The Terms-Index Vocabulary that is shorted by Frequency descending order
+            tid_vocabulary = tfdutils.tf2tidx( tf_vocabulary )
+        
         #Creating h5file
-        h5f = tb.openFile(h5_fname, 'w')
+        h5f = tb.open_file(h5_fname, 'w')
 
         #Defning pytables Filters
         filters = tb.Filters(complevel=1, complib='lzo', shuffle=True, fletcher32=True)
 
         #Initializing EArray. NOTE: expectedrow is critical for very large scale corpora
-        fq_earray = h5f.createEArray('/', 'corpus_earray', tb.Float32Atom(), shape=(0, len(tid_dictionary)),\
-                                        expectedrows=len(xhtml_file_l), filters=filters)  
+        fq_earray = h5f.createEArray('/', 'corpus_earray', tb.Float32Atom(), shape=(0, len(tid_vocabulary)),\
+                                        expectedrows=len(xhtml_file_l), filters=filters) 
 
-        #Creating the Dictionary from the given corpus if not given form the use
-        if tid_dictionary == None:
-            tid_dictionary = self.__build_vocabulary(xhtml_file_l, encoding, error_handling)
-            
         print "Creating NGrams-TF"
         #Create the NGrams-TF Sparse Matrix for the whole corpus
         for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            fq_earray.append( self.tl2tf.trms2f_narray( Html2TF.s2ngl.terms_lst( self.html_attrib( html_str ) ), tid_dictionary, norm_func, d2=True) )
+
+            #Creating the pytables Earray for the data. 
+            fq_earray.append(\
+                #Appending an numpy.array 2D to expandable array of pytables.
+                self.tl2tf.trms2f_narray(\
+                    #Geting the Character or Word n-grams list.
+                    ###NOTE: self.__class__.terms_lst is the only way to work correctly when this class
+                    #will be used as Parent class.
+                    self.__class__.s2ngl.terms_lst(\
+                        #Getting the HTML attributes (usually text) as requested at Object Initialization. 
+                        self.html_attrib( html_str )\
+                    ),\
+                #Setting some parameters required here. 
+                tid_vocabulary, norm_func, d2=True\
+                #Parameter dtype has ommited and letting the default value to be applied.
+                )\
+            )\
         
         #Return Corpus Frequencie's-per-Document EArray
-        return (fq_earray, h5f, tid_dictionary)
+        return (fq_earray, h5f, tid_vocabulary)
     
     
     def from_src(self, xhtml_str):
