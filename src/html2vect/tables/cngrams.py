@@ -30,10 +30,10 @@ class Html2TF(BaseHtml2TF):
         super(Html2TF, self).__init__(*args, **kwrgs)
             
         
-    def yield_(self, xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling):
+    def yield_(self, xhtml_file_l, h5_fname, tid_vocabulary, norm_func, encoding, error_handling):
         
         #Creating the Dictionary from the given corpus if not given form the use
-        if tid_dictionary == None:
+        if tid_vocabulary == None:
 
             #Creating Terms-Frequnecies Vocabulary. 
             tf_vocabulary = self._build_vocabulary(xhtml_file_l, encoding, error_handling)
@@ -80,17 +80,17 @@ class Html2TF(BaseHtml2TF):
         raise Exception("Please use from_files() or from_paths() methods instead")
     
         
-    def from_files(self, xhtml_file_l, h5_fname, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'):
-        return self.yield_(xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling)  
+    def from_files(self, xhtml_file_l, h5_fname, tid_vocabulary=None, norm_func=None, encoding='utf8', error_handling='strict'):
+        return self.yield_(xhtml_file_l, h5_fname, tid_vocabulary, norm_func, encoding, error_handling)  
     
         
-    def from_paths(self, basepath, filepath_l, h5_fname, tid_dictionary=None, norm_func=None, encoding='utf8', error_handling='strict'):
+    def from_paths(self, basepath, filepath_l, h5_fname, tid_vocabulary=None, norm_func=None, encoding='utf8', error_handling='strict'):
         
         #Get the filenames located in the paths given 
         xhtml_file_l = self.file_list_frmpaths(basepath, filepath_l)
         
         #Create the vectors sparse matrix for this files
-        matrix, h5f, tid_dict = self.from_files(xhtml_file_l, h5_fname, tid_dictionary, norm_func, encoding, error_handling)
+        matrix, h5f, tid_dict = self.from_files(xhtml_file_l, h5_fname, tid_vocabulary, norm_func, encoding, error_handling)
         
         #Return the matrix, the dictionary created and the xhtml_files_list
         return (matrix, h5f, tid_dict, xhtml_file_l)
