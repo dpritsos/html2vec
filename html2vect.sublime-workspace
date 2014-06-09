@@ -99,7 +99,7 @@
 			"file": "src/html2vect/base/vectortypes/termslist2tf.py",
 			"settings":
 			{
-				"buffer_size": 5481,
+				"buffer_size": 5397,
 				"line_ending": "Unix"
 			}
 		},
@@ -452,7 +452,7 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -599,15 +599,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5481,
+						"buffer_size": 5397,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4337,
-								4337
+								0,
+								0
 							]
 						],
 						"settings":
@@ -724,7 +724,7 @@
 						"translation.y": 1551.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -992,7 +992,7 @@
 						"translation.y": 410.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
