@@ -26,7 +26,7 @@ class Html2TF(BaseHtml2TF):
 
     def __init__(self, *args, **kwrgs):
 
-        # Initialise BaseHtml2TF Class.
+        # Initializing BaseHtml2TF Class.
         super(Html2TF, self).__init__(*args, **kwrgs)
 
     def yield_(self, xhtml_file_l, h5_fname, tid_vocabulary, norm_func, encoding, error_handling):
@@ -43,12 +43,14 @@ class Html2TF(BaseHtml2TF):
         # Creating h5file.
         h5f = tb.open_file(h5_fname, 'w')
 
-        # Defning pytables Filters.
-        filters = tb.Filters(complevel=1, complib='lzo', shuffle=True, fletcher32=True)
+        # Defining pyTables Filters.
+        filters = tb.Filters(complevel=1, complib='lzo', shuffle=True, fletcher32=False)
 
-        # Initializing EArray. NOTE: expectedrow is critical for very large scale corpora
-        fq_earray = h5f.createEArray(
-            '/', 'corpus_earray', tb.Float32Atom(), shape=(0, len(tid_vocabulary)),
+        # Initializing EArray. NOTE: expected row is critical for very large scale corpora.
+        # NOTE: It has to be tb.Float64Atom() in case a limit -> 0 will be used in farther...
+        # ...Text Classification or other vector calculations.
+        fq_earray = h5f.create_earray(
+            '/', 'corpus_earray', tb.Float64Atom(), shape=(0, len(tid_vocabulary)),
             expectedrows=len(xhtml_file_l), filters=filters
         )
 
@@ -60,7 +62,7 @@ class Html2TF(BaseHtml2TF):
             fq_earray.append(
                 # Appending an numpy.array 2D to expandable array of pytables.
                 self.tl2tf.trms2f_narray(
-                    # Geting the Character or Word n-grams list.
+                    # Getting the Character or Word n-grams list.
                     # NOTE: self.__class__.terms_lst is the only way to work correctly when this...
                     # ...class will be used as Parent class.
                     self.__class__.s2ngl.terms_lst(
@@ -70,11 +72,11 @@ class Html2TF(BaseHtml2TF):
                     ),
                     # Setting some parameters required here.
                     tid_vocabulary, norm_func, d2=True
-                    # Parameter dtype has ommited and letting the default value to be applied.
+                    # Parameter dtype has omitted and letting the default value to be applied.
                 )
             )
 
-        # Return Corpus Frequencie's-per-Document EArray
+        # Return Corpus Frequencies'-per-Document EArray
         return (fq_earray, h5f, tid_vocabulary)
 
     def from_src(self, xhtml_str):
