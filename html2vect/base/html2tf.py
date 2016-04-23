@@ -39,6 +39,10 @@ class BaseHtml2TF(BaseFileHandler):
             self.html_attrib__ = self.h2attr.text
         elif attrib == "tags":
             self.html_attrib__ = self.h2attr.tags
+        elif attrib == "titles":
+            self.html_attrib__ = self.h2attr.titles
+        elif attrib == "url_anchor":
+            self.html_attrib__ = self.h2attr.urls_anchors
         else:
             raise Exception("Invalid attribute: only HTML 'text' or 'tags' can be returned for now")
 

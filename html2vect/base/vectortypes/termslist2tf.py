@@ -51,7 +51,7 @@ def trms2tf_dict(terms_l, vocabulary=None):
 
 
 def trms2tf_narray(terms_l, vocabulary=None, norm_func=None,
-                   ndtype=np.dtype([('terms', 'S128'), ('freq', 'float32')])):
+                   ndtype=np.dtype([('terms', 'S128'), ('freq', 'float')])):
 
     # In case None is returned then return None again. The outer code layer should handle this...
     # ...if caused due to error.
@@ -84,7 +84,7 @@ def trms2tf_narray(terms_l, vocabulary=None, norm_func=None,
     return TF_arr
 
 
-def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
+def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float):
 
     # Checking prerecusites: Vocabulary (Terms-Index) should not be None or empty.
     if not tid_vocabulary or not isinstance(tid_vocabulary, dict):
@@ -142,7 +142,7 @@ def trms2f_sparse(terms_l, tid_vocabulary, norm_func=None, ndtype=np.float32):
     return ssp.csr_matrix(norm_f_mtrx, shape=norm_f_mtrx.shape, dtype=ndtype)
 
 
-def trms2f_narray(terms_l, tid_vocabulary, norm_func=None, d2=False, ndtype=np.float32):
+def trms2f_narray(terms_l, tid_vocabulary, norm_func=None, d2=False, ndtype=np.float):
 
     # Getting the sparse matrix aligned along to the Terms-Index of the Corpus' Vocabulary
     sparse_mtrx = trms2f_sparse(terms_l, tid_vocabulary, norm_func, ndtype)

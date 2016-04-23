@@ -49,7 +49,7 @@ class Html2TF(BaseHtml2TF):
         # Pack it as a sparse vstack and return it
         copus_fq_array = ssp.vstack(fq_lst)
         return (
-                ssp.csr_matrix(copus_fq_array, shape=copus_fq_array.shape, dtype=np.float32),
+                ssp.csr_matrix(copus_fq_array, shape=copus_fq_array.shape, dtype=np.float),
                 tid_vocabulary
                 )
 

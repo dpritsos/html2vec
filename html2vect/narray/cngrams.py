@@ -50,7 +50,7 @@ class Html2TF(BaseHtml2TF):
 
         # Pack it as a sparse vstack and return it
         copus_fq_array = np.vstack(fq_lst)
-        return np.array(copus_fq_array, dtype=np.float32), tid_vocabulary
+        return np.array(copus_fq_array, dtype=np.float), tid_vocabulary
 
     def from_src(self, xhtml_str):
         raise Exception("Please use from_files() or from_paths() methods instead")
