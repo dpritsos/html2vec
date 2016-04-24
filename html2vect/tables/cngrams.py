@@ -55,31 +55,33 @@ class Html2TF(BaseHtml2TF):
         )
 
         print "Creating NGrams-TF"
-        # Create the NGrams-TF Sparse Matrix for the whole corpus
-        for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
+        # Create the NGrams-TF Sparse Matrix for all...
+        # ...HTML attributes requested.
+        for html_attrib in self.html_attrib_lst:
+            for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
 
-            # Creating the pytables Earray for the data.
-            fq_earray.append(
-                # Appending an numpy.array 2D to expandable array of pytables.
-                self.tl2tf.trms2f_narray(
-                    # Getting the Character or Word n-grams list.
-                    # NOTE: self.__class__.terms_lst is the only way to work correctly when this...
-                    # ...class will be used as Parent class.
-                    self.__class__.s2ngl.terms_lst(
-                        # Getting the HTML attributes (usually text) as requested at Object...
-                        # ...Initialization.
-                        self.html_attrib(html_str)
-                    ),
-                    # Setting some parameters required here.
-                    tid_vocabulary, norm_func, d2=True
-                    # Parameter dtype has omitted and letting the default value to be applied.
+                # Creating the pytables Earray for the data.
+                fq_earray.append(
+                    # Appending an numpy.array 2D to expandable array of pytables.
+                    self.tl2tf.trms2f_narray(
+                        # Getting the Character or Word n-grams list.
+                        # NOTE: self.__class__.terms_lst is the only way to work correctly when...
+                        # this class will be used as Parent class.
+                        self.__class__.s2ngl.terms_lst(
+                            # Getting the HTML attributes (usually text) as requested at Object...
+                            # ...Initialization.
+                            self._string_case(self.h2attr.__getattribute__(html_attrib)(html_str))
+                        ),
+                        # Setting some parameters required here.
+                        tid_vocabulary, norm_func, d2=True
+                        # Parameter dtype has omitted and letting the default value to be applied.
+                    )
                 )
-            )
 
         # Return Corpus Frequencies'-per-Document EArray
         return (fq_earray, h5f, tid_vocabulary)
 
-    def from_src(self, xhtml_str):
+    def from_src(self, xhtml_str, tid_vocabulary=None):
         raise Exception("Please use from_files() or from_paths() methods instead")
 
     def from_files(self, xhtml_file_l, h5_fname, tid_vocabulary=None, norm_func=None,

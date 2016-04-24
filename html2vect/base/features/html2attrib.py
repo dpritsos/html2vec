@@ -188,7 +188,6 @@ class BaseHTML2Attributes(object):
 
         return str
 
-
     def text(self, xhtml_str):
 
         if self.valid_html:

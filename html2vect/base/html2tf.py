@@ -1,11 +1,11 @@
 #
-#     Module: html2terms
+#     Module: html2terms.
 #
-#     Author: Dimitiros Pritsos
+#     Author: Dimitiros Pritsos.
 #
-#     License: BSD Style
+#     License: BSD Style.
 #
-#     Last update: Please refer to the GIT tracking
+#     Last update: Please refer to the GIT tracking.
 #
 
 """ html2vect.base.html2terms: submodule of `html2vect` module defines the classes: BaseHtml2TF"""
@@ -21,58 +21,62 @@ from ..utils import tfdutils
 class BaseHtml2TF(BaseFileHandler):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, n, html_attrib, lowercase, valid_html):
+    def __init__(self, n, html_attrib, str_case, valid_html):
 
-        # Initializing BaseFileHandler Class
+        # Initializing BaseFileHandler Class.
         super(BaseHtml2TF, self).__init__()
 
-        # HTML to attributes Class
+        # HTML to attributes Class.
         self.h2attr = BaseHTML2Attributes(valid_html)
 
-        # Initialized the TermsType to be produced from this class stored in as class attribute
+        # Initialized the TermsType to be produced from this class stored in as class attribute.
         self.__class__.s2ngl.N = n
 
-        # String to Term Frequency Class using
+        # String to Term Frequency Class using.
         self.tl2tf = termslist2tf
 
-        if html_attrib == "text":
-            self.html_attrib__ = self.h2attr.text
-        elif attrib == "tags":
-            self.html_attrib__ = self.h2attr.tags
-        elif attrib == "titles":
-            self.html_attrib__ = self.h2attr.titles
-        elif attrib == "url_anchor":
-            self.html_attrib__ = self.h2attr.urls_anchors
-        else:
-            raise Exception("Invalid attribute: only HTML 'text' or 'tags' can be returned for now")
+        # Converting the single sting to a sting list.
+        if isinstance(html_attrib, str):
+            self.html_attrib_lst = list(html_attrib)
+        elif not isinstance(html_attrib, list):
+            raise Exception(
+                "Invalid HTML attribute argument: Only string or string list are valid options."
+            )
 
-        if lowercase:
-            self.html_attrib = self._lower(self.html_attrib__)
-        else:
-            self.html_attrib = self.html_attrib__
+        # Checking if the reqested HTML atrributes list is valid.
+        if not set(self.html_attrib_lst) < set(dir(self.h2attr)):
+            raise Exception(
+                "Invalid HTML attribute: HTML attributes can be exacted are " +
+                ", ".join([attr for attr in dir(self.h2attr) if attr[0] != '_'])
+            )
 
-    def _lower(self, methd):
+        # Keeping the setting for string case, whether it will be Upper of Lower.
+        self.str_case = str_case
+
+    def _string_case(self, methd):
 
         def lowerCase(*args, **kwrgs):
-            return methd(*args, **kwrgs).lower()
+            return methd(*args, **kwrgs).__getattribute__(self.str_case)
 
         return lowerCase
 
     def build_vocabulary(self, xhtml_file_l, encoding, error_handling):
 
-        # The TF Dictionary
+        # The TF Dictionary.
         tf_d = dict()
 
-        # Merge All Term-Frequency Dictionaries created by the Raw Texts
-        for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-            tf_d = tfdutils.merge_tfds(
-                tf_d,
-                self.tl2tf.trms2tf_dict(
-                    self.__class__.s2ngl.terms_lst(
-                        self.html_attrib(html_str)
+        # Merge All Term-Frequency Dictionaries created by the Raw Texts for all...
+        # ...HTML attributes requested.
+        for html_attrib in self.html_attrib_lst:
+            for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
+                tf_d = tfdutils.merge_tfds(
+                    tf_d,
+                    self.tl2tf.trms2tf_dict(
+                        self.__class__.s2ngl.terms_lst(
+                            self._string_case(self.h2attr.__getattribute__(html_attrib)(html_str))
+                        )
                     )
                 )
-            )
 
         tf_vocabulary = tf_d
 
@@ -80,16 +84,16 @@ class BaseHtml2TF(BaseFileHandler):
 
     def _build_vocabulary(self, *args, **kwrgs):
 
-        # Warn me that a Vocabulary will automatically be build.
+        # Warn me that a Vocabulary will automatically be build..
         warnings.warn("Automated Vocabulary Building has been triggered:" +
                       " NONE tid_vocabulary has been given as argument")
 
-        # Build and return the Vocabulary
+        # Build and return the Vocabulary.
         return self.build_vocabulary(*args, **kwrgs)
 
     @abc.abstractmethod
     def yield_(self, xhtml_str, tid_vocabulary):
-        # The main method that will produce the Term-Frequency or Frequency Dictionaries/Lists
+        # The main method that will produce the Term-Frequency or Frequency Dictionaries/Lists.
         pass
 
     @abc.abstractmethod

@@ -34,21 +34,23 @@ class Html2TF(BaseHtml2TF):
             tid_vocabulary = self.__build_vocabulery(xhtml_file_l, encoding, error_handling)
 
         print "Creating NGrams-TF (Narray)"
-        # Create the NGrams-TF Sparse Matrix for the whole corpus
+
+        # The Frequnecy List.
         fq_lst = list()
 
-        for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-
-            fq_lst.append(
-                self.tl2tf.trms2f_narray(
-                    self.__class__.s2ngl.terms_lst(
-                        self.html_attrib(html_str)
-                    ),
-                    tid_vocabulary, norm_func
+        # Creating the NGrams-TF Sparse Matrix for the whole corpus
+        for html_attrib in self.html_attrib_lst:
+            for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
+                fq_lst.append(
+                    self.tl2tf.trms2f_narray(
+                        self.__class__.s2ngl.terms_lst(
+                            self._string_case(self.h2attr.__getattribute__(html_attrib)(html_str))
+                        ),
+                        tid_vocabulary, norm_func
+                    )
                 )
-            )
 
-        # Pack it as a sparse vstack and return it
+        # Packing it as a sparse vstack and return it.
         copus_fq_array = np.vstack(fq_lst)
         return np.array(copus_fq_array, dtype=np.float), tid_vocabulary
 
