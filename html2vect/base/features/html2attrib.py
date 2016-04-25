@@ -186,7 +186,7 @@ class BaseHTML2Attributes(object):
                 pass
                 # print("ERROR converting HTML entities to UTF-8 - There is no html entity: %s, %s" % (entity, e))
 
-        return str
+        return strg
 
     def text(self, xhtml_str):
 
@@ -274,7 +274,7 @@ class BaseHTML2Attributes(object):
 
         return text
 
-    def titles(self, xhtml_str):
+    def title(self, xhtml_str):
 
         if self.valid_html:
             properhtml = self.proper_html.findall(xhtml_str)
@@ -287,7 +287,34 @@ class BaseHTML2Attributes(object):
             # Getting the title of the HTML page.
             title = self.html_title.findall(xhtml_str)
 
-        return title[0]
+        # Merging the list of string from the reqular expression maching.
+        title = " ".join(title)
+
+        # Replace HTML Entity Number and Name with the proper utf8 character
+        title = self.htmlentities2utf8(title)
+
+        # Normalise Encoding
+        # # # norm_title = self.encoding_norm(title)
+        # Replace NULL bytes - Yes! encoding and decoding conversion may cause this
+        title = self.NULL_chars.sub(' ', title)
+
+        # Replace whitespace chars with single space
+        title = self.whitespace_chars.sub(' ', title)
+
+        # Replace utf8 'REPLACEMENT CHARACTER' with empty string
+        title = self.unknown_char_seq.sub('', title)
+
+        # Remove whitespace from the beginning of text if any
+        title = title.lstrip()
+
+        # Remove newline character from the end of title if any
+        title = title.rstrip(u'\n')
+
+        # If the string is empty replace it with something.
+        if title == "":
+            title = " "
+
+        return title
 
     def urls_anchors(self, xhtml_str):
 
@@ -302,7 +329,32 @@ class BaseHTML2Attributes(object):
             # Getting the title of the HTML page.
             url_anchor = self.url_anchor.findall(xhtml_str)
 
-        return list(url_anchor[0])
+        # Merging the list of string from the reqular expression maching.
+        url_anchor = " ".join([" ".join(ua_tpl) for ua_tpl in url_anchor])
+
+        # Removing quotes (",').
+        url_anchor = url_anchor.replace("'", "")
+        url_anchor = url_anchor.replace('"', '')
+
+        # Replace HTML Entity Number and Name with the proper utf8 character
+        url_anchor = self.htmlentities2utf8(url_anchor)
+
+        # Normalise Encoding
+        # # # norm_title = self.encoding_norm(title)
+        # Replace NULL bytes - Yes! encoding and decoding conversion may cause this
+        url_anchor = self.NULL_chars.sub(' ', url_anchor)
+
+        # Replace whitespace chars with single space
+        url_anchor = self.whitespace_chars.sub(' ', url_anchor)
+
+        # Replace utf8 'REPLACEMENT CHARACTER' with empty string
+        url_anchor = self.unknown_char_seq.sub('', url_anchor)
+
+        # If the string is empty replace it with something.
+        if url_anchor == "":
+            url_anchor = " "
+
+        return url_anchor
 
     def scripts(self, xhtml_str):
         pass

@@ -36,12 +36,13 @@ class BaseHtml2TF(BaseFileHandler):
         self.tl2tf = termslist2tf
 
         # Converting the single sting to a sting list.
-        if isinstance(html_attrib, str):
+        if isinstance(html_attrib, str) or isinstance(html_attrib, list):
             self.html_attrib_lst = list(html_attrib)
-        elif not isinstance(html_attrib, list):
+        else:
             raise Exception(
                 "Invalid HTML attribute argument: Only string or string list are valid options."
             )
+
 
         # Checking if the reqested HTML atrributes list is valid.
         if not set(self.html_attrib_lst) < set(dir(self.h2attr)):
@@ -53,12 +54,8 @@ class BaseHtml2TF(BaseFileHandler):
         # Keeping the setting for string case, whether it will be Upper of Lower.
         self.str_case = str_case
 
-    def _string_case(self, methd):
-
-        def lowerCase(*args, **kwrgs):
-            return methd(*args, **kwrgs).__getattribute__(self.str_case)
-
-        return lowerCase
+    def _string_case(self, strg):
+        return strg.__getattribute__(self.str_case)()
 
     def build_vocabulary(self, xhtml_file_l, encoding, error_handling):
 

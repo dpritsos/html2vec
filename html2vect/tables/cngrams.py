@@ -59,7 +59,6 @@ class Html2TF(BaseHtml2TF):
         # ...HTML attributes requested.
         for html_attrib in self.html_attrib_lst:
             for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-
                 # Creating the pytables Earray for the data.
                 fq_earray.append(
                     # Appending an numpy.array 2D to expandable array of pytables.
