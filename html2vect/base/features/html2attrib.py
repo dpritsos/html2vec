@@ -47,8 +47,9 @@ class BaseHTML2Attributes(object):
 
         # RegEx getting the url and the anchor text tuple form <a href=...></a>.
         self.url_anchor = re.compile(
-            r'<a.*href=(["\'].+?["\']).*[>](.+)(?=</a>)', re.UNICODE | re.IGNORECASE
+            r'<a.*href="(.+?)".*[>](.+?)(?=</a>)', re.UNICODE | re.IGNORECASE
         )
+        # <a.*href=["\'](.+?)["\'].*[>](.+?)(?=</a>)
 
         # RegEx for the <title></title> of the HTML document.
         self.html_title = re.compile(r'(?<=<title>).+(?=</title>)', re.UNICODE | re.IGNORECASE)
@@ -329,8 +330,25 @@ class BaseHTML2Attributes(object):
             # Getting the title of the HTML page.
             url_anchor = self.url_anchor.findall(xhtml_str)
 
-        # Merging the list of string from the reqular expression maching.
-        url_anchor = " ".join([" ".join(ua_tpl) for ua_tpl in url_anchor])
+        # ### Merging the list of string from the reqular expression maching. ###
+
+        ua_join_lst = list()  # A list to append the 2 RegEx groups maching.
+
+        for ua_tpl in url_anchor:
+
+            # Appending the first part which is the URL
+            ua_join_lst.append(ua_tpl[0])
+
+            # Cleaning and appeding the second part which is the anchor text together with HTML..
+            # ...like <img>, <span> etc.
+            ua_join_lst.append(
+                self.text(ua_tpl[0])
+            )
+
+        # Joining the UA list list.
+        url_anchor = " ".join(ua_join_lst)
+
+        # ### Merging - END ###
 
         # Removing quotes (",').
         url_anchor = url_anchor.replace("'", "")

@@ -1,10 +1,14 @@
 
 import re
 
-get_url_anchor = re.compile(r'<a.*href=(["\'].+?["\']).*[>](.+)(?=</a>)', re.UNICODE | re.IGNORECASE)
+get_url_anchor = re.compile(r'<a.*href="(.+?)".*[>](.+?)(?=</a>)', re.UNICODE | re.IGNORECASE)
 
-print get_url_anchor.findall('<a href="/eee/ee//e" style="fdfasdfsa" >CLICK WORLD!</a>')
+# <a.*href=(["\'].+?["\']).*[>](^(<.+>|</.+>).+)(?=</a>)
 
+print get_url_anchor.findall('<a href="javascript:HaloScan(\'20040602\');">fdsfa<img src="ffff"></a>')
+
+
+"""
 
 class TestClass(object):
 
@@ -20,3 +24,6 @@ tc = TestClass()
 
 if set(['testMethod', '__init__']) < set(dir(tc)):
     tc.__getattribute__('testMethod')("Hello World!")
+
+
+"""
