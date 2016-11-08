@@ -22,10 +22,9 @@ def trms2tf_dict(terms_l, vocabulary=None):
         return None
 
     # Use the Vocabulary argument if any
+    TF_d = dict()
     if vocabulary:
         # If a Vocabulary was given as argument
-        TF_d = dict()
-
         # Count Terms and Build the Terms-Frequency (TF) dictionary
         for trm in terms_l:
             if trm in vocabulary:
@@ -38,8 +37,6 @@ def trms2tf_dict(terms_l, vocabulary=None):
 
     else:
         # If a Vocabulary was None
-        TF_d = dict()
-
         # Count Terms and Build the Terms-Frequency (TF) dictionary
         for trm in terms_l:
             if trm in TF_d:  # if the dictionary of terms has the 'terms' as a key

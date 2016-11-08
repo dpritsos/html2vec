@@ -11,6 +11,7 @@
 """ html2vect.tables.wngrams: submodule of `html2vect` module defines the classes: Html2TF() """
 
 from .cngrams import Html2TF as CHtml2TF
+from .cngrams import Html2TV as CHtml2TV
 from ..base.termstypes.wngrams import String2WNGramsList
 
 
@@ -23,6 +24,17 @@ class Html2TF(CHtml2TF):
 
         # Initialise BaseHtml2TF Class
         super(Html2TF, self).__init__(*args, **kwrgs)
+
+
+class Html2TV(CHtml2TV):
+
+    # Define the TermsType to be produced from this class
+    s2ngl = String2WNGramsList()
+
+    def __init__(self, *args, **kwrgs):
+
+        # Initialise BaseHtml2TF Class
+        super(Html2TV, self).__init__(*args, **kwrgs)
 
 
 # To Be Written
