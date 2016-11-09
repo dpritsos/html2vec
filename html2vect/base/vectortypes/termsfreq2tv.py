@@ -59,9 +59,12 @@ def tf2rtv_dict(tf_dict, rtchar_size, var_vocab=None):
 
     tvftl_dict = tf2tv_dict(tf_dict, rtchar_size, var_vocab)
 
+    # Getting max frequency as normalization factor.
+    max_tf = np.max([vals[1] for vals in tvftl_dict.values()])
+
     rtv_dict = dict()
     for rtrm, vals in tvftl_dict.items():
-        rtv_dict[rtrm] = vals[0]
+        rtv_dict[rtrm] = vals[0] * (vals[1] / float(max_tf))
 
     return rtv_dict
 
