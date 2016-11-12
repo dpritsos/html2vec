@@ -23,7 +23,7 @@ def tf2tv_dict(tf_dict, rtchar_size, var_vocab=None):
 
                         tvftl_dict[trm[0:rtchar_size]][2].append(trm)
 
-                else:
+                elif len(trm[0:rtchar_size]) == rtchar_size:
 
                     tvftl_dict[trm[0:rtchar_size]] = [1, frq,  [trm]]
 
@@ -46,7 +46,7 @@ def tf2tv_dict(tf_dict, rtchar_size, var_vocab=None):
 
                     tvftl_dict[trm[0:rtchar_size]][2].append(trm)
 
-            else:
+            elif len(trm[0:rtchar_size]) == rtchar_size:
 
                 tvftl_dict[trm[0:rtchar_size]] = [1, frq,  [trm]]
 
