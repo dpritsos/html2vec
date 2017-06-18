@@ -4,12 +4,19 @@ import sys
 sys.path.append('../../')
 
 import tables as tb
+
+# THIS IS THE MOST IMPORTANT
 import html2vec.tables.cngrams as h2v_cng
+import html2vec.tables.wngrams as h2v_cng
 
 char_n_gram_size = 3
+# tables_wng = h2v_wng.Html2LSI(
 tables_cng = h2v_cng.Html2LSI(
     char_n_gram_size, html_attrib=["text"], str_case='lower', valid_html=False
 )
+
+
+# The rest is always the same!!!!
 
 corpus_filepath = "/home/dimitrios/Synergy-Crawler/Santinis_7-web_genre/"
 state_saving_path = "/home/dimitrios/Synergy-Crawler/Santinis_7-web_genre/TEST/"
