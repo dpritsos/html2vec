@@ -60,14 +60,14 @@ class BaseHtml2TF(BaseFileHandler):
     def build_vocabulary(self, xhtml_file_l, encoding, error_handling):
 
         # The TF Dictionary.
-        tf_d = dict()
+        tf_vocabulary = dict()
 
         # Merge All Term-Frequency Dictionaries created by the Raw Texts for all...
         # ...HTML attributes requested.
         for html_attrib in self.html_attrib_lst:
             for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
-                tf_d = tfdutils.merge_tfds(
-                    tf_d,
+                tf_vocabulary = tfdutils.merge_tfds(
+                    tf_vocabulary,
                     self.tl2tf.trms2tf_dict(
                         self.__class__.s2ngl.terms_lst(
                             self._string_case(self.h2attr.__getattribute__(html_attrib)(html_str))
@@ -75,15 +75,14 @@ class BaseHtml2TF(BaseFileHandler):
                     )
                 )
 
-        tf_vocabulary = tf_d
-
         return tf_vocabulary
 
     def _build_vocabulary(self, *args, **kwrgs):
 
-        # Warn me that a Vocabulary will automatically be build..
-        warnings.warn("Automated Vocabulary Building has been triggered:" +
-                      " NONE tid_vocabulary has been given as argument")
+        # Warning that a Vocabulary will automatically be build..
+        wrn = "Automated Vocabulary Building has been triggered:" +\
+                " NONE tid_vocabulary has been given as argument"
+        warnings.warn(wrn)
 
         # Build and return the Vocabulary.
         return self.build_vocabulary(*args, **kwrgs)
