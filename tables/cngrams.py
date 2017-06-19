@@ -289,14 +289,14 @@ class Html2LSI(BaseHtml2TF):
     def from_src(self, xhtml_str, tid_vocabulary=None):
         raise Exception("Please use from_files() or from_paths() methods instead")
 
-    def from_files(self, xhtml_file_l, dims, h5_fname, tid_vocabulary=None, norm_func=None,
-                   encoding='utf8', error_handling='strict'):
+    def from_files(self, xhtml_file_l, dims, h5_fname,
+                   tid_vocabulary=None, norm_func=None, encoding='utf8', error_handling='strict'):
         return self.yield_(
             xhtml_file_l, dims, h5_fname, tid_vocabulary, norm_func, encoding, error_handling
         )
 
-    def from_paths(self, basepath, filepath_l, dims, h5_fname, tid_vocabulary=None, norm_func=None,
-                   encoding='utf8', error_handling='strict'):
+    def from_paths(self, basepath, filepath_l, dims, h5_fname,
+                   tid_vocabulary=None, norm_func=None, encoding='utf8', error_handling='strict'):
 
         # Get the filenames located in the paths given
         xhtml_file_l = file_list_frmpaths(basepath, filepath_l)

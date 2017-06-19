@@ -11,6 +11,7 @@
 """ html2vect.sparse.wngrams: submodule of `html2vect` module defines the classes: Html2TF() """
 
 from .cngrams import Html2TF as CHtml2TF
+from .cngrams import Html2LSI as CHtml2LSI
 from ..base.termstypes.wngrams import String2WNGramsList
 
 
@@ -30,3 +31,14 @@ class Html2TPL(object):
 
     def __init__(self):
         pass
+
+
+class Html2LSI(CHtml2LSI):
+
+    # Define the TermsType to be produced from this class.
+    s2ngl = String2WNGramsList()
+
+    def __init__(self, *args, **kwrgs):
+
+        # Initialise BaseHtml2TF Class.
+        super(CHtml2LSI, self).__init__(*args, **kwrgs)

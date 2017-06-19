@@ -43,7 +43,6 @@ class BaseHtml2TF(BaseFileHandler):
                 "Invalid HTML attribute argument: Only string or string list are valid options."
             )
 
-
         # Checking if the reqested HTML atrributes list is valid.
         if not set(self.html_attrib_lst) < set(dir(self.h2attr)):
             raise Exception(
