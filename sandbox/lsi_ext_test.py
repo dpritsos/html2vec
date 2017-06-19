@@ -21,7 +21,6 @@ narray_cng = h2v_arr_cng.Html2LSI(
 )
 
 
-
 # The rest is always the same!!!!
 
 corpus_filepath = "/home/dimitrios/Synergy-Crawler/Santinis_7-web_genre/"
