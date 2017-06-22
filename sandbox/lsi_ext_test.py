@@ -20,7 +20,6 @@ narray_cng = h2v_arr_cng.Html2LSI(
     char_n_gram_size, html_attrib=["text"], str_case='lower', valid_html=False
 )
 
-
 # The rest is always the same!!!!
 
 corpus_filepath = "/home/dimitrios/Synergy-Crawler/Santinis_7-web_genre/"

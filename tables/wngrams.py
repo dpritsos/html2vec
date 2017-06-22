@@ -13,6 +13,7 @@
 from .cngrams import Html2TF as CHtml2TF
 from .cngrams import Html2TV as CHtml2TV
 from .cngrams import Html2LSI as CHtml2LSI
+from .cngrams import Html2GsmVec as CHtml2GsmVec
 from ..base.termstypes.wngrams import String2WNGramsList
 
 
@@ -54,3 +55,14 @@ class Html2LSI(CHtml2LSI):
 
         # Initialise BaseHtml2TF Class
         super(Html2LSI, self).__init__(*args, **kwrgs)
+
+
+class Html2GsmVec(CHtml2GsmVec):
+
+    # Define the TermsType to be produced from this class
+    s2ngl = String2WNGramsList()
+
+    def __init__(self, *args, **kwrgs):
+
+        # Initialise BaseHtml2TF Class
+        super(Html2GsmVec, self).__init__(*args, **kwrgs)

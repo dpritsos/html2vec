@@ -76,7 +76,7 @@ def _tf2idxf(tf_d, tidx_d):
 
 def tf2idxf(tf_d_l, tf_idx_d):
     """ tf2idxf(): is getting a TF-Dictionary or a list of TF-Dictionaries and TF-Index. It applies
-        the VHutils.__tf2idxf() function to the dictionaries and returns a list or single
+        the VHutils._tf2idxf() function to the dictionaries and returns a list or single
         TF-Dictionary depending on the input. """
 
     if isinstance(tf_d_l, list):
@@ -88,7 +88,7 @@ def tf2idxf(tf_d_l, tf_idx_d):
         return idxed_d
 
     elif isinstance(tf_d_l, dict):
-        return __tf2idxf(tf_d_l, tf_idx_d)
+        return _tf2idxf(tf_d_l, tf_idx_d)
     else:
         raise Exception("Dictionary or a List of Dictionaries was expected as fist input argument")
 
@@ -131,3 +131,11 @@ def keep_atleast(term_d, terms_amount):
     terms_d = dict(atleast_tf_l)
 
     return terms_d
+
+
+def keep_min_fq(term_d, min_freq):
+    """ keep_min_fq(): is getting a dictionary of Terms-Frequencies and
+        the minimum frequnecy value and retruns only the terms with this
+        frequency and above. """
+
+    return dict([(term, freq) for term, freq in term_d.items() if freq >= min_freq])
