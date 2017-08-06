@@ -459,7 +459,7 @@ class Html2GsmVec(BaseHtml2TF):
                 )
 
                 doc2vec_mdl.alpha -= decay  # decreasing the learning rate
-                doc2vec_mdl.min_alpha = model.alpha
+                doc2vec_mdl.min_alpha = doc2vec_mdl.alpha
 
         # Creating the Gensim Doc2Vec Earray table.
         gsm_d2v_earray = h5f.create_earray(
