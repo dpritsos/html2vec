@@ -81,7 +81,7 @@ class Html2TF(BaseHtml2TF):
                 )
 
         # Return Corpus Frequencies'-per-Document EArray
-        return fq_earray, h5f, tid_vocabulary, tf_vocabulary
+        return fq_earray, h5f, tid_vocabulary
 
     def from_src(self, xhtml_str, tid_vocabulary=None):
         raise Exception("Please use from_files() or from_paths() methods instead")
@@ -99,12 +99,12 @@ class Html2TF(BaseHtml2TF):
         xhtml_file_l = file_list_frmpaths(basepath, filepath_l)
 
         # Create the vectors sparse matrix for this files
-        matrix, h5f, tid_vocabulary, tf_vocabulary = self.from_files(
+        matrix, h5f, tid_vocabulary = self.from_files(
             xhtml_file_l, h5_fname, tid_vocabulary, norm_func, encoding, error_handling
         )
 
         # Return the matrix, the dictionary created and the xhtml_files_list
-        return matrix, h5f, tid_vocabulary, tf_vocabulary xhtml_file_l
+        return matrix, h5f, tid_vocabulary, xhtml_file_l
 
 
 class Html2TV(BaseHtml2TV):
