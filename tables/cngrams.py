@@ -326,7 +326,8 @@ class Html2GsmVec(BaseHtml2TF):
 
         # Creating the Dictionary from the given corpus if not given form the use
         if tid_vocabulary is None:
-
+            pass
+            """
             # Creating Terms-Frequnecies Vocabulary.
             tf_vocabulary = self._build_vocabulary(xhtml_file_l, encoding, error_handling)
 
@@ -347,6 +348,7 @@ class Html2GsmVec(BaseHtml2TF):
                 wrn = "The min_trm_fq option has been ignored because" +\
                       " is causing a zero (0) size Vocabulary."
                 warnings.warn(wrn)
+            """
 
         # Creating h5file.
         h5f = tb.open_file(h5_fname, 'w')
@@ -357,17 +359,18 @@ class Html2GsmVec(BaseHtml2TF):
         # Initializing EArray. NOTE: expected row is critical for very large scale corpora.
         # NOTE: It has to be tb.Float64Atom() in case a limit -> 0 will be used in farther...
         # ...Text Classification or other vector calculations.
-        fq_earray = h5f.create_earray(
-            '/', 'corpus_array', tb.Float64Atom(), shape=(0, len(tid_vocabulary)),
-            expectedrows=len(xhtml_file_l), filters=filters
-        )
+        if tid_vocabulary is not None:
+            fq_earray = h5f.create_earray(
+                '/', 'corpus_array', tb.Float64Atom(), shape=(0, len(tid_vocabulary)),
+                expectedrows=len(xhtml_file_l), filters=filters
+            )
 
         # List of TaggedDocuments objects one for each sentence of each document, plus a list of...
         # terms-list one for each document.
         corptgd_sentces_lst = list()
         corp_doctermslist_lst = list()
 
-        print "Creating NGrams-TF and Gensim Doc2Vec List."
+        print "Creating NGrams-TF and Gensim Doc2Vec List..."
         # Create the NGrams-TF Sparse Matrix for all...
         # ...HTML attributes requested.
 
@@ -392,12 +395,15 @@ class Html2GsmVec(BaseHtml2TF):
                     # NOTE: self.__class__.terms_lst is the only way to work correctly when...
                     # this class will be used as Parent class.
                     sent_trm_lst = self.__class__.s2ngl.terms_lst(sent)
-
+                    print "VocCheck"
                     # Getting the Terms are inlcuded in Vocabulary only!
-                    sent_trm_lst_in_vocab = [
-                        trm for trm in sent_trm_lst if trm in tid_vocabulary.keys()
-                    ]
-
+                    if tid_vocabulary is None:
+                        sent_trm_lst_in_vocab = doc_sents_lst
+                    else:
+                        sent_trm_lst_in_vocab = [
+                            trm for trm in sent_trm_lst if trm in tid_vocabulary.keys()
+                        ]
+                    print "TaggDoc"
                     # Populating the corpus sentence list.
                     corptgd_sentces_lst.append(
                         gsm.models.doc2vec.TaggedDocument(sent_trm_lst_in_vocab, [i])
@@ -411,14 +417,15 @@ class Html2GsmVec(BaseHtml2TF):
                 # ...for creating the Doc2Vec projection vector of the full corpus.
                 corp_doctermslist_lst.append(doc_trms_lst)
 
-                # Creating the pytables Earray for corpus TF vectors for each Document.
-                fq_earray.append(
-                    # Creating numpy.array of Frequencies of the respective terms.
-                    self.tl2tf.trms2f_narray(
-                        sent_trm_lst_in_vocab, tid_vocabulary, norm_func, d2=True
-                        # Parameter dtype has omitted and letting the default value to be applied.
+                if tid_vocabulary is not None:
+                    # Creating the pytables Earray for corpus TF vectors for each Document.
+                    fq_earray.append(
+                        # Creating numpy.array of Frequencies of the respective terms.
+                        self.tl2tf.trms2f_narray(
+                            sent_trm_lst_in_vocab, tid_vocabulary, norm_func, d2=True
+                            # Parameter dtype has omitted and letting the default value to be applied.
+                        )
                     )
-                )
 
         # Choosing algorithm for Gensim Doc2Vec.
         if algo == 'PV-DBOW':
@@ -428,9 +435,11 @@ class Html2GsmVec(BaseHtml2TF):
         else:
             raise Exception("Invalid option for 'alog' argument.")
 
-        # When decay is non-zero then  linear learning-rate is triggered. Following the manual..
+        # When decay is non-zero then linear learning-rate is triggered. Following the manual..
         # ...instructions of Gensim lib.
-        if decay:
+        print "Learning Documents Model..."
+
+        if not decay:
 
             doc2vec_mdl = gsm.models.doc2vec.Doc2Vec(
                 size=dims, window=win_size, dm=dm, alpha=alpha, min_alpha=min_alpha
@@ -444,15 +453,15 @@ class Html2GsmVec(BaseHtml2TF):
             )
 
         else:
-
+            print "init"
             doc2vec_mdl = gsm.models.doc2vec.Doc2Vec(
                 size=dims, window=win_size, dm=dm, iter=epochs, alpha=alpha, min_alpha=min_alpha
             )
-
+            print "Voc"
             doc2vec_mdl.build_vocab(corptgd_sentces_lst)
 
             for epoch in range(epochs):
-
+                print "Epoch", epoch
                 doc2vec_mdl.train(
                     corptgd_sentces_lst,
                     total_examples=doc2vec_mdl.corpus_count, epochs=doc2vec_mdl.iter
@@ -467,6 +476,7 @@ class Html2GsmVec(BaseHtml2TF):
             expectedrows=len(xhtml_file_l), filters=filters
         )
 
+        print "Mapping"
         # Appending the Infered Doc2Vec vectors to the Doc2Vec Earray.
         for doc_trm_lst in corp_doctermslist_lst:
             gsm_d2v_earray.append(doc2vec_mdl.infer_vector(doc_trm_lst).reshape((1, dims)))
