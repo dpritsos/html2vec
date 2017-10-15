@@ -325,11 +325,7 @@ class Html2GsmVec(BaseHtml2TF):
                h5_fname, tid_vocabulary, norm_func, encoding, error_handling):
 
         # Creating the Dictionary from the given corpus if not given form the use
-        if tid_vocabulary is None:
-            pass
-            """
-            # Creating Terms-Frequnecies Vocabulary.
-            tf_vocabulary = self._build_vocabulary(xhtml_file_l, encoding, error_handling)
+        if tid_vocabulary is not None:
 
             # Get the Vocabulary keeping all the terms this 'min_trm_fq' frequency and above.
             resized_tf_vocab = tfdutils.keep_min_fq(tf_vocabulary, min_trm_fq)
@@ -348,22 +344,6 @@ class Html2GsmVec(BaseHtml2TF):
                 wrn = "The min_trm_fq option has been ignored because" +\
                       " is causing a zero (0) size Vocabulary."
                 warnings.warn(wrn)
-            """
-
-        # Creating h5file.
-        h5f = tb.open_file(h5_fname, 'w')
-
-        # Defining pyTables Filters.
-        filters = tb.Filters(complevel=1, complib='lzo', shuffle=True, fletcher32=False)
-
-        # Initializing EArray. NOTE: expected row is critical for very large scale corpora.
-        # NOTE: It has to be tb.Float64Atom() in case a limit -> 0 will be used in farther...
-        # ...Text Classification or other vector calculations.
-        if tid_vocabulary is not None:
-            fq_earray = h5f.create_earray(
-                '/', 'corpus_array', tb.Float64Atom(), shape=(0, len(tid_vocabulary)),
-                expectedrows=len(xhtml_file_l), filters=filters
-            )
 
         # List of TaggedDocuments objects one for each sentence of each document, plus a list of...
         # terms-list one for each document.
@@ -395,7 +375,7 @@ class Html2GsmVec(BaseHtml2TF):
                     # NOTE: self.__class__.terms_lst is the only way to work correctly when...
                     # this class will be used as Parent class.
                     sent_trm_lst = self.__class__.s2ngl.terms_lst(sent)
-                    print "VocCheck"
+
                     # Getting the Terms are inlcuded in Vocabulary only!
                     if tid_vocabulary is None:
                         sent_trm_lst_in_vocab = doc_sents_lst
@@ -403,7 +383,7 @@ class Html2GsmVec(BaseHtml2TF):
                         sent_trm_lst_in_vocab = [
                             trm for trm in sent_trm_lst if trm in tid_vocabulary.keys()
                         ]
-                    print "TaggDoc"
+
                     # Populating the corpus sentence list.
                     corptgd_sentces_lst.append(
                         gsm.models.doc2vec.TaggedDocument(sent_trm_lst_in_vocab, [i])
@@ -416,16 +396,6 @@ class Html2GsmVec(BaseHtml2TF):
                 # Keeping the full list of terms for this document. This list will be used...
                 # ...for creating the Doc2Vec projection vector of the full corpus.
                 corp_doctermslist_lst.append(doc_trms_lst)
-
-                if tid_vocabulary is not None:
-                    # Creating the pytables Earray for corpus TF vectors for each Document.
-                    fq_earray.append(
-                        # Creating numpy.array of Frequencies of the respective terms.
-                        self.tl2tf.trms2f_narray(
-                            sent_trm_lst_in_vocab, tid_vocabulary, norm_func, d2=True
-                            # Parameter dtype has omitted and letting the default value to be applied.
-                        )
-                    )
 
         # Choosing algorithm for Gensim Doc2Vec.
         if algo == 'PV-DBOW':
@@ -442,7 +412,8 @@ class Html2GsmVec(BaseHtml2TF):
         if not decay:
 
             doc2vec_mdl = gsm.models.doc2vec.Doc2Vec(
-                size=dims, window=win_size, dm=dm, alpha=alpha, min_alpha=min_alpha
+                size=dims, window=win_size, dm=dm, alpha=alpha,
+                min_alpha=min_alpha, min_count=min_trm_fq
             )
 
             doc2vec_mdl.build_vocab(corptgd_sentces_lst)
@@ -453,15 +424,13 @@ class Html2GsmVec(BaseHtml2TF):
             )
 
         else:
-            print "init"
             doc2vec_mdl = gsm.models.doc2vec.Doc2Vec(
-                size=dims, window=win_size, dm=dm, iter=epochs, alpha=alpha, min_alpha=min_alpha
+                size=dims, window=win_size, dm=dm, iter=epochs, alpha=alpha,
+                min_alpha=min_alpha, min_count=min_trm_fq
             )
-            print "Voc"
             doc2vec_mdl.build_vocab(corptgd_sentces_lst)
 
             for epoch in range(epochs):
-                print "Epoch", epoch
                 doc2vec_mdl.train(
                     corptgd_sentces_lst,
                     total_examples=doc2vec_mdl.corpus_count, epochs=doc2vec_mdl.iter
@@ -470,19 +439,25 @@ class Html2GsmVec(BaseHtml2TF):
                 doc2vec_mdl.alpha -= decay  # decreasing the learning rate
                 doc2vec_mdl.min_alpha = doc2vec_mdl.alpha
 
+        # Creating h5file.
+        h5f = tb.open_file(h5_fname, 'w')
+
+        # Defining pyTables Filters.
+        filters = tb.Filters(complevel=1, complib='lzo', shuffle=True, fletcher32=False)
+
         # Creating the Gensim Doc2Vec Earray table.
         gsm_d2v_earray = h5f.create_earray(
-            '/', 'corpus_GsmDoc2Vec_array', tb.Float64Atom(), shape=(0, dims),
+            '/', 'corpus_earray', tb.Float64Atom(), shape=(0, dims),
             expectedrows=len(xhtml_file_l), filters=filters
         )
 
-        print "Mapping"
         # Appending the Infered Doc2Vec vectors to the Doc2Vec Earray.
-        for doc_trm_lst in corp_doctermslist_lst:
+        print "Mapping Infer Vector..."
+        for i, doc_trm_lst in enumerate(corp_doctermslist_lst):
             gsm_d2v_earray.append(doc2vec_mdl.infer_vector(doc_trm_lst).reshape((1, dims)))
 
         # Returning Corpus LSI and Frequencies per Document.
-        return (gsm_d2v_earray, fq_earray, h5f, tid_vocabulary)
+        return (gsm_d2v_earray, h5f, tid_vocabulary)
 
     def from_src(self, xhtml_str, tid_vocabulary=None):
         raise Exception("Please use from_files() or from_paths() methods instead")
@@ -503,11 +478,11 @@ class Html2GsmVec(BaseHtml2TF):
         xhtml_file_l = file_list_frmpaths(basepath, filepath_l)
 
         # Create the vectors sparse matrix for this files
-        gsm_d2v_earray, fq_earray, h5f, tid_vocabulary = self.from_files(
+        gsm_d2v_earray, h5f, tid_vocabulary = self.from_files(
             xhtml_file_l,
             dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay, h5_fname,
             tid_vocabulary, norm_func, encoding, error_handling
         )
 
         # Return the matrix, the dictionary created and the xhtml_files_list
-        return (gsm_d2v_earray, fq_earray, h5f, tid_vocabulary, xhtml_file_l)
+        return (gsm_d2v_earray, h5f, tid_vocabulary, xhtml_file_l)
