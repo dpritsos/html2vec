@@ -322,7 +322,7 @@ class Html2GsmVec(BaseHtml2TF):
 
     def yield_(self,
                xhtml_file_l, dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay,
-               h5_fname, tid_vocabulary, norm_func, encoding, error_handling):
+               h5_fname, tid_vocabulary, norm_func, encoding, error_handling, trn_idxs=None):
 
         # Creating the Dictionary from the given corpus if not given form the use
         if tid_vocabulary is not None:
@@ -356,7 +356,8 @@ class Html2GsmVec(BaseHtml2TF):
 
         for html_attrib in self.html_attrib_lst:
 
-            for html_str in self.load_files(xhtml_file_l, encoding, error_handling):
+            for doc_i, html_str in enumerate(
+                    self.load_files(xhtml_file_l, encoding, error_handling)):
 
                 # Getting the HTML attributes (usually text) as requested at Object...
                 # ...Initialization.
@@ -370,28 +371,30 @@ class Html2GsmVec(BaseHtml2TF):
                 # Document's Full Terms List.
                 doc_trms_lst = list()
 
-                for i, sent in enumerate(doc_sents_lst):
-                    # Getting the Character or Word n-grams list.
-                    # NOTE: self.__class__.terms_lst is the only way to work correctly when...
-                    # this class will be used as Parent class.
-                    sent_trm_lst = self.__class__.s2ngl.terms_lst(sent)
+                if doc_i in trn_idxs:
 
-                    # Getting the Terms are inlcuded in Vocabulary only!
-                    if tid_vocabulary is None:
-                        sent_trm_lst_in_vocab = doc_sents_lst
-                    else:
-                        sent_trm_lst_in_vocab = [
-                            trm for trm in sent_trm_lst if trm in tid_vocabulary.keys()
-                        ]
+                    for i, sent in enumerate(doc_sents_lst):
+                        # Getting the Character or Word n-grams list.
+                        # NOTE: self.__class__.terms_lst is the only way to work correctly when...
+                        # this class will be used as Parent class.
+                        sent_trm_lst = self.__class__.s2ngl.terms_lst(sent)
 
-                    # Populating the corpus sentence list.
-                    corptgd_sentces_lst.append(
-                        gsm.models.doc2vec.TaggedDocument(sent_trm_lst_in_vocab, [i])
-                    )
+                        # Getting the Terms are inlcuded in Vocabulary only!
+                        if tid_vocabulary is None:
+                            sent_trm_lst_in_vocab = doc_sents_lst
+                        else:
+                            sent_trm_lst_in_vocab = [
+                                trm for trm in sent_trm_lst if trm in tid_vocabulary.keys()
+                            ]
 
-                    # Extending the list of the document's terms list with the terms of this...
-                    # ...sentence.
-                    doc_trms_lst.extend(sent_trm_lst_in_vocab)
+                        # Populating the corpus sentence list.
+                        corptgd_sentces_lst.append(
+                            gsm.models.doc2vec.TaggedDocument(sent_trm_lst_in_vocab, [i])
+                        )
+
+                        # Extending the list of the document's terms list with the terms of this...
+                        # ...sentence.
+                        doc_trms_lst.extend(sent_trm_lst_in_vocab)
 
                 # Keeping the full list of terms for this document. This list will be used...
                 # ...for creating the Doc2Vec projection vector of the full corpus.
@@ -464,15 +467,17 @@ class Html2GsmVec(BaseHtml2TF):
 
     def from_files(self, xhtml_file_l,
                    dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay, h5_fname,
-                   tid_vocabulary=None, norm_func=None, encoding='utf8', error_handling='strict'):
+                   tid_vocabulary=None, norm_func=None,
+                   encoding='utf8', error_handling='strict', trn_idxs=None):
         return self.yield_(
             xhtml_file_l, dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay,
-            h5_fname, tid_vocabulary, norm_func, encoding, error_handling
+            h5_fname, tid_vocabulary, norm_func, encoding, error_handling, trn_idxs
         )
 
     def from_paths(self, basepath, filepath_l,
                    dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay, h5_fname,
-                   tid_vocabulary=None, norm_func=None, encoding='utf8', error_handling='strict'):
+                   tid_vocabulary=None, norm_func=None,
+                   encoding='utf8', error_handling='strict', trn_idxs=None):
 
         # Get the filenames located in the paths given
         xhtml_file_l = file_list_frmpaths(basepath, filepath_l)
@@ -481,7 +486,7 @@ class Html2GsmVec(BaseHtml2TF):
         gsm_d2v_earray, h5f, tid_vocabulary = self.from_files(
             xhtml_file_l,
             dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay, h5_fname,
-            tid_vocabulary, norm_func, encoding, error_handling
+            tid_vocabulary, norm_func, encoding, error_handling, trn_idxs
         )
 
         # Return the matrix, the dictionary created and the xhtml_files_list
