@@ -322,7 +322,7 @@ class Html2GsmVec(BaseHtml2TF):
 
     def yield_(self,
                xhtml_file_l, dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay,
-               h5_fname, tid_vocabulary, norm_func, encoding, error_handling, trn_idxs=None):
+               h5_fname, tid_vocabulary, norm_func, encoding, error_handling, trn_idxs=[None]):
 
         # Creating the Dictionary from the given corpus if not given form the use
         if tid_vocabulary is not None:
@@ -371,7 +371,7 @@ class Html2GsmVec(BaseHtml2TF):
                 # Document's Full Terms List.
                 doc_trms_lst = list()
 
-                if doc_i in trn_idxs:
+                if doc_i in trn_idxs or trn_idxs[0] is None:
 
                     for i, sent in enumerate(doc_sents_lst):
                         # Getting the Character or Word n-grams list.
@@ -468,7 +468,7 @@ class Html2GsmVec(BaseHtml2TF):
     def from_files(self, xhtml_file_l,
                    dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay, h5_fname,
                    tid_vocabulary=None, norm_func=None,
-                   encoding='utf8', error_handling='strict', trn_idxs=None):
+                   encoding='utf8', error_handling='strict', trn_idxs=[None]):
         return self.yield_(
             xhtml_file_l, dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay,
             h5_fname, tid_vocabulary, norm_func, encoding, error_handling, trn_idxs
@@ -477,7 +477,7 @@ class Html2GsmVec(BaseHtml2TF):
     def from_paths(self, basepath, filepath_l,
                    dims, min_trm_fq, win_size, algo, alpha, min_alpha, epochs, decay, h5_fname,
                    tid_vocabulary=None, norm_func=None,
-                   encoding='utf8', error_handling='strict', trn_idxs=None):
+                   encoding='utf8', error_handling='strict', trn_idxs=[None]):
 
         # Get the filenames located in the paths given
         xhtml_file_l = file_list_frmpaths(basepath, filepath_l)
