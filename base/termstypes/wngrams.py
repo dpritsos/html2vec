@@ -13,34 +13,17 @@
 import re
 
 
-class String2WNGramsList(object):
+class String2WNGramsList(String2TokenList):
 
     def __init__(self, n=1, terms_size_reject=512):
+
+        super(String2WNGramsList, self).__init__(*args, **kwrgs)
 
         # N-Grams size
         self.n = n
 
         # Term Size Reject
         self.terms_size_reject = terms_size_reject
-
-        # Whitespace characters [<space>\t\n\r\f\v] matching, for splitting the raw text to terms
-        self.white_spliter = re.compile(r'[\s]+', re.UNICODE)
-
-        # Find URL String. Probably anchor text
-        self.url_str = re.compile(r'(((ftp://|FTP://|http://|HTTP://|https://|HTTPS://)?(www|[^\s()<>.?]+))?([.]?[^\s()<>.?]+)+?(?=.org|.edu|.tv|.com|.gr|.gov|.uk)(.org|.edu|.tv|.com|.gr|.gov|.uk){1}([/]\S+)*[/]?)', re.UNICODE|re.IGNORECASE)
-
-        #  Comma decomposer
-        self.comma_decomp = re.compile(r'[^,]+(?=,)|(?<=,)[^,]+|[,]+', re.UNICODE|re.IGNORECASE)
-
-        # Find dot or sequence of dots
-        self.dot_str = re.compile(r'[.]+', re.UNICODE)
-        self.dot_decomp = re.compile(r'[^.]+(?=\.)|(?<=\.)[^.]+|[.]+', re.UNICODE)
-
-        # Symbol term decomposer
-        self.fredsb_clean = re.compile(r'(^[\W])([\w]+?)|([\w]+?)([^\w%]$)', re.UNICODE) # front-end-symbol-cleaning => fredsb_clean
-
-        # Find proper number
-        self.proper_num = re.compile(r'(^[0-9]+$)|(^[0-9]+[,][0-9]+$)|(^[0-9]+[.][0-9]+$)|(^[0-9]{1,3}(?:[.][0-9]{3})+[,][0-9]+$)|(^[0-9]{1,3}(?:[,][0-9]{3})+[.][0-9]+$)', re.UNICODE)
 
     @property
     def N(self):
@@ -52,50 +35,88 @@ class String2WNGramsList(object):
 
     def terms_lst(self, text):
 
-        # In case not text is given it returns None. The outer code layer should handle this...
-        # ...if caused due to error.
-        if not text:
-            return None
+        # Getting the Analysed list of tokens.
+        analyzed_terms_lst = self.token_lst(text, self.terms_size_reject)
 
-        # Initially split the text to terms separated by white-spaces [\t\n\r\f\v].
-        terms_l = self.white_spliter.split(text)
-
-        # Any term has more than self.terms_size_reject (default 512 chars) characters is rejected.
-        terms_l = self.__term_len_limit(terms_l, self.terms_size_reject)
-
-        # Extract the Numbers form the terms_l.
-        terms_l = self.__extract_proper_numbers(terms_l)
-
-        # Extract the terms to sub-terms of any symbol but comma (,) and comma sub-term(s).
-        terms_l = self.__extract_comma_n_trms(terms_l)
-
-        # Extract term to words upon dot (.) and dot needs special treatment because we have...
-        # ...the case of . or ... and so on.
-        terms_l = self.__extract_dot_n_trms(terms_l)
-
-        # Extract the non-alphanumeric symbols ONLY from the Beginning and the End of the terms
-        # # except dot (.) and percentage % at the end for the term)
-        terms_l = self.__extract_propr_trms_n_symbs(terms_l)
-
-        # Creating the analyzed terms list by puting the analyzed and non-analyzed terms in...
-        # ...a single list.
-        analyzed_terms_lst = list()
-        for trm in terms_l:
-            if isinstance(trm, list):
-                analyzed_terms_lst.extend(trm)
-            else:
-                analyzed_terms_lst.append(trm)
-
-        # Removing any empty string (if any).
-        analyzed_terms_lst = [trm for trm in analyzed_terms_lst if trm != '']
-
-        # Construct the Words N-Grams List
+        # Constructing the Words N-Grams List
         analyzed_terms_lst = [
             " ".join(analyzed_terms_lst[i: i+self.n])
             for i in range(len(analyzed_terms_lst) - self.n + 1)
         ]
 
         return analyzed_terms_lst
+
+
+class String2TokenList(object):
+
+    def __init__(self):
+
+        # Whitespace characters [<space>\t\n\r\f\v] matching, for splitting the raw text to terms
+        self.white_spliter = re.compile(r'[\s]+', re.UNICODE)
+
+        # Find URL String. Probably anchor text
+        self.url_str = re.compile(
+            r'(((ftp://|FTP://|http://|HTTP://|https://|HTTPS://)?(www|[^\s()<>.?]+))?([.]?[^\s()<>.?]+)+?(?=.org|.edu|.tv|.com|.gr|.gov|.uk)(.org|.edu|.tv|.com|.gr|.gov|.uk){1}([/]\S+)*[/]?)',
+            re.UNICODE|re.IGNORECASE
+        )
+
+        #  Comma decomposer
+        self.comma_decomp = re.compile(r'[^,]+(?=,)|(?<=,)[^,]+|[,]+', re.UNICODE|re.IGNORECASE)
+
+        # Find dot or sequence of dots
+        self.dot_str = re.compile(r'[.]+', re.UNICODE)
+        self.dot_decomp = re.compile(r'[^.]+(?=\.)|(?<=\.)[^.]+|[.]+', re.UNICODE)
+
+        # Symbol term decomposer
+        self.fredsb_clean = re.compile(r'(^[\W])([\w]+?)|([\w]+?)([^\w%]$)', re.UNICODE)
+        # front-end-symbol-cleaning => fredsb_clean
+
+        # Find proper number
+        self.proper_num = re.compile(
+            r'(^[0-9]+$)|(^[0-9]+[,][0-9]+$)|(^[0-9]+[.][0-9]+$)|(^[0-9]{1,3}(?:[.][0-9]{3})+[,][0-9]+$)|(^[0-9]{1,3}(?:[,][0-9]{3})+[.][0-9]+$)',
+            re.UNICODE
+        )
+
+    def token_lst(self, text, terms_size_reject=1024):
+
+        # In case not text is given it returns None. The outer code layer should handle this...
+        # ...if caused due to error.
+        if not text:
+            return None
+
+        # Initially split the text to terms separated by white-spaces [\t\n\r\f\v].
+        token_l = self.white_spliter.split(text)
+
+        # Any term has more than self.terms_size_reject (default 512 chars) characters is rejected.
+        token_l = self.__term_len_limit(token_l, terms_size_reject)
+
+        # Extract the Numbers form the token_l.
+        token_l = self.__extract_proper_numbers(token_l)
+
+        # Extract the terms to sub-terms of any symbol but comma (,) and comma sub-term(s).
+        token_l = self.__extract_comma_n_trms(token_l)
+
+        # Extract term to words upon dot (.) and dot needs special treatment because we have...
+        # ...the case of . or ... and so on.
+        token_l = self.__extract_dot_n_trms(token_l)
+
+        # Extract the non-alphanumeric symbols ONLY from the Beginning and the End of the terms
+        # # except dot (.) and percentage % at the end for the term)
+        token_l = self.__extract_propr_trms_n_symbs(token_l)
+
+        # Creating the analyzed terms list by puting the analyzed and non-analyzed terms in...
+        # ...a single list.
+        analyzed_token_lst = list()
+        for trm in terms_l:
+            if isinstance(trm, list):
+                analyzed_token_lst.extend(trm)
+            else:
+                analyzed_token_lst.append(trm)
+
+        # Removing any empty string (if any).
+        analyzed_token_lst = [trm for trm in analyzed_token_lst if trm != '']
+
+        return analyzed_token_lst
 
     def __term_len_limit(self, term_l, limit):
 
