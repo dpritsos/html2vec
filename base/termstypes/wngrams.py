@@ -13,40 +13,6 @@
 import re
 
 
-class String2WNGramsList(String2TokenList):
-
-    def __init__(self, n=1, terms_size_reject=512):
-
-        super(String2WNGramsList, self).__init__(*args, **kwrgs)
-
-        # N-Grams size
-        self.n = n
-
-        # Term Size Reject
-        self.terms_size_reject = terms_size_reject
-
-    @property
-    def N(self):
-        return self.n
-
-    @N.setter
-    def N(self, value):
-        self.n = value
-
-    def terms_lst(self, text):
-
-        # Getting the Analysed list of tokens.
-        analyzed_terms_lst = self.token_lst(text, self.terms_size_reject)
-
-        # Constructing the Words N-Grams List
-        analyzed_terms_lst = [
-            " ".join(analyzed_terms_lst[i: i+self.n])
-            for i in range(len(analyzed_terms_lst) - self.n + 1)
-        ]
-
-        return analyzed_terms_lst
-
-
 class String2TokenList(object):
 
     def __init__(self):
@@ -107,7 +73,7 @@ class String2TokenList(object):
         # Creating the analyzed terms list by puting the analyzed and non-analyzed terms in...
         # ...a single list.
         analyzed_token_lst = list()
-        for trm in terms_l:
+        for trm in token_l:
             if isinstance(trm, list):
                 analyzed_token_lst.extend(trm)
             else:
@@ -212,3 +178,37 @@ class String2TokenList(object):
                     terms_l[i] = [trm for trm in symb_term_l[0] if trm != '']
 
         return terms_l
+
+
+class String2WNGramsList(String2TokenList):
+
+    def __init__(self, n=1, terms_size_reject=512):
+
+        super(String2WNGramsList, self).__init__(*args, **kwrgs)
+
+        # N-Grams size
+        self.n = n
+
+        # Term Size Reject
+        self.terms_size_reject = terms_size_reject
+
+    @property
+    def N(self):
+        return self.n
+
+    @N.setter
+    def N(self, value):
+        self.n = value
+
+    def terms_lst(self, text):
+
+        # Getting the Analysed list of tokens.
+        analyzed_terms_lst = self.token_lst(text, self.terms_size_reject)
+
+        # Constructing the Words N-Grams List
+        analyzed_terms_lst = [
+            " ".join(analyzed_terms_lst[i: i+self.n])
+            for i in range(len(analyzed_terms_lst) - self.n + 1)
+        ]
+
+        return analyzed_terms_lst
