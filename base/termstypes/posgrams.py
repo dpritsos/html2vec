@@ -18,7 +18,7 @@
 # #########################################################################################
 
 from .wngrams import String2TokenList
-from nltk.tag.stanford import StanfordPOSTagger
+from nltk.tag.stanford import StanfordPOSTagger, CoreNLPPOSTagger
 
 
 class String2POSGramsList(String2TokenList):
@@ -28,6 +28,11 @@ class String2POSGramsList(String2TokenList):
         super(String2POSGramsList, self).__init__()
 
         self.tagger_cls = tagger_cls
+
+        # Getting the Stanford tagger instance.
+        self.spt = StanfordPOSTagger(self.tagger_cls)
+        # self.spt = CoreNLPPOSTagger(url='http://localhost:9000')
+        self.spt.java_options='-mx10240m'
 
     @property
     def N(self):
@@ -42,10 +47,7 @@ class String2POSGramsList(String2TokenList):
         # Getting the Analysed list of tokens.
         analyzed_terms_lst = self.token_lst(text)
 
-        # Getting the Stanford tagger instance.
-        spt = StanfordPOSTagger(self.tagger_cls)
-        print spt.tag(analyzed_terms_lst)
         # Tagging the Analyzed terms list and getting the tags list as terms.
-        pos_tags = [pos for t, pos in spt.tag(analyzed_terms_lst)]
+        pos_tags = [pos for t, pos in self.spt.tag(analyzed_terms_lst)]
 
         return pos_tags

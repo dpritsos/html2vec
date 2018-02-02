@@ -43,7 +43,7 @@ class String2TokenList(object):
             re.UNICODE
         )
 
-    def token_lst(self, text, terms_size_reject=1024):
+    def token_lst(self, text, terms_size_reject=256):
 
         # In case not text is given it returns None. The outer code layer should handle this...
         # ...if caused due to error.
