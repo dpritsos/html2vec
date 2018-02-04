@@ -23,7 +23,11 @@ from nltk.tag.stanford import StanfordPOSTagger, CoreNLPPOSTagger
 
 class String2POSGramsList(String2TokenList):
 
-    def __init__(self, tagger_cls='english-bidirectional-distsim.tagger'):
+    def __init__(self, tagger_cls='english-left3words-distsim.tagger'):
+
+        # Other Taggers:
+        #   1. 'english-bidirectional-distsim.tagger'
+        #   2. 'english-left3words-distsim.tagger'
 
         super(String2POSGramsList, self).__init__()
 
@@ -32,7 +36,7 @@ class String2POSGramsList(String2TokenList):
         # Getting the Stanford tagger instance.
         self.spt = StanfordPOSTagger(self.tagger_cls)
         # self.spt = CoreNLPPOSTagger(url='http://localhost:9000')
-        self.spt.java_options='-mx10240m'
+        self.spt.java_options = '-mx10g'
 
     @property
     def N(self):
