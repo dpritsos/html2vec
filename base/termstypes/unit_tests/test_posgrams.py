@@ -12,12 +12,14 @@ import sys
 sys.path.append('../../../../')
 
 import unittest
-from html2vec.base.termstypes.posgrams import String2POSGramsList
+from html2vec.base.termstypes.posngrams import String2POSNGramsList
 
 
 if __name__ == '__main__':
 
-    st = String2POSGramsList()
+    st = String2POSNGramsList()
+    st.N = 3
+    print st.n
     print st.terms_lst(
         "Cento Vergilianus de laudibus Christi is a fourth-century Latin poem arranged by Faltonia Betitia Proba after her conversion to Christianity. A cento rearranges verses written by other poets; this one repurposes Virgil to tell stories from the Old and New Testament of the Christian Bible. Much of the work focuses on the story of Jesus Christ. The poem was widely circulated, eventually being used in schools to teach the tenets of Christianity, often alongside Augustine of Hippo's De Doctrina Christiana. Although the poem was popular, critical reception was mixed. A pseudonymous work purportedly by Pope Gelasius I disparaged the poem, deeming it apocryphal, and St. Jerome may have written disapprovingly of it, and of Proba. Other thinkers like Isidore of Seville, Petrarch, and Giovanni Boccaccio wrote highly of her, and many praised her ingenuity. During the 19th and 20th centuries the poem was considered a work of poor quality, but recent scholars have held it in higher regard."
     )

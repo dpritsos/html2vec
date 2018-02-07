@@ -22,7 +22,7 @@ import tables as tb
 
 # from html2vect.base.vectortypes.termslist2tf import trms2tf_dict, trms2tf_narray
 # from html2vect.base.vectortypes.termslist2tf import trms2f_sparse, trms2f_narray
-from html2vec.tables.posgrams import Html2TF
+from html2vec.tables.posngrams import Html2TF
 
 
 if __name__ == '__main__':
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     xhtml_file_l = ["../../unit_test_data/html/test_01.html"]
 
     h2tf_pos = Html2TF(
-        'english-bidirectional-distsim.tagger', html_attrib=['text'],
+        tagger_cls='english-bidirectional-distsim.tagger', n=29, html_attrib=['text'],
         str_case='lower', valid_html=False
     )
 
