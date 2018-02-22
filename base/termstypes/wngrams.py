@@ -184,7 +184,7 @@ class String2WNGramsList(String2TokenList):
 
     def __init__(self, n=1, terms_size_reject=512):
 
-        super(String2WNGramsList, self).__init__(*args, **kwrgs)
+        super(String2WNGramsList, self).__init__()
 
         # N-Grams size
         self.n = n
