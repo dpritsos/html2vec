@@ -4,4 +4,3 @@
 *.so
 build
 *.egg-info
-*.c
