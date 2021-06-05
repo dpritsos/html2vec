@@ -42,6 +42,7 @@ class HtmlFullText(BaseHTML2Attributes, BaseFileHandler):
         fname_script_ll = list()
 
         for filename in flist:
+            # print(filename+'\n')
             xhtml_src = self.load_files(filename, encoding, error_handling)
             fname_script_ll.append([filename, self.from_src(xhtml_src)])
 

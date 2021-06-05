@@ -12,7 +12,8 @@
 
 import re
 import unicodedata
-import htmlentitydefs as hedfs
+# import entitydefs as hedfs  # For python2 
+from html.entities import entitydefs as hedfs
 
 # The HTML tags list cosist of the full W3C tag list including HTML 5.0 and HTML 4.0.1 which they...
 # ...are depricated in HTML5

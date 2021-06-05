@@ -2,10 +2,12 @@
 
 import sys
 
+sys.path.append('../../')
 sys.path.append('../')
+sys.path.append('./')
 
 # Santini's 7-genres Corpus
-corpus_filepath = "/media/dimitrios/TurnstoneDisk/7Genres/"
+corpus_filepath = "/mnt/61010e55-8f35-46da-b9a5-4781f48b3a92/7Genres/"
 
 genres = ["blog", "eshop", "faq", "frontpage", "listing", "php", "spage"]
 # genres = [
@@ -13,24 +15,24 @@ genres = ["blog", "eshop", "faq", "frontpage", "listing", "php", "spage"]
 # ]
 
 
-
 ###################################### STRING ##########################################
 
-import html2vec.string.attrib_text as html2txt
-
-# Character N-grams.
-char_n_gram_size = 4
+import html2vec.string.html2txt as html2txt
 
 html2text = html2txt.HtmlFullText(valid_html=False)
 # html2text = html2txt.HtmlTagText(valid_html=False)  NOTE: HTML Tags
 # html2text = html2txt.HtmlScriptText(valid_html=False) NOTE: JavaScript
 # html2text = html2txt.HtmlStyleText(valid_html=False)  NOTE: CSS
 
-html_texts_lst = html2text.from_files(
-    xhtml_file_l=list(self.html_file_l), encoding='utf-8', error_handling='replace'
+# html_texts_lst = html2text.from_files(
+#     xhtml_file_l=< REQUIRES A LIST OF FILENAMEs (FULL PATH) >, encoding='utf-8', error_handling='replace'
+# )
+
+html_texts_lst = html2text.from_paths(
+    basepath=corpus_filepath, filepath_l=genres, encoding='utf-8', error_handling='replace'
 )
 
-print html_texts_lst
+print(html_texts_lst[0])
 
 
 """

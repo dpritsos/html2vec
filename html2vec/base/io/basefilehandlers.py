@@ -52,7 +52,7 @@ def file_list_frmpaths(basepath, filepath_l):
         for filepath in filepath_l:
             flist = [files_n_paths[2] for files_n_paths in os.walk(basepath + filepath)]
             flist = flist[0]
-            fname_lst.extend([basepath + filepath + fname for fname in flist])
+            fname_lst.extend([basepath + filepath + '/' + fname for fname in flist])
     else:
         raise Exception(
             "A String or a list of Strings was Expected as input - Stings should be file-paths"
